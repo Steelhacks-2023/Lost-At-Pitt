@@ -5,6 +5,7 @@ import 'package:google_maps_flutter_web/google_maps_flutter_web.dart'
     as GWebMap;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:lost_found_steelhacks/PostPage.dart';
 
 class mapPage extends StatefulWidget {
   const mapPage({super.key});
@@ -36,15 +37,22 @@ class _mapPageState extends State<mapPage> {
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return Text("Waiting Getting Data");
           }
-          
           return Scaffold(
-              body: GoogleMap(
+              body: Stack(alignment: Alignment.center,
+              children: [
+              FloatingActionButton(onPressed: (() {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const PostPage()));
+                      }),)
+              GoogleMap(
             onMapCreated: _onMapCreated,
             initialCameraPosition: CameraPosition(
               target: _center,
               zoom: 16,
             ),
-          ));
+          )]));
         });
   }
 }
