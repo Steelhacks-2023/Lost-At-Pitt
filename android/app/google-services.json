@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "780072412373",
+    "project_id": "steelhacks-2023-db",
+    "storage_bucket": "steelhacks-2023-db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:780072412373:android:8be28c803947082bd0ee5c",
+        "android_client_info": {
+          "package_name": "com.example.lost_found_steelhacks"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "780072412373-t7gbn47men8l2e1ie49qpjasr9p4br8s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCERe3j3efr-wf3lNFHwqM1E2Dpg4HKJ6Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "780072412373-t7gbn47men8l2e1ie49qpjasr9p4br8s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

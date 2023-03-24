@@ -4,6 +4,8 @@
         android:label="lost_found_steelhacks"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+                android:value="AIzaSyDaeA4j77KOqMdW3WfIfhXHLDOEUN_Z3Wo"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
