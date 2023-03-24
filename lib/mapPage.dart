@@ -40,19 +40,20 @@ class _mapPageState extends State<mapPage> {
           return Scaffold(
               body: Stack(alignment: Alignment.center,
               children: [
-              FloatingActionButton(onPressed: (() {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const PostPage()));
-                      }),),
               GoogleMap(
             onMapCreated: _onMapCreated,
             initialCameraPosition: CameraPosition(
               target: _center,
               zoom: 16,
             ),
-          )]));
+          ),
+          FloatingActionButton(onPressed: (() {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const PostPage()));
+                      }),),
+          ]));
         });
   }
 }
