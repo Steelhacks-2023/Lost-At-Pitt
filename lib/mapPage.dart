@@ -56,7 +56,7 @@ class _mapPageState extends State<mapPage> {
           //   LostObject lostItem = LostObject.fromFirestore(singleDoc, null);
           //   lostObjects.add(lostItem);
           // }
-          
+
           return Scaffold(
               body: Stack(alignment: Alignment.center, children: [
               GoogleMap(
@@ -82,12 +82,7 @@ class _mapPageState extends State<mapPage> {
                     MaterialPageRoute(builder: (context) => const PostPage()));
                   }),
                 ),
-                // FloatingActionButton(
-                //   onPressed: (() {
-                //     Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) => SwitchApp()));
-                //   }),
-                // ),
+
             ],
             ),
 
