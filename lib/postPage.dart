@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:icon_forest/icon_forest.dart';
+import 'package:lost_found_steelhacks/mapPage.dart';
 
 // title: 'Flutter Project',
 // theme: ThemeData(
@@ -9,7 +10,6 @@ import 'package:icon_forest/icon_forest.dart';
 //   bodyColor: Color.fromARGB(255, 2, 12, 20),
 //   displayColor: Colors.black),
 
-
 class PostPage extends StatefulWidget {
   const PostPage({super.key});
 
@@ -18,36 +18,33 @@ class PostPage extends StatefulWidget {
 }
 
 class _PostPageState extends State<PostPage> {
-  
   @override
   Widget build(BuildContext context) {
     var dim = MediaQuery.of(context).size;
     var dim_x = dim.width;
     var dim_y = dim.height;
-    var edge_padding = 0.02*dim_y;
-    var widget_padding = 0.01*dim_y;
-    var header_row_spacing = 0.02*dim_x;
+    var edge_padding = 0.02 * dim_y;
+    var widget_padding = 0.01 * dim_y;
     var border_radius = Radius.circular(10);
+    var header_row_spacing = 0.2 * dim_x;
 
     return Scaffold(
-      body: ListView(
-        padding: EdgeInsets.all(edge_padding),
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              color: Color.fromARGB(255, 98, 239, 176),
-              borderRadius: BorderRadius.all(border_radius)
-            ),
-            height: 0.15*dim_y,
-            //child: HeaderWidget(title: "Header"),
-            // Change header color based on Lost/Found
-            //color: Color.fromARGB(255, 98, 239, 176),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start, // set your alignment
-              children: <Widget>[
-                Padding(padding: EdgeInsets.all(header_row_spacing)),
-                ElevatedButton(
-                  onPressed: () {},
+        body: ListView(
+      padding: EdgeInsets.all(edge_padding),
+      children: <Widget>[
+        // Header
+        Container(
+            decoration: separatorBoxDecoration(),
+            height: 0.18 * dim_y,
+            child: ListView(children: <Widget>[
+              Row(children: [
+                  ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const mapPage()));
+                  },
                   child: Icon(
                     Icons.keyboard_arrow_left,
                     color: Color.fromARGB(255, 44, 14, 192),
@@ -58,111 +55,69 @@ class _PostPageState extends State<PostPage> {
                     primary: Color.fromARGB(255, 96, 160, 213),
                   ),
                 ),
-                Padding(padding: EdgeInsets.all(header_row_spacing)),
-                Icon(
-                    Icons.change_history,
-                    color: Color.fromARGB(255, 44, 14, 192),
-                    size: 30.0,
-                ),
-                Text(
-                  textAlign: TextAlign.center,
-                  "Item: Water bottle"
-                ),
-                Icon(
-                    Icons.change_history,
-                    color: Color.fromARGB(255, 44, 14, 192),
-                    size: 30.0,
-                ),
-                Text(
-                  textAlign: TextAlign.center,
-                  "X hr : min ago"
-                ),
-                Padding(padding: EdgeInsets.all(header_row_spacing)),
-              ] 
-            )
-            
-          ),
-          Padding(padding: EdgeInsets.all(widget_padding)),
-          Container(
-            decoration: BoxDecoration(
-              color: Color.fromARGB(255, 98, 239, 176),
-              borderRadius: BorderRadius.all(border_radius)
-            ),
+                ], 
+                mainAxisAlignment: MainAxisAlignment.start
+              ),
+              headerPadding(dim_y),
+              headerItem(Icons.local_offer, "   Item: Water bottle"),
+              headerPadding(dim_y),
+              headerItem(Icons.access_time, "   X hr : min ago"),
+              headerPadding(dim_y),
+            ]),
+        ),
+        // Image
+        Padding(padding: EdgeInsets.all(widget_padding)),
+        Container(
+            decoration: separatorBoxDecoration(),
             padding: EdgeInsets.all(widget_padding),
-            height: 0.5*dim_y,
-            child: Image.asset("assets/sample_image.png")
-          ),
-          Padding(padding: EdgeInsets.all(widget_padding)),
-          Container(
-            decoration: BoxDecoration(
+            height: 0.3 * dim_y,
+            child: Image.network('https://media.tenor.com/uE23EO9LCRgAAAAM/bing.gif')
+        ),
+        // Description
+        Padding(padding: EdgeInsets.all(widget_padding)),
+        Container(
+          decoration: BoxDecoration(
               color: Color.fromARGB(255, 98, 239, 176),
-              borderRadius: BorderRadius.all(border_radius)
-            ),
-            padding: EdgeInsets.all(widget_padding),
-            height: 0.5*dim_y,
-            // Description text
-            child: Text("Description of the item goes here"),
-          )
-
-        ],
-      )
-    );
+              borderRadius: BorderRadius.all(border_radius)),
+          padding: EdgeInsets.all(widget_padding),
+          height: 0.3 * dim_y,
+          // Description text
+          child: Text("Description of the item goes here"),
+        )
+      ],
+    ));
   }
 }
 
-// class HeaderWidget extends StatefulWidget {
-//   const HeaderWidget({super.key, required this.title});
+BoxDecoration separatorBoxDecoration() {
+  return BoxDecoration(
+    border: Border(
+      bottom: BorderSide(
+        //                    <--- top side
+        color: Colors.blueAccent,
+        width: 3.0,
+      ),
+    ),
+  );
+}
 
-//   final String title;
+Padding headerPadding(var dim_y) {
+  var header_row_spacing = 0.01 * dim_y;
+  return Padding(padding: EdgeInsets.all(header_row_spacing));
+}
 
-//   @override
-//   State<HeaderWidget> createState() => _HeaderWidgetState();
-// }
-
-// class _HeaderWidgetState extends State<HeaderWidget> {
-  
-//   @override
-//   Widget build(BuildContext context) {
-      
-//     var dim = MediaQuery.of(context).size;
-//     var dim_x = dim.width;
-//     var dim_y = dim.height;
-//     var header_row_spacing = 0.02*dim_x;
-
-//     return Scaffold(
-//       body: Row(
-//         mainAxisAlignment: MainAxisAlignment.start, // set your alignment
-//         children: <Widget>[
-//           Padding(padding: EdgeInsets.all(header_row_spacing)),
-//           ElevatedButton(
-//             onPressed: () {},
-//             child: Icon(
-//               Icons.keyboard_arrow_left,
-//               color: Color.fromARGB(255, 44, 14, 192),
-//               size: 30.0,
-//             ),
-//             style: ElevatedButton.styleFrom(
-//               shape: CircleBorder(),
-//               primary: Color.fromARGB(255, 96, 160, 213),
-//             ),
-//           ),
-//           Padding(padding: EdgeInsets.all(header_row_spacing)),
-//           Column(
-//             mainAxisAlignment: MainAxisAlignment.center, // set your alignment
-//             children: [
-//               Text(
-//                 textAlign: TextAlign.center,
-//                 "Item: Water bottle"
-//               ),
-//               Text(
-//                 textAlign: TextAlign.center,
-//                 "X hr : min ago"
-//               )
-//             ],
-//           ),
-//           Padding(padding: EdgeInsets.all(header_row_spacing)),
-//         ] 
-//       )
-//     );
-//   }
-// }
+Container headerItem(IconData icon, String text) {
+  return Container(
+    //decoration: separatorBoxDecoration(),
+    child: Row(
+      children: [
+        Icon(
+          icon,
+          color: Color.fromARGB(255, 44, 14, 192),
+          size: 30.0,
+        ),
+        Text(text),
+      ],
+    ),
+  );
+}
