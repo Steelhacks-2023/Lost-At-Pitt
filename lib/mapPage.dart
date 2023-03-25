@@ -207,6 +207,8 @@ class _mapPageState extends State<mapPage> {
                               child: SlidingUpPanel(
                                 defaultPanelState: PanelState.CLOSED,
                                 maxHeight: dim.height * 0.5,
+                                minHeight: 0,
+
                                 controller: _panelController,
                                 backdropEnabled: true,
                                 // collapsed: Container(
@@ -228,12 +230,12 @@ class _mapPageState extends State<mapPage> {
                                   onTap: (coords) {
                                     _add(coords.latitude, coords.longitude);
                                     tempCoords = coords;
-                                    _panelController.open();
+                                    //_panelController.open();
 
-                                    // Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //         builder: (context) => SwitchApp(coord: coords)));
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => SwitchApp(coord: coords)));
                                   },
                                   markers: Set<Marker>.of(markers.values),
                                 ),
