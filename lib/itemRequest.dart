@@ -134,9 +134,7 @@ class _FormWidgetState extends State<FormWidget> {
             padding: EdgeInsets.symmetric(vertical: 16.0), 
             child: PhoneNumber(),
           ),
-          DropdownButt(),
-          TextBox(),
-          PhoneNumber(),
+
           Container(
             color: Colors.white,
             child: Column(
@@ -253,14 +251,16 @@ class _DropdownButtState extends State<DropdownButt> {
   String dropdownValue = list.first;
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<String>(
+    return DropdownButtonHideUnderline(child: DropdownButton<String>(
+      alignment: Alignment.center,
       value: dropdownValue,
+      borderRadius: BorderRadius.circular(14),
       icon: const Icon(Icons.arrow_downward),
       elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
+      style: const TextStyle(color: Colors.blue),
       underline: Container(
         height: 2,
-        color: Colors.deepPurpleAccent,
+        color: Colors.blue,
       ),
       onChanged: (String? value) {
         // This is called when the user selects an item.
@@ -275,7 +275,7 @@ class _DropdownButtState extends State<DropdownButt> {
           child: Text(value),
         );
       }).toList(),
-    );
+    ));
   }
 }
 
