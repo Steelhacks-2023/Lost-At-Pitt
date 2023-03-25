@@ -305,7 +305,7 @@ class _UploadImageButtonState extends State<UploadImageButton> {
       if (picked != null) {
         file = File(picked.files.single.name);
         setState(() {
-          imageUrl = file;
+          var imageUrl = file;
         });
         try {
           await _firebaseStorage.putFile(file);
