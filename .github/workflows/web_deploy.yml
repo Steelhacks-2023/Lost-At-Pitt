@@ -24,8 +24,8 @@ jobs:
       # Web deploy now is contained in build/web directory
       - run: |
           cd build
-          mkdir web-deploy
-          cd web-deploy
+          mkdir web_deploy
+          cd web_deploy
           #! Update with your Email ID associated with GitHub
           git config --global user.email <email ID>
           #! Update with your username associated with GitHub
