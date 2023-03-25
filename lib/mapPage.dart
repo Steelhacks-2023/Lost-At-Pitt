@@ -65,6 +65,16 @@ class _mapPageState extends State<mapPage> {
   Map<MarkerId, Marker> markers =
       <MarkerId, Marker>{}; // CLASS MEMBER, MAP OF MARKS
   int counter = 0;
+  LatLng tempCoords = LatLng(0, 0);
+  @override
+  initState() {
+    setFoundMarkerIcon();
+  }
+
+  void setFoundMarkerIcon() async {
+    foundMarkerIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 2.5), 'assets/blue_marker.png');
+  }
 
   void _add(double lat, double long) {
     final MarkerId markerId = MarkerId("ID" + counter.toString());
@@ -172,32 +182,30 @@ class _mapPageState extends State<mapPage> {
 
                 PanelController _panelController = PanelController();
                 return Scaffold(
-                  appBar: AppBar(
-                    title: const Text("Lost and Found"),
-                  ),
                   body: SlidingUpPanel(
-                    // defaultPanelState: PanelState.CLOSED,
-                    // minHeight: 0,
+                    defaultPanelState: PanelState.CLOSED,
+                    minHeight: 0,
                     controller: _panelController,
                     backdropEnabled: true,
-                    collapsed: Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.blueGrey,
-                        ),
-                        child: const Center(
-                            child: Text(
-                          "what should go here?",
-                          style: TextStyle(color: Colors.white),
-                        ))),
-                    panel: FormWidget(),
-                    body: GoogleMap(
-                      onMapCreated: _onMapCreated,
-                      initialCameraPosition: CameraPosition(
+                    // collapsed: Container(
+                    //     decoration: const BoxDecoration(
+                    //       color: Colors.blueGrey,
+                    //     ),
+                    //     child: const Center(
+                    //         child: Text(
+                    //       "Click on the map to place a pin",
+                    //       style: TextStyle(color: Colors.white),
+                    //   ))),
+                      panel: SwitchApp(coord: tempCoords),
+                      body: GoogleMap(
+                         onMapCreated: _onMapCreated,
+                        initialCameraPosition: CameraPosition(
                         target: _center,
                         zoom: 16,
                       ),
                       onTap: (coords) {
                         _add(coords.latitude, coords.longitude);
+                        tempCoords = coords;
                         _panelController.open();
 
                         // Navigator.push(
@@ -209,75 +217,6 @@ class _mapPageState extends State<mapPage> {
                     ),
                   ),
                 );
-
-                //       body: Stack(alignment: Alignment.center, children: [
-
-                //     SlidingUpPanel(
-                //       // defaultPanelState: PanelState.CLOSED,
-                //       // minHeight: 0,
-                //       controller: PanelController(),
-                //       backdropEnabled: true,
-                //       collapsed: Container(
-                //           decoration: const BoxDecoration(
-                //             color: Colors.blueGrey,
-                //           ),
-                //           child: const Center(
-                //               child: Text(
-                //             "what should go here?",
-                //             style: TextStyle(color: Colors.white),
-                //           ))),
-                //       panel: FormWidget(),
-                //     ),
-
-                //     GoogleMap(
-                //       initialCameraPosition: CameraPosition(
-                //         target: _center,
-                //         zoom: 16,
-                //       ),
-                //       onTap: (coords) {
-                //         _add(coords.latitude, coords.longitude);
-
-                //         // Navigator.push(
-                //         //     context,
-                //         //     MaterialPageRoute(
-                //         //         builder: (context) => SwitchApp(coord: coords)));
-                //       },
-                //       markers: Set<Marker>.of(markers.values),
-                //     ),
-
-                //     SlidingUpPanel(
-                //       // defaultPanelState: PanelState.CLOSED,
-                //       // minHeight: 0,
-                //       controller: PanelController(),
-                //       backdropEnabled: true,
-                //       collapsed: Container(
-                //           decoration: const BoxDecoration(
-                //             color: Colors.blueGrey,
-                //           ),
-                //           child: const Center(
-                //               child: Text(
-                //             "what should go here?",
-                //             style: TextStyle(color: Colors.white),
-                //           ))),
-                //       panel: FormWidget(),
-                //     ),
-
-                //     //THESE ARE THE INDIVIDUAL POST AND POST CREATION BUTTONS
-                //     // Column(
-                //     //   mainAxisAlignment: MainAxisAlignment.end,
-                //     //   children: [
-                //     //     FloatingActionButton(
-                //     //       onPressed: (() {
-                //     //         Navigator.push(
-                //     //             context,
-                //     //             MaterialPageRoute(
-                //     //                 builder: (context) => const PostPage()));
-                //     //       }),
-                //     //     ),
-                //     //   ],
-                //     // ),
-                //   ]));
-                // });
               });
         });
   }
