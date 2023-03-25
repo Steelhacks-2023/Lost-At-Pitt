@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:icon_forest/icon_forest.dart';
+import 'package:lost_found_steelhacks/lostAndFoundObject.dart';
 import 'package:lost_found_steelhacks/mapPage.dart';
 
 // title: 'Flutter Project',
@@ -11,7 +12,8 @@ import 'package:lost_found_steelhacks/mapPage.dart';
 //   displayColor: Colors.black),
 
 class PostPage extends StatefulWidget {
-  const PostPage({super.key});
+  final LostAndFoundObject item;
+  const PostPage({super.key, required this.item});
 
   @override
   State<PostPage> createState() => _PostPageState();
@@ -59,7 +61,7 @@ class _PostPageState extends State<PostPage> {
                 mainAxisAlignment: MainAxisAlignment.start
               ),
               headerPadding(dim_y),
-              headerItem(Icons.local_offer, "   Item: Water bottle"),
+              headerItem(Icons.local_offer, "   Item: " + widget.item.itemName.toString()),
               headerPadding(dim_y),
               headerItem(Icons.access_time, "   X hr : min ago"),
               headerPadding(dim_y),
@@ -71,7 +73,7 @@ class _PostPageState extends State<PostPage> {
             decoration: separatorBoxDecoration(),
             padding: EdgeInsets.all(widget_padding),
             height: 0.3 * dim_y,
-            child: Image.network('https://media.tenor.com/uE23EO9LCRgAAAAM/bing.gif')
+            child: Image.network(widget.item.picture.toString())
         ),
         // Description
         Padding(padding: EdgeInsets.all(widget_padding)),
@@ -82,7 +84,7 @@ class _PostPageState extends State<PostPage> {
           padding: EdgeInsets.all(widget_padding),
           height: 0.3 * dim_y,
           // Description text
-          child: Text("Description of the item goes here"),
+          child: Text(widget.item.description.toString()),
         )
       ],
     ));
