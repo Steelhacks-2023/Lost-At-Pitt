@@ -14,6 +14,7 @@ import 'package:lost_found_steelhacks/Utils.dart';
 import 'package:lost_found_steelhacks/lostAndFoundObject.dart';
 import 'package:lost_found_steelhacks/lostAndFoundObject.dart';
 import 'package:lost_found_steelhacks/postPage.dart';
+import 'package:lost_found_steelhacks/listPage.dart';
 import 'package:lost_found_steelhacks/itemRequest.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:icon_forest/icon_forest.dart';
@@ -26,19 +27,18 @@ class mapPage extends StatefulWidget {
 }
 
 class _mapPageState extends State<mapPage> {
+  int currentPageIndex = 0;
   late GoogleMapController mapController;
   BitmapDescriptor lostMarkerIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor foundMarkerIcon = BitmapDescriptor.defaultMarker;
-  
+
   String _mapStyle = "";
-  
 
   @override
   void initState() {
     super.initState();
     setFoundIcon();
     setLostIcon();
-
   }
 
   void setFoundIcon() async {
@@ -172,42 +172,73 @@ class _mapPageState extends State<mapPage> {
                 }
 
                 PanelController _panelController = PanelController();
+                var dim = MediaQuery.of(context).size;
                 return Scaffold(
-                  body: SlidingUpPanel(
-                    defaultPanelState: PanelState.CLOSED,
-                    minHeight: 0,
-                    controller: _panelController,
-                    backdropEnabled: true,
-                    // collapsed: Container(
-                    //     decoration: const BoxDecoration(
-                    //       color: Colors.blueGrey,
-                    //     ),
-                    //     child: const Center(
-                    //         child: Text(
-                    //       "Click on the map to place a pin",
-                    //       style: TextStyle(color: Colors.white),
-                    //   ))),
-                      panel: SwitchApp(coord: tempCoords),
-                      body: GoogleMap(
-                         onMapCreated: _onMapCreated,
-                        initialCameraPosition: CameraPosition(
-                        target: _center,
-                        zoom: 16,
-                      ),
-                      onTap: (coords) {
-                        _add(coords.latitude, coords.longitude);
-                        tempCoords = coords;
-                        _panelController.open();
+                    resizeToAvoidBottomInset: false,
+                    body: Container(
+                        height: dim.height,
+                        child: Column(children: [
+                          Expanded(
+                              flex: 0,
+                              child: NavigationBar(
+                                onDestinationSelected: (int index) {
+                                  setState(() {
+                                    if (index == 1) {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => listPage(entries: lostObjects)));
+                                    }
+                                  });
+                                },
+                                selectedIndex: currentPageIndex,
+                                destinations: const <Widget>[
+                                  NavigationDestination(
+                                    icon: Icon(Icons.explore),
+                                    label: 'Map',
+                                  ),
+                                  NavigationDestination(
+                                    icon: Icon(Icons.format_list_numbered),
+                                    label: 'List',
+                                  ),
+                                ],
+                              )),
+                          Expanded(
+                              flex: 5,
+                              child: SlidingUpPanel(
+                                defaultPanelState: PanelState.CLOSED,
+                                maxHeight: dim.height * 0.5,
+                                controller: _panelController,
+                                backdropEnabled: true,
+                                // collapsed: Container(
+                                //     decoration: const BoxDecoration(
+                                //       color: Colors.blueGrey,
+                                //     ),
+                                //     child: const Center(
+                                //         child: Text(
+                                //       "Click on the map to place a pin",
+                                //       style: TextStyle(color: Colors.white),
+                                //   ))),
+                                panel: SwitchApp(coord: tempCoords),
+                                body: GoogleMap(
+                                  onMapCreated: _onMapCreated,
+                                  initialCameraPosition: CameraPosition(
+                                    target: _center,
+                                    zoom: 16,
+                                  ),
+                                  onTap: (coords) {
+                                    _add(coords.latitude, coords.longitude);
+                                    tempCoords = coords;
+                                    _panelController.open();
 
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => SwitchApp(coord: coords)));
-                      },
-                      markers: Set<Marker>.of(markers.values),
-                    ),
-                  ),
-                );
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) => SwitchApp(coord: coords)));
+                                  },
+                                  markers: Set<Marker>.of(markers.values),
+                                ),
+                              )),
+                        ])));
               });
         });
   }
