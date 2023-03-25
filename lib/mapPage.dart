@@ -46,11 +46,13 @@ class _mapPageState extends State<mapPage> {
 
           List<Marker> listOfMarkers = [];
           List<LostObject> lostObjects = [];
-          
+
+          //query database, go through each item in database, and create list of lost objects
           for (int i = 0; i < snapshot.data!.size; i++) {
             QueryDocumentSnapshot singleDoc = snapshot.requireData.docs[i];
 
             LostObject lostItem = LostObject.fromFirestore(singleDoc, null);
+            lostObjects.add(lostItem);
           }
           return Scaffold(
               body: Stack(alignment: Alignment.center, children: [
