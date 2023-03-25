@@ -50,25 +50,28 @@ class _mapPageState extends State<mapPage> {
           List<LostObject> lostObjects = [];
 
           //query database, go through each item in database, and create list of lost objects
-          for (int i = 0; i < snapshot.data!.size; i++) {
-            QueryDocumentSnapshot singleDoc = snapshot.requireData.docs[i];
+          // for (int i = 0; i < snapshot.data!.size; i++) {
+          //   QueryDocumentSnapshot singleDoc = snapshot.requireData.docs[i];
 
-            LostObject lostItem = LostObject.fromFirestore(singleDoc, null);
-            lostObjects.add(lostItem);
-          }
+          //   LostObject lostItem = LostObject.fromFirestore(singleDoc, null);
+          //   lostObjects.add(lostItem);
+          // }
+          
           return Scaffold(
               body: Stack(alignment: Alignment.center, children: [
-            GoogleMap(
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: _center,
-                zoom: 16,
+              GoogleMap(
+                onMapCreated: _onMapCreated,
+                initialCameraPosition: CameraPosition(
+                  target: _center,
+                  zoom: 16,
+                ),
+                
+                onTap: (coords) {
+                  //print(coords);
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => SwitchApp(coord: coords)));
+                  //_onAddMarkerPress(coords);
+                }, 
               ),
-              /*
-              onTap: (coords) {
-                _onAddMarkerPress(coords);
-              }, */
-            ),
             //THESE ARE THE INDIVIDUAL POST AND POST CREATION BUTTONS
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -79,12 +82,12 @@ class _mapPageState extends State<mapPage> {
                     MaterialPageRoute(builder: (context) => const PostPage()));
                   }),
                 ),
-                FloatingActionButton(
-                  onPressed: (() {
-                    Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const SwitchApp()));
-                  }),
-                ),
+                // FloatingActionButton(
+                //   onPressed: (() {
+                //     Navigator.push(context,
+                //     MaterialPageRoute(builder: (context) => SwitchApp()));
+                //   }),
+                // ),
             ],
             ),
 

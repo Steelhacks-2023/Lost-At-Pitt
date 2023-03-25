@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lost_found_steelhacks/lostObject.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lost_found_steelhacks/mapPage.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -14,7 +13,8 @@ final numberCheck = RegExp(r'^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}
 final List<bool> isSelected = <bool>[true, false];
 String description = "", category = "Water Bottle";
 int phone = 0;
-
+LatLng local = LatLng(0,0);
+double lat = 0, long = 0;
 
 
 const List<Widget> options = <Widget>[
@@ -30,14 +30,18 @@ void main() {
   
   WidgetsFlutterBinding.ensureInitialized();
   Firebase.initializeApp();
-  runApp(const SwitchApp());
+  runApp(SwitchApp(coord: local));
 
 }
 class SwitchApp extends StatelessWidget {
-  const SwitchApp({super.key});
+  //const SwitchApp({super.key});
+  const SwitchApp({Key? key, required this.coord}) : super(key: key);
 
+  final LatLng coord;
   @override
   Widget build(BuildContext context) {
+    lat = coord.latitude;
+    long = coord.longitude;
     return  const MaterialApp(
       home: Scaffold(
         //appBar: AppBar(title: const Text('Switch Sample')),
@@ -203,8 +207,8 @@ Future<void> addLost() {
             //Data added in the form of a dictionary into the document.
               'Description':description, 
               'ItemName': category,
-              'Location': 0,
-              'Phone Number': phone,
+              'Location': GeoPoint(lat, long),
+              'Phone': phone,
               'Picture': 0
           });
 }
@@ -216,8 +220,8 @@ Future<void> addFound() {
             //Data added in the form of a dictionary into the document.
               'Description':description, 
               'ItemName': category,
-              'Locaton': 0,
-              'Phone Number': phone,
+              'Location': GeoPoint(lat, long),
+              'Phone': phone,
               'Picture': 0
           });
 }
