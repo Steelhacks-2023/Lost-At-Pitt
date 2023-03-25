@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lost_found_steelhacks/mapPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 CollectionReference lost = FirebaseFirestore.instance.collection('Lost');
 CollectionReference found = FirebaseFirestore.instance.collection('Found');
@@ -45,7 +46,7 @@ class SwitchApp extends StatelessWidget {
     return  const MaterialApp(
       home: Scaffold(
         //appBar: AppBar(title: const Text('Switch Sample')),
-        body:  FormWidget(),
+        body: FormWidget(),
       ),
     );
   }

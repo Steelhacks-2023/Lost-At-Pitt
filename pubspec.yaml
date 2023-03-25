@@ -31,6 +31,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  
+  sliding_up_panel: ^2.0.0+1
+
+  
 
 
 
@@ -66,8 +70,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  assets:
-   - assets/sample_image.png
+  # assets:
+  #  - assets/sample_image.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
