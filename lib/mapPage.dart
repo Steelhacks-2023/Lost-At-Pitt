@@ -143,8 +143,11 @@ class _mapPageState extends State<mapPage> {
                     icon: foundMarkerIcon,
                     position: LatLng(geo.latitude, geo.longitude),
                     onTap: () => showDialog(
+                      barrierDismissible: true,
                       context: context,
                        builder: (BuildContext) => AlertDialog(
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0))),
                         title: Text("Item Information"),
                         insetPadding: EdgeInsets.all(200),
                         content: Column(children: [
@@ -160,6 +163,13 @@ class _mapPageState extends State<mapPage> {
                             child: Container(
                               child: Text("Item Description: " + data["Description"])),
                           ),
+                          // Flexible(
+                          //   flex: 5,
+                          //   fit: FlexFit.tight,
+                          //   child: Container(
+                          //     child: Image.asset(data["Picture"]),
+                          //   )
+                          // ),
                           Flexible(
                             flex: 1,
                             fit: FlexFit.tight,
@@ -196,8 +206,11 @@ class _mapPageState extends State<mapPage> {
                     icon: lostMarkerIcon,
                     position: LatLng(geo.latitude, geo.longitude),
                     onTap: () => showDialog(
+                      barrierDismissible: true,
                       context: context,
                        builder: (BuildContext) => AlertDialog(
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0))),
                         insetPadding: EdgeInsets.all(200),
                         title: Text("Item Information"),
                         content: Column(children: [
@@ -213,6 +226,13 @@ class _mapPageState extends State<mapPage> {
                             child: Container(
                               child: Text("Item Description: " + data["Description"])),
                           ),
+                          // Flexible(
+                          //   flex: 5,
+                          //   fit: FlexFit.tight,
+                          //   child: Container(
+                          //     child: Image.asset(data["Picture"]),
+                          //   )
+                          // ),
                           Flexible(
                             flex: 1,
                             fit: FlexFit.tight,
