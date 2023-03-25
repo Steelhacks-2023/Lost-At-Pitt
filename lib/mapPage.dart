@@ -66,15 +66,6 @@ class _mapPageState extends State<mapPage> {
       <MarkerId, Marker>{}; // CLASS MEMBER, MAP OF MARKS
   int counter = 0;
   LatLng tempCoords = LatLng(0, 0);
-  @override
-  initState() {
-    setFoundMarkerIcon();
-  }
-
-  void setFoundMarkerIcon() async {
-    foundMarkerIcon = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(devicePixelRatio: 2.5), 'assets/blue_marker.png');
-  }
 
   void _add(double lat, double long) {
     final MarkerId markerId = MarkerId("ID" + counter.toString());
