@@ -90,6 +90,8 @@ class _mapPageState extends State<mapPage> {
     });
   }
 
+
+
   final Stream<QuerySnapshot> _lostCollectionStream =
       FirebaseFirestore.instance.collection('Lost').snapshots();
 
@@ -121,6 +123,7 @@ class _mapPageState extends State<mapPage> {
                     lostSnapshot.connectionState == ConnectionState.waiting) {
                   return Text("Waiting Getting Data");
                 }
+      
 
                 List<LostAndFoundObject> lostObjects = [];
                 List<LostAndFoundObject> foundObjects = [];
@@ -139,10 +142,38 @@ class _mapPageState extends State<mapPage> {
                     markerId: temp,
                     icon: foundMarkerIcon,
                     position: LatLng(geo.latitude, geo.longitude),
-                    //infoWindow: InfoWindow(title: markerIdVal, snippet: '*'),
-                    // onTap: () {
-                    //   _onMarkerTapped(markerId);
-                    // },
+                    onTap: () => showDialog(
+                      context: context,
+                       builder: (BuildContext) => AlertDialog(
+                        title: Text("Item Information"),
+                        insetPadding: EdgeInsets.all(200),
+                        content: Column(children: [
+                          Flexible(
+                            flex: 2,
+                            fit: FlexFit.tight,
+                            child: Container(
+                              child: Text("Item Name: " + data["ItemName"])),
+                          ),
+                          Flexible(
+                            flex: 4,
+                            fit: FlexFit.tight,
+                            child: Container(
+                              child: Text("Item Description: " + data["Description"])),
+                          ),
+                          Flexible(
+                            flex: 1,
+                            fit: FlexFit.tight,
+                            child: Container(
+                              child: Text("Contact Info: " + data["Phone"].toString())),
+                          )
+                        ],),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, "close"), 
+                            child: const Text("Close"))
+                        ],
+                        backgroundColor: Colors.lightGreenAccent,
+                       )),
                   );
 
                   markers[temp] = marker;
@@ -159,14 +190,43 @@ class _mapPageState extends State<mapPage> {
                   GeoPoint geo = data["Location"];
                   //_add(geo.latitude, geo.longitude);
                   final MarkerId temp = MarkerId(singleDoc.id);
+                  var markerIdVal = "Item Information";
                   final Marker marker = Marker(
                     markerId: temp,
                     icon: lostMarkerIcon,
                     position: LatLng(geo.latitude, geo.longitude),
-                    //infoWindow: InfoWindow(title: markerIdVal, snippet: '*'),
-                    // onTap: () {
-                    //   _onMarkerTapped(markerId);
-                    // },
+                    onTap: () => showDialog(
+                      context: context,
+                       builder: (BuildContext) => AlertDialog(
+                        insetPadding: EdgeInsets.all(200),
+                        title: Text("Item Information"),
+                        content: Column(children: [
+                          Flexible(
+                            flex: 2,
+                            fit: FlexFit.tight,
+                            child: Container(
+                              child: Text("Item Name: " + data["ItemName"])),
+                          ),
+                          Flexible(
+                            flex: 4,
+                            fit: FlexFit.tight,
+                            child: Container(
+                              child: Text("Item Description: " + data["Description"])),
+                          ),
+                          Flexible(
+                            flex: 1,
+                            fit: FlexFit.tight,
+                            child: Container(
+                              child: Text("Contact Info: " + data["Phone"].toString())),
+                          )
+                        ],),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, "close"), 
+                            child: const Text("Close"))
+                        ],
+                        backgroundColor: Colors.redAccent,
+                       )),
                   );
                   markers[temp] = marker;
                 }
@@ -206,6 +266,8 @@ class _mapPageState extends State<mapPage> {
                               flex: 5,
                               child: SlidingUpPanel(
                                 defaultPanelState: PanelState.CLOSED,
+                                minHeight: 0,
+                                isDraggable: false,
                                 maxHeight: dim.height * 0.5,
                                 controller: _panelController,
                                 backdropEnabled: true,
@@ -218,7 +280,7 @@ class _mapPageState extends State<mapPage> {
                                 //       "Click on the map to place a pin",
                                 //       style: TextStyle(color: Colors.white),
                                 //   ))),
-                                panel: SwitchApp(coord: tempCoords),
+                                panel: new SwitchApp(coord: tempCoords),
                                 body: GoogleMap(
                                   onMapCreated: _onMapCreated,
                                   initialCameraPosition: CameraPosition(
@@ -229,6 +291,7 @@ class _mapPageState extends State<mapPage> {
                                     _add(coords.latitude, coords.longitude);
                                     tempCoords = coords;
                                     _panelController.open();
+                                
 
                                     // Navigator.push(
                                     //     context,
