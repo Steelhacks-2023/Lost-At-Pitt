@@ -65,12 +65,28 @@ class _FormWidgetState extends State<FormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
+  
+    return Padding(
+    padding: const EdgeInsets.fromLTRB(100, 10, 100, 12),
+    child: Form(
       key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           //SwitchExample(),
+          const Text(
+            'Enter your item from: ',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+          )),
+          Text(
+              ("N: " + lat.toString() + " \nS: " + long.toString() + "\n"),
+              style: TextStyle(
+                fontSize: 18,
+              )
+            ),
+
           ToggleButtons(
             isSelected: isSelected,
             onPressed: (int index) {
@@ -87,19 +103,26 @@ class _FormWidgetState extends State<FormWidget> {
             },
             borderRadius: const BorderRadius.all(Radius.circular(8)),
             children: options,
-            // children: const <Widget>[
-            //     Text('Lost'),
-            //     Text('Found'),
-            // ],
+            color: Colors.blue,
+         
           ),
-          DropdownButt(),
-          TextBox(),
-          PhoneNumber(),
-
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 16.0), 
+            child: DropdownButt(),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 16.0), 
+            child: TextBox(),
+          ),          Padding(
+            padding: EdgeInsets.symmetric(vertical: 16.0), 
+            child: PhoneNumber(),
+          ),
 
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: ElevatedButton(
+            child: ButtonTheme(
+              minWidth: 150,
+              child: ElevatedButton(
               onPressed: () {
                 // Validate will return true if the form is valid, or false if
                 // the form is invalid.
@@ -120,18 +143,21 @@ class _FormWidgetState extends State<FormWidget> {
               },
               child: const Text('Submit'),
             ),
-          ),
+          ),),
         ],
       ),
-    );
+    ),);
   }
 }
 class TextBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return SizedBox( 
+          child:TextFormField(
             decoration: const InputDecoration(
               hintText: 'Description of Lost Item',
+              
+              border: OutlineInputBorder(),
             ),
             validator: (String? value) {
               if (value == null || value.isEmpty) {
@@ -142,7 +168,7 @@ class TextBox extends StatelessWidget {
               }
               return null;
             },
-    );
+    ));
   }
 }
 class PhoneNumber extends StatelessWidget {
@@ -151,6 +177,7 @@ class PhoneNumber extends StatelessWidget {
     return TextFormField(
             decoration: const InputDecoration(
               hintText: 'Enter your phone number',
+              border: OutlineInputBorder(),
             ),
             validator: (String? value) {
               if (value == null || value.isEmpty || !numberCheck.hasMatch(value)) {
