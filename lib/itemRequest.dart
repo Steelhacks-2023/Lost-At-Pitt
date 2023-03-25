@@ -80,142 +80,138 @@ class _FormWidgetState extends State<FormWidget> {
 
   @override
   Widget build(BuildContext context) {
-  
-    String imageUrl = "";
+    File imageUrl;
     return Padding(
-    padding: const EdgeInsets.fromLTRB(100, 10, 100, 12),
-    child: Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          //SwitchExample(),
-          const Text(
-            'Enter your item from: ',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-          )),
-          Text(
-              ("N: " + lat.toString() + " \nS: " + long.toString() + "\n"),
-              style: TextStyle(
-                fontSize: 18,
-              )
-            ),
+      padding: const EdgeInsets.fromLTRB(100, 10, 100, 12),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            //SwitchExample(),
+            const Text('Enter your item from: ',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                )),
+            Text(("N: " + lat.toString() + " \nS: " + long.toString() + "\n"),
+                style: TextStyle(
+                  fontSize: 18,
+                )),
 
-          ToggleButtons(
-            isSelected: isSelected,
-            onPressed: (int index) {
-              setState(() {
-                for (int buttonIndex = 0;
-                    buttonIndex < isSelected.length;
-                    buttonIndex++) {
-                  if (buttonIndex == index) {
-                    isSelected[buttonIndex] = true;
-                  } else {
-                    isSelected[buttonIndex] = false;
+            ToggleButtons(
+              isSelected: isSelected,
+              onPressed: (int index) {
+                setState(() {
+                  for (int buttonIndex = 0;
+                      buttonIndex < isSelected.length;
+                      buttonIndex++) {
+                    if (buttonIndex == index) {
+                      isSelected[buttonIndex] = true;
+                    } else {
+                      isSelected[buttonIndex] = false;
+                    }
                   }
-                }
-              });
-            },
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
-            children: options,
-            color: Colors.blue,
-         
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 16.0), 
-            child: DropdownButt(),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 16.0), 
-            child: TextBox(),
-          ),          Padding(
-            padding: EdgeInsets.symmetric(vertical: 16.0), 
-            child: PhoneNumber(),
-          ),
-
-          Container(
-            color: Colors.white,
-            child: Column(
-              children: <Widget>[
-                Container(
-                    margin: EdgeInsets.all(15),
-                    padding: EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(15),
-                      ),
-                      border: Border.all(color: Colors.white),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black12,
-                          offset: Offset(2, 2),
-                          spreadRadius: 2,
-                          blurRadius: 1,
-                        ),
-                      ],
-                    ),
-                    child: (imageUrl != null)
-                        ? Image.network(imageUrl)
-                        : Image.network('https://i.imgur.com/sUFH1Aq.png')),
-              ],
-            ),
-          ),
-          UploadImageButton(),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: ButtonTheme(
-              minWidth: 150,
-              child: ElevatedButton(
-              onPressed: () {
-                // Validate will return true if the form is valid, or false if
-                // the form is invalid.
-                if (_formKey.currentState!.validate()) {
-                  //this is where the form stuff is grabbed
-                  print(category);
-                  print(description);
-                  print(phone);
-
-                  if (isSelected[0]) {
-                    addLost();
-                  } else {
-                    addFound();
-                  }
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const mapPage()));
-                }
+                });
               },
-              child: const Text('Submit'),
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
+              children: options,
+              color: Colors.blue,
             ),
-          ),),
-        ],
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.0),
+              child: DropdownButt(),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.0),
+              child: TextBox(),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.0),
+              child: PhoneNumber(),
+            ),
+
+            Container(
+              color: Colors.white,
+              child: Column(
+                children: <Widget>[
+                  Container(
+                      margin: EdgeInsets.all(15),
+                      padding: EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(15),
+                        ),
+                        border: Border.all(color: Colors.white),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            offset: Offset(2, 2),
+                            spreadRadius: 2,
+                            blurRadius: 1,
+                          ),
+                        ],
+                      ),
+                      ),
+                ],
+              ),
+            ),
+            UploadImageButton(),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: ButtonTheme(
+                minWidth: 150,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Validate will return true if the form is valid, or false if
+                    // the form is invalid.
+                    if (_formKey.currentState!.validate()) {
+                      //this is where the form stuff is grabbed
+                      print(category);
+                      print(description);
+                      print(phone);
+
+                      if (isSelected[0]) {
+                        addLost();
+                      } else {
+                        addFound();
+                      }
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const mapPage()));
+                    }
+                  },
+                  child: const Text('Submit'),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
-    ),);
+    );
   }
 }
 
 class TextBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SizedBox( 
-          child:TextFormField(
-            decoration: const InputDecoration(
-              hintText: 'Description of Lost Item',
-              
-              border: OutlineInputBorder(),
-            ),
-            validator: (String? value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter some text';
-              }
-              else{
-                description = value;
-              }
-              return null;
-            },
+    return SizedBox(
+        child: TextFormField(
+      decoration: const InputDecoration(
+        hintText: 'Description of Lost Item',
+        border: OutlineInputBorder(),
+      ),
+      validator: (String? value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter some text';
+        } else {
+          description = value;
+        }
+        return null;
+      },
     ));
   }
 }
@@ -224,19 +220,18 @@ class PhoneNumber extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-            decoration: const InputDecoration(
-              hintText: 'Enter your phone number',
-              border: OutlineInputBorder(),
-            ),
-            validator: (String? value) {
-              if (value == null || value.isEmpty || !numberCheck.hasMatch(value)) {
-                return 'Please enter a valid phone number';
-              }
-              else{
-                phone = int.parse(value.replaceAll('-', ''));
-              }
-              return null;
-            },
+      decoration: const InputDecoration(
+        hintText: 'Enter your phone number',
+        border: OutlineInputBorder(),
+      ),
+      validator: (String? value) {
+        if (value == null || value.isEmpty || !numberCheck.hasMatch(value)) {
+          return 'Please enter a valid phone number';
+        } else {
+          phone = int.parse(value.replaceAll('-', ''));
+        }
+        return null;
+      },
     );
   }
 }
@@ -251,7 +246,8 @@ class _DropdownButtState extends State<DropdownButt> {
   String dropdownValue = list.first;
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonHideUnderline(child: DropdownButton<String>(
+    return DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
       alignment: Alignment.center,
       value: dropdownValue,
       borderRadius: BorderRadius.circular(14),
@@ -308,7 +304,9 @@ class _UploadImageButtonState extends State<UploadImageButton> {
 
       if (picked != null) {
         file = File(picked.files.single.name);
-        print(file.toString());
+        setState(() {
+          imageUrl = file;
+        });
         try {
           await _firebaseStorage.putFile(file);
         } on Exception catch (_, e) {
