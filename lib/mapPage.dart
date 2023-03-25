@@ -246,7 +246,11 @@ class _mapPageState extends State<mapPage> {
                                     if (index == 1) {
                                       Navigator.push(
                                           context,
-                                          MaterialPageRoute(builder: (context) => listPage(entries: lostObjects)));
+                                          MaterialPageRoute(builder: (context) => listPage(
+                                            lostObjects: lostObjects,
+                                            foundObjects: foundObjects,
+                                            displayLostItems: true
+                                      )));
                                     }
                                   });
                                 },
