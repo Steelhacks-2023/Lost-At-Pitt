@@ -5,7 +5,7 @@ class LostObject {
   final String? itemName;
   final String? description;
   final num? phone;
-  final Image? picture;
+  final int? picture;
   final GeoPoint? location;
 
   LostObject(

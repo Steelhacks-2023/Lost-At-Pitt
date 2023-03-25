@@ -13,7 +13,6 @@ import 'package:lost_found_steelhacks/lostObject.dart';
 import 'package:lost_found_steelhacks/postPage.dart';
 import 'package:lost_found_steelhacks/itemRequest.dart';
 
-
 class mapPage extends StatefulWidget {
   const mapPage({super.key});
 
@@ -23,10 +22,34 @@ class mapPage extends StatefulWidget {
 
 class _mapPageState extends State<mapPage> {
   late GoogleMapController mapController;
-  var count = 0;
+  BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
 
-  final Stream<QuerySnapshot> _lostCollectionStream =
-      FirebaseFirestore.instance.collection('Lost').snapshots();
+  Map<MarkerId, Marker> markers = <MarkerId, Marker>{}; // CLASS MEMBER, MAP OF MARKS
+  int counter = 0;
+
+  void _add(double lat, double long) {
+    final MarkerId markerId = MarkerId("ID" + counter.toString());
+
+    // creating a new MARKER
+    final Marker marker = Marker(
+      markerId: markerId,
+      icon: markerIcon,
+      position: LatLng(
+        lat, long,
+      ),
+      //infoWindow: InfoWindow(title: markerIdVal, snippet: '*'),
+      // onTap: () {
+      //   _onMarkerTapped(markerId);
+      // },
+    );
+  counter ++;
+    setState(() {
+      // adding a new marker to map
+      markers[markerId] = marker;
+    });
+  } 
+
+  final Stream<QuerySnapshot> _lostCollectionStream = FirebaseFirestore.instance.collection('Lost').snapshots();
 
   //University of Pittsburgh Coordinates
   final LatLng _center = const LatLng(40.4443533, -79.960835);
@@ -37,6 +60,7 @@ class _mapPageState extends State<mapPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return StreamBuilder<QuerySnapshot>(
         stream: _lostCollectionStream,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -46,32 +70,36 @@ class _mapPageState extends State<mapPage> {
             return Text("Waiting Getting Data");
           }
 
-          List<Marker> listOfMarkers = [];
-          List<LostObject> lostObjects = [];
-
+          //List<LostObject> lostObjects = [];
           //query database, go through each item in database, and create list of lost objects
-          // for (int i = 0; i < snapshot.data!.size; i++) {
-          //   QueryDocumentSnapshot singleDoc = snapshot.requireData.docs[i];
+          for (int i = 0; i < snapshot.data!.size; i++) {
+            QueryDocumentSnapshot singleDoc = snapshot.requireData.docs[i];
+            //LostObject lostItem = LostObject.fromFirestore(singleDoc, null);
+            print(singleDoc.data());
+          }
 
-          //   LostObject lostItem = LostObject.fromFirestore(singleDoc, null);
-          //   lostObjects.add(lostItem);
-          // }
+          
 
           return Scaffold(
               body: Stack(alignment: Alignment.center, children: [
               GoogleMap(
-                onMapCreated: _onMapCreated,
+                
                 initialCameraPosition: CameraPosition(
                   target: _center,
                   zoom: 16,
                 ),
                 
                 onTap: (coords) {
-                  //print(coords);
-                  Navigator.push(context,MaterialPageRoute(builder: (context) => SwitchApp(coord: coords)));
-                  //_onAddMarkerPress(coords);
+                  _add(coords.latitude, coords.longitude); 
+                  //Navigator.push(context,MaterialPageRoute(builder: (context) => SwitchApp(coord: coords)));
                 }, 
+
+                markers: Set<Marker>.of(markers.values),
+                
               ),
+
+
+
             //THESE ARE THE INDIVIDUAL POST AND POST CREATION BUTTONS
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
