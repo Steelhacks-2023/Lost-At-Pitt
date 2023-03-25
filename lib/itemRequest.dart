@@ -80,13 +80,29 @@ class _FormWidgetState extends State<FormWidget> {
 
   @override
   Widget build(BuildContext context) {
+  
     String imageUrl = "";
-    return Form(
+    return Padding(
+    padding: const EdgeInsets.fromLTRB(100, 10, 100, 12),
+    child: Form(
       key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           //SwitchExample(),
+          const Text(
+            'Enter your item from: ',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+          )),
+          Text(
+              ("N: " + lat.toString() + " \nS: " + long.toString() + "\n"),
+              style: TextStyle(
+                fontSize: 18,
+              )
+            ),
+
           ToggleButtons(
             isSelected: isSelected,
             onPressed: (int index) {
@@ -104,10 +120,19 @@ class _FormWidgetState extends State<FormWidget> {
             },
             borderRadius: const BorderRadius.all(Radius.circular(8)),
             children: options,
-            // children: const <Widget>[
-            //     Text('Lost'),
-            //     Text('Found'),
-            // ],
+            color: Colors.blue,
+         
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 16.0), 
+            child: DropdownButt(),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 16.0), 
+            child: TextBox(),
+          ),          Padding(
+            padding: EdgeInsets.symmetric(vertical: 16.0), 
+            child: PhoneNumber(),
           ),
           DropdownButt(),
           TextBox(),
@@ -144,7 +169,9 @@ class _FormWidgetState extends State<FormWidget> {
 
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: ElevatedButton(
+            child: ButtonTheme(
+              minWidth: 150,
+              child: ElevatedButton(
               onPressed: () {
                 // Validate will return true if the form is valid, or false if
                 // the form is invalid.
@@ -165,29 +192,33 @@ class _FormWidgetState extends State<FormWidget> {
               },
               child: const Text('Submit'),
             ),
-          ),
+          ),),
         ],
       ),
-    );
+    ),);
   }
 }
 
 class TextBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: const InputDecoration(
-        hintText: 'Description of Lost Item',
-      ),
-      validator: (String? value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter some text';
-        } else {
-          description = value;
-        }
-        return null;
-      },
-    );
+    return SizedBox( 
+          child:TextFormField(
+            decoration: const InputDecoration(
+              hintText: 'Description of Lost Item',
+              
+              border: OutlineInputBorder(),
+            ),
+            validator: (String? value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter some text';
+              }
+              else{
+                description = value;
+              }
+              return null;
+            },
+    ));
   }
 }
 
@@ -195,17 +226,19 @@ class PhoneNumber extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      decoration: const InputDecoration(
-        hintText: 'Enter your phone number',
-      ),
-      validator: (String? value) {
-        if (value == null || value.isEmpty || !numberCheck.hasMatch(value)) {
-          return 'Please enter a valid phone number';
-        } else {
-          phone = int.parse(value.replaceAll('-', ''));
-        }
-        return null;
-      },
+            decoration: const InputDecoration(
+              hintText: 'Enter your phone number',
+              border: OutlineInputBorder(),
+            ),
+            validator: (String? value) {
+              if (value == null || value.isEmpty || !numberCheck.hasMatch(value)) {
+                return 'Please enter a valid phone number';
+              }
+              else{
+                phone = int.parse(value.replaceAll('-', ''));
+              }
+              return null;
+            },
     );
   }
 }
