@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:html';
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -5,6 +8,8 @@ import 'package:google_maps_flutter_web/google_maps_flutter_web.dart'
     as GWebMap;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:lost_found_steelhacks/lostObject.dart';
+import 'package:lost_found_steelhacks/lostObject.dart';
 import 'package:lost_found_steelhacks/postPage.dart';
 
 class mapPage extends StatefulWidget {
@@ -16,6 +21,7 @@ class mapPage extends StatefulWidget {
 
 class _mapPageState extends State<mapPage> {
   late GoogleMapController mapController;
+  var count = 0;
 
   final Stream<QuerySnapshot> _lostCollectionStream =
       FirebaseFirestore.instance.collection('Lost').snapshots();
@@ -37,22 +43,34 @@ class _mapPageState extends State<mapPage> {
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return Text("Waiting Getting Data");
           }
+
+          List<Marker> listOfMarkers = [];
+          List<LostObject> lostObjects = [];
+          
+          for (int i = 0; i < snapshot.data!.size; i++) {
+            QueryDocumentSnapshot singleDoc = snapshot.requireData.docs[i];
+
+            LostObject lostItem = LostObject.fromFirestore(singleDoc, null);
+          }
           return Scaffold(
-              body: Stack(alignment: Alignment.center,
-              children: [
-              GoogleMap(
-            onMapCreated: _onMapCreated,
-            initialCameraPosition: CameraPosition(
-              target: _center,
-              zoom: 16,
+              body: Stack(alignment: Alignment.center, children: [
+            GoogleMap(
+              onMapCreated: _onMapCreated,
+              initialCameraPosition: CameraPosition(
+                target: _center,
+                zoom: 16,
+              ),
+              /*
+              onTap: (coords) {
+                _onAddMarkerPress(coords);
+              }, */
             ),
-          ),
-          FloatingActionButton(onPressed: (() {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const PostPage()));
-                      }),),
+            FloatingActionButton(
+              onPressed: (() {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const PostPage()));
+              }),
+            ),
           ]));
         });
   }
