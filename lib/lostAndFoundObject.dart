@@ -1,26 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class LostObject {
+class LostAndFoundObject {
   final String? itemName;
   final String? description;
   final num? phone;
   final int? picture;
   final GeoPoint? location;
 
-  LostObject(
+  LostAndFoundObject(
       {this.itemName,
       this.description,
       this.phone,
       this.picture,
       this.location});
 
-  factory LostObject.fromFirestore(
+  factory LostAndFoundObject.fromFirestore(
     QueryDocumentSnapshot snapshot,
     SnapshotOptions? options,
   ) {
     //final data = snapshot.data();
-    return LostObject(
+    return LostAndFoundObject(
         itemName: snapshot.get('ItemName'),
         description: snapshot.get('Description'),
         location: snapshot.get('Location'),

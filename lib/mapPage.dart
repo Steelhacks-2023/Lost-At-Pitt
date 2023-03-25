@@ -8,11 +8,12 @@ import 'package:google_maps_flutter_web/google_maps_flutter_web.dart'
     as GWebMap;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:lost_found_steelhacks/lostObject.dart';
-import 'package:lost_found_steelhacks/lostObject.dart';
+import 'package:lost_found_steelhacks/lostAndFoundObject.dart';
+import 'package:lost_found_steelhacks/lostAndFoundObject.dart';
 import 'package:lost_found_steelhacks/postPage.dart';
 import 'package:lost_found_steelhacks/itemRequest.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:icon_forest/icon_forest.dart';
 
 class mapPage extends StatefulWidget {
   const mapPage({super.key});
@@ -24,10 +25,21 @@ class mapPage extends StatefulWidget {
 class _mapPageState extends State<mapPage> {
   late GoogleMapController mapController;
   BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
+  late BitmapDescriptor foundMarkerIcon;
 
   Map<MarkerId, Marker> markers =
       <MarkerId, Marker>{}; // CLASS MEMBER, MAP OF MARKS
   int counter = 0;
+
+  @override
+  initState() {
+    setFoundMarkerIcon();
+  }
+
+  void setFoundMarkerIcon() async {
+    foundMarkerIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 2.5), 'assets/blue_marker.png');
+  }
 
   void _add(double lat, double long) {
     final MarkerId markerId = MarkerId("ID" + counter.toString());
@@ -69,27 +81,51 @@ class _mapPageState extends State<mapPage> {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
         stream: _foundCollectionStream,
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        builder:
+            (BuildContext context, AsyncSnapshot<QuerySnapshot> foundSnapshot) {
           return StreamBuilder<QuerySnapshot>(
               stream: _lostCollectionStream,
               builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasError) {
+                  AsyncSnapshot<QuerySnapshot> lostSnapshot) {
+                if (lostSnapshot.hasError || foundSnapshot.hasError) {
                   return Text("Something Has Gone Wrong Please Refresh");
-                } else if (snapshot.connectionState ==
-                    ConnectionState.waiting) {
+                } else if (lostSnapshot.connectionState ==
+                        ConnectionState.waiting ||
+                    lostSnapshot.connectionState == ConnectionState.waiting) {
                   return Text("Waiting Getting Data");
                 }
 
-                List<LostObject> lostObjects = [];
+                List<LostAndFoundObject> lostObjects = [];
+                List<LostAndFoundObject> foundObjects = [];
                 //query database, go through each item in database, and create list of lost objects
-                for (int i = 0; i < snapshot.data!.size; i++) {
+                for (int i = 0; i < foundSnapshot.data!.size; i++) {
                   QueryDocumentSnapshot singleDoc =
-                      snapshot.requireData.docs[i];
+                      lostSnapshot.requireData.docs[i];
+                  var data = singleDoc.data() as Map;
+                  LostAndFoundObject foundItem =
+                      LostAndFoundObject.fromFirestore(singleDoc, null);
+                  foundObjects.add(foundItem);
+                  GeoPoint geo = data["Location"];
+                  //_add(geo.latitude, geo.longitude);
+                  final MarkerId temp = MarkerId(singleDoc.id);
+                  final Marker marker = Marker(
+                    markerId: temp,
+                    icon: foundMarkerIcon,
+                    position: LatLng(geo.latitude, geo.longitude),
+                    //infoWindow: InfoWindow(title: markerIdVal, snippet: '*'),
+                    // onTap: () {
+                    //   _onMarkerTapped(markerId);
+                    // },
+                  );
+                  markers[temp] = marker;
+                }
+                for (int i = 0; i < lostSnapshot.data!.size; i++) {
+                  QueryDocumentSnapshot singleDoc =
+                      lostSnapshot.requireData.docs[i];
                   var data = singleDoc.data() as Map;
                   //print(data["Description"].toString() + data["Phone"].toString());
-                  LostObject lostItem =
-                      LostObject.fromFirestore(singleDoc, null);
+                  LostAndFoundObject lostItem =
+                      LostAndFoundObject.fromFirestore(singleDoc, null);
                   lostObjects.add(lostItem);
                   GeoPoint geo = data["Location"];
                   //_add(geo.latitude, geo.longitude);
