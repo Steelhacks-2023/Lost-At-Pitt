@@ -1,22 +1,39 @@
+//import 'dart:html';
+import 'dart:io';
+
+//import 'dart:html';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lost_found_steelhacks/mapPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 CollectionReference lost = FirebaseFirestore.instance.collection('Lost');
 CollectionReference found = FirebaseFirestore.instance.collection('Found');
 
-
-const List<String> list = <String>['Water Bottle', 'ID', 'Wallet', 'Phone', 'Coat', 'Other'];
-final numberCheck = RegExp(r'^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$');
+const List<String> list = <String>[
+  'Water Bottle',
+  'ID',
+  'Wallet',
+  'Phone',
+  'Coat',
+  'Other'
+];
+final numberCheck =
+    RegExp(r'^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$');
 final List<bool> isSelected = <bool>[true, false];
 String description = "", category = "Water Bottle";
 int phone = 0;
-LatLng local = LatLng(0,0);
+LatLng local = LatLng(0, 0);
 double lat = 0, long = 0;
-
 
 const List<Widget> options = <Widget>[
   Text('Lost'),
@@ -27,13 +44,11 @@ const List<Widget> options = <Widget>[
 //   await Firebase.initializeApp();
 //   runApp(const SwitchApp());
 // }
-void main() {
-  
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp();
   runApp(SwitchApp(coord: local));
-
 }
+
 class SwitchApp extends StatelessWidget {
   //const SwitchApp({super.key});
   const SwitchApp({Key? key, required this.coord}) : super(key: key);
@@ -43,7 +58,7 @@ class SwitchApp extends StatelessWidget {
   Widget build(BuildContext context) {
     lat = coord.latitude;
     long = coord.longitude;
-    return  const MaterialApp(
+    return const MaterialApp(
       home: Scaffold(
         //appBar: AppBar(title: const Text('Switch Sample')),
         body: FormWidget(),
@@ -51,7 +66,6 @@ class SwitchApp extends StatelessWidget {
     );
   }
 }
-
 
 class FormWidget extends StatefulWidget {
   const FormWidget({super.key});
@@ -62,9 +76,11 @@ class FormWidget extends StatefulWidget {
 
 class _FormWidgetState extends State<FormWidget> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final storageRef = FirebaseStorage.instance.ref();
 
   @override
   Widget build(BuildContext context) {
+    String imageUrl = "";
     return Form(
       key: _formKey,
       child: Column(
@@ -75,14 +91,15 @@ class _FormWidgetState extends State<FormWidget> {
             isSelected: isSelected,
             onPressed: (int index) {
               setState(() {
-                for (int buttonIndex = 0; buttonIndex < isSelected.length; buttonIndex++) {
+                for (int buttonIndex = 0;
+                    buttonIndex < isSelected.length;
+                    buttonIndex++) {
                   if (buttonIndex == index) {
                     isSelected[buttonIndex] = true;
                   } else {
                     isSelected[buttonIndex] = false;
                   }
                 }
-
               });
             },
             borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -95,7 +112,35 @@ class _FormWidgetState extends State<FormWidget> {
           DropdownButt(),
           TextBox(),
           PhoneNumber(),
-
+          Container(
+            color: Colors.white,
+            child: Column(
+              children: <Widget>[
+                Container(
+                    margin: EdgeInsets.all(15),
+                    padding: EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15),
+                      ),
+                      border: Border.all(color: Colors.white),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          offset: Offset(2, 2),
+                          spreadRadius: 2,
+                          blurRadius: 1,
+                        ),
+                      ],
+                    ),
+                    child: (imageUrl != null)
+                        ? Image.network(imageUrl)
+                        : Image.network('https://i.imgur.com/sUFH1Aq.png')),
+              ],
+            ),
+          ),
+          UploadImageButton(),
 
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -109,13 +154,13 @@ class _FormWidgetState extends State<FormWidget> {
                   print(description);
                   print(phone);
 
-                  if(isSelected[0]){
+                  if (isSelected[0]) {
                     addLost();
-                  }
-                  else{
+                  } else {
                     addFound();
                   }
-                  Navigator.push(context,  MaterialPageRoute(builder: (context) => const mapPage()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const mapPage()));
                 }
               },
               child: const Text('Submit'),
@@ -126,41 +171,41 @@ class _FormWidgetState extends State<FormWidget> {
     );
   }
 }
+
 class TextBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-            decoration: const InputDecoration(
-              hintText: 'Description of Lost Item',
-            ),
-            validator: (String? value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter some text';
-              }
-              else{
-                description = value;
-              }
-              return null;
-            },
+      decoration: const InputDecoration(
+        hintText: 'Description of Lost Item',
+      ),
+      validator: (String? value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter some text';
+        } else {
+          description = value;
+        }
+        return null;
+      },
     );
   }
 }
+
 class PhoneNumber extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-            decoration: const InputDecoration(
-              hintText: 'Enter your phone number',
-            ),
-            validator: (String? value) {
-              if (value == null || value.isEmpty || !numberCheck.hasMatch(value)) {
-                return 'Please enter a valid phone number';
-              }
-              else{
-                phone = int.parse(value.replaceAll('-', ''));
-              }
-              return null;
-            },
+      decoration: const InputDecoration(
+        hintText: 'Enter your phone number',
+      ),
+      validator: (String? value) {
+        if (value == null || value.isEmpty || !numberCheck.hasMatch(value)) {
+          return 'Please enter a valid phone number';
+        } else {
+          phone = int.parse(value.replaceAll('-', ''));
+        }
+        return null;
+      },
     );
   }
 }
@@ -200,29 +245,77 @@ class _DropdownButtState extends State<DropdownButt> {
     );
   }
 }
-Future<void> addLost() {
-      // Calling the collection to add a new user
-      return lost
-          //adding to firebase collection
-          .add({
-            //Data added in the form of a dictionary into the document.
-              'Description':description, 
-              'ItemName': category,
-              'Location': GeoPoint(lat, long),
-              'Phone': phone,
-              'Picture': 0
-          });
+
+class UploadImageButton extends StatefulWidget {
+  const UploadImageButton({super.key});
+
+  @override
+  State<UploadImageButton> createState() => _UploadImageButtonState();
 }
+
+class _UploadImageButtonState extends State<UploadImageButton> {
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      child: Text("Upload Image"),
+      onPressed: () {
+        uploadImage();
+      },
+    );
+  }
+
+  uploadImage() async {
+    final _firebaseStorage = FirebaseStorage.instance.ref();
+    String filePath = '';
+
+    File file;
+
+    if (kIsWeb) {
+      var picked = await FilePicker.platform.pickFiles(type: FileType.image);
+
+      if (picked != null) {
+        file = File(picked.files.single.name);
+        print(file.toString());
+        try {
+          await _firebaseStorage.putFile(file);
+        } on Exception catch (_, e) {
+          print("HI");
+        }
+      }
+    } else {
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String filePath = '${appDocDir.absolute}';
+      file = File(filePath);
+
+      await _firebaseStorage.putFile(file);
+    }
+  }
+}
+
+Future<void> addLost() {
+  // Calling the collection to add a new user
+  return lost
+      //adding to firebase collection
+      .add({
+    //Data added in the form of a dictionary into the document.
+    'Description': description,
+    'ItemName': category,
+    'Location': GeoPoint(lat, long),
+    'Phone': phone,
+    'Picture': 0
+  });
+}
+
 Future<void> addFound() {
-      // Calling the collection to add a new user
-      return found
-          //adding to firebase collection
-          .add({
-            //Data added in the form of a dictionary into the document.
-              'Description':description, 
-              'ItemName': category,
-              'Location': GeoPoint(lat, long),
-              'Phone': phone,
-              'Picture': 0
-          });
+  // Calling the collection to add a new user
+  return found
+      //adding to firebase collection
+      .add({
+    //Data added in the form of a dictionary into the document.
+    'Description': description,
+    'ItemName': category,
+    'Location': GeoPoint(lat, long),
+    'Phone': phone,
+    'Picture': 0
+  });
 }

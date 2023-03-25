@@ -46,6 +46,11 @@ dependencies:
   google_maps_flutter: ^2.2.5
   google_maps_flutter_web: ^0.4.0+7
   cloud_firestore: ^4.4.5
+  firebase_storage: ^11.0.16
+  path_provider: ^2.0.14
+  image_picker: ^0.8.7
+  permission_handler: ^10.2.0
+  file_picker: ^5.2.6
 
 dev_dependencies:
   flutter_test:
