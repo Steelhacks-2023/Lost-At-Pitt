@@ -11,6 +11,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lost_found_steelhacks/lostObject.dart';
 import 'package:lost_found_steelhacks/lostObject.dart';
 import 'package:lost_found_steelhacks/postPage.dart';
+import 'package:lost_found_steelhacks/itemRequest.dart';
+
 
 class mapPage extends StatefulWidget {
   const mapPage({super.key});
@@ -67,12 +69,25 @@ class _mapPageState extends State<mapPage> {
                 _onAddMarkerPress(coords);
               }, */
             ),
-            FloatingActionButton(
-              onPressed: (() {
-                Navigator.push(context,
+            //THESE ARE THE INDIVIDUAL POST AND POST CREATION BUTTONS
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                FloatingActionButton(
+                  onPressed: (() {
+                    Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const PostPage()));
-              }),
+                  }),
+                ),
+                FloatingActionButton(
+                  onPressed: (() {
+                    Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const SwitchApp()));
+                  }),
+                ),
+            ],
             ),
+
           ]));
         });
   }
