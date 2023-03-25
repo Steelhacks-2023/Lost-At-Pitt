@@ -34,7 +34,7 @@ jobs:
           git init
           # the repository to push the deploy into
           #! Update the following with your username and repository
-          git remote add origin https://${{secrets.ACCESS_TOKEN}}@github.com/<username>/<repository>.git
+          git remote add origin https://${{secrets.ACCESS_TOKEN}}@github.com/jeffzheng13/Lost-and-Found-Steelhacks.git
           git fetch origin gh-pages
           git switch gh-pages
           # copy the build that is there in ROOT/build/web into ROOT/build/web-deploy
