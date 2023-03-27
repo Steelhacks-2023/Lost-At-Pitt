@@ -36,16 +36,16 @@ jobs:
           # the repository to push the deploy into
           #! Update the following with your username and repository
           git remote add origin https://${{secrets.ACCESS_TOKEN}}@github.com/jeffzheng13/Lost-and-Found-Steelhacks.git
-          git fetch origin gh-pages
-          git switch gh-pages
+          git fetch origin public-gh-pages
+          git switch public-gh-pages
           # copy the build that is there in ROOT/build/web into ROOT/build/web-deploy
           cp -R ../web/* .
           git status
           git add .
           # add commit of the previous commit from main
           echo ""
-          echo "Committing to gh-pages: ${{ github.event.head_commit.message }}"
+          echo "Committing to public-gh-pages: ${{ github.event.head_commit.message }}"
           echo ""
           git commit -m "${{ github.event.head_commit.message }}"
-          git push origin gh-pages
+          git push origin public-gh-pages
           
