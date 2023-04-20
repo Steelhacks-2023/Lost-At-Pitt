@@ -20,7 +20,7 @@ jobs:
 
       - run: flutter clean
       - run: flutter pub get
-      - run: flutter build web --release
+      - run: flutter build web --release --dart-define=FIREBASE_WEB_KEY=${{secrets.FIREBASE_WEB_KEY}} --dart-define=FIREBASE_ANDROID_KEY=${{secrets.FIREBASE_ANDROID_KEY}} --dart-define=FIREBASE_IOS_KEY=${{secrets.FIREBASE_IOS_KEY}} --dart-define=FIREBASE_MACOS_KEY=${{secrets.FIREBASE_MACOS_KEY}} --dart-define=GOOGLE_MAPS_KEY=${{secrets.GOOGLE_MAPS_KEY}}
 
       # Web deploy now is contained in build/web directory
       - run: |
