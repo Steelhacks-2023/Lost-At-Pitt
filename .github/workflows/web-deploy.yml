@@ -24,6 +24,11 @@ jobs:
 
       # Web deploy now is contained in build/web directory
       - run: |
+          export FIREBASE_WEB_KEY=${{secrets.FIREBASE_WEB_KEY}}
+          export FIREBASE_ANDROID_KEY=${{secrets.FIREBASE_ANDROID_KEY}}
+          export FIREBASE_IOS_KEY=${{secrets.FIREBASE_IOS_KEY}}
+          export FIREBASE_MACOS_KEY=${{secrets.FIREBASE_MACOS_KEY}}
+          export GOOGLE_MAPS_KEY=${{secrets.GOOGLE_MAPS_KEY}}
           cd build
           mkdir web-deploy
           cd web-deploy
