@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       actions: write
-      deployments: read|write|none
+      deployments: write
     steps:
       - uses: actions/checkout@v3
       - name: Find and Replace
