@@ -23,5 +23,5 @@ jobs:
         env:
           REPO: git@github.com:jeffzheng13/Lost-and-Found-Steelhacks.git
           BRANCH: main
-          FOLDER: .
+          FOLDER: /
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
