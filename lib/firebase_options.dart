@@ -44,7 +44,7 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: String.fromEnvironment("FIREBASE_WEB_KEY"),
+    apiKey: 'AIzaSyByMdAHCU2PYpS69RCJGUhvkyvu5NCYIj8',
     appId: '1:780072412373:web:7895885a967148bdd0ee5c',
     messagingSenderId: '780072412373',
     projectId: 'steelhacks-2023-db',
@@ -54,7 +54,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: String.fromEnvironment("FIREBASE_ANDROID_KEY"),
+    apiKey: 'AIzaSyCERe3j3efr-wf3lNFHwqM1E2Dpg4HKJ6Y',
     appId: '1:780072412373:android:8be28c803947082bd0ee5c',
     messagingSenderId: '780072412373',
     projectId: 'steelhacks-2023-db',
@@ -62,7 +62,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: String.fromEnvironment("FIREBASE_IOS_KEY"),
+    apiKey: 'AIzaSyB6ZUq_5_dagmiBo2rLxJKu56lOC0fGO4I',
     appId: '1:780072412373:ios:a567e58d75bb7015d0ee5c',
     messagingSenderId: '780072412373',
     projectId: 'steelhacks-2023-db',
@@ -72,7 +72,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: String.fromEnvironment("FIREBASE_MACOS_KEY"),
+    apiKey: 'AIzaSyB6ZUq_5_dagmiBo2rLxJKu56lOC0fGO4I',
     appId: '1:780072412373:ios:a567e58d75bb7015d0ee5c',
     messagingSenderId: '780072412373',
     projectId: 'steelhacks-2023-db',
