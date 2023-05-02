@@ -7,9 +7,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      actions: write
-      deployments: write
     steps:
       - uses: actions/checkout@v3
       - name: Find and Replace
@@ -21,7 +18,7 @@ jobs:
       - name: Push to Hidden Key Branch
         uses: s0/git-publish-subdir-action@develop
         env:
-          REPO: git@github.com:Steelhacks-2023/Lost-and-Found-Steelhacks.git
+          REPO: self
           BRANCH: hiddenKey-ghPages
           FOLDER: .
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
