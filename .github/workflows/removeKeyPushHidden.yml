@@ -1,0 +1,30 @@
+name: Remove API Key and Push To Hidden Branch
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Find and Replace
+        uses: jacobtomlinson/gha-find-replace@v3
+        with:
+          find: "AIzaSyDaeA4j77KOqMdW3WfIfhXHLDOEUN_Z3Wo"
+          replace: "%GOOGLE_MAPS_KEY%"
+      - name: Push Changes
+      - run: | 
+          git config user.name jeffzheng13
+          git config user.email jeffreyzheng12@gmail.com
+          git init
+          git remote add origin https://${{secrets.GITHUB_TOKEN}}@github.com/Steelhacks-2023/Lost-and-Found-Steelhacks.git
+          git fetch origin hiddenKey-ghPages
+          git switch hiddenKey-ghPages
+          git add .
+          git status
+          git commit -m "${{ github.event.head_commit.message }}"
+          git push origin hiddenKey-ghPages
+          
+        
