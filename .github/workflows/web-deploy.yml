@@ -28,9 +28,9 @@ jobs:
           mkdir web-deploy
           cd web-deploy
           #! Update with your Email ID associated with GitHub
-          git config --global user.email jeffreyzheng12@gmail.com
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           #! Update with your username associated with GitHub
-          git config --global user.name jeffzheng13
+          git config --global user.name 'github-actions[bot]'
           git config --global init.defaultBranch main
           git init
           # the repository to push the deploy into
