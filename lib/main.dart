@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:lost_found_steelhacks/mapPage.dart';
 import 'firebase_options.dart';
 
-// ...
+
 void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
