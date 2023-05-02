@@ -15,7 +15,6 @@ jobs:
           find: "AIzaSyDaeA4j77KOqMdW3WfIfhXHLDOEUN_Z3Wo"
           replace: "%GOOGLE_MAPS_KEY%"
       - run: | 
-          git remote add origin https://${{secrets.GITHUB_TOKEN}}@github.com/Steelhacks-2023/Lost-and-Found-Steelhacks.git
           git fetch origin hiddenKey-ghPages
           git switch hiddenKey-ghPages
           git add .
