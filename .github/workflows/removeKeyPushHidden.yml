@@ -12,7 +12,7 @@ jobs:
       - name: Find and Replace
         uses: jacobtomlinson/gha-find-replace@v3
         with:
-          find: "<script src="AIzaSyDaeA4j77KOqMdW3WfIfhXHLDOEUN_Z3Wo"></script>"
+          find: "<script src=\"AIzaSyDaeA4j77KOqMdW3WfIfhXHLDOEUN_Z3Wo\"></script>"
           replace: "%GOOGLE_MAPS_KEY%"
           include: "web/**"
           regex: false
