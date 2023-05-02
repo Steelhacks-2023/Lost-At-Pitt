@@ -14,7 +14,7 @@ jobs:
         with:
           find: "AIzaSyDaeA4j77KOqMdW3WfIfhXHLDOEUN_Z3Wo"
           replace: "%GOOGLE_MAPS_KEY%"
-          include: "**/*.html"
+          include: "web/**"
       - name: Push Changes
         uses: ad-m/github-push-action@v0.6.0
         with:
