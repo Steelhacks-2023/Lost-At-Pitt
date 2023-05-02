@@ -17,11 +17,36 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-
+      - run: |
+          cd build
+          mkdir web-deploy
+          cd web-deploy
+          #! Update with your Email ID associated with GitHub
+          git config --global user.email jeffreyzheng12@gmail.com
+          #! Update with your username associated with GitHub
+          git config --global user.name jeffzheng13
+          git config --global init.defaultBranch main
+          git init
+          # the repository to push the deploy into
+          #! Update the following with your username and repository
+          git remote add origin https://${{secrets.GITHUB_TOKEN}}@github.com/Steelhacks-2023/Lost-and-Found-Steelhacks.git
+          git fetch origin gh-pages
+          git switch gh-pages
+          # copy the build that is there in ROOT/build/web into ROOT/build/web-deploy
+          cp -R ../web/* .
+          git status
+          git add .
+          # add commit of the previous commit from main
+          echo ""
+          echo "Committing to gh-pages: ${{ github.event.head_commit.message }}"
+          echo ""
+          git commit -m "${{ github.event.head_commit.message }}"
+          git push origin gh-pages
+          
       - name: Deploy to Jeff's Private Repo, which will create site
         uses: s0/git-publish-subdir-action@develop
         env:
           REPO: git@github.com:jeffzheng13/Lost-and-Found-Steelhacks.git
           BRANCH: main
-          FOLDER: /
+          FOLDER: web-deploy
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
