@@ -1,23 +1,13 @@
-import 'dart:developer';
-import 'dart:html';
-import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lost_found_steelhacks/Utils.dart';
 import 'package:lost_found_steelhacks/lostAndFoundObject.dart';
-import 'package:lost_found_steelhacks/lostAndFoundObject.dart';
-import 'package:lost_found_steelhacks/postPage.dart';
 import 'package:lost_found_steelhacks/listPage.dart';
 import 'package:lost_found_steelhacks/itemRequest.dart';
-import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:icon_forest/icon_forest.dart';
-import 'package:flutter/gestures.dart';
 
 class mapPage extends StatefulWidget {
   const mapPage({super.key});

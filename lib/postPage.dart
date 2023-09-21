@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:icon_forest/icon_forest.dart';
 import 'package:lost_found_steelhacks/lostAndFoundObject.dart';
 import 'package:lost_found_steelhacks/mapPage.dart';
 import 'package:lost_found_steelhacks/listPage.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 // title: 'Flutter Project',
 // theme: ThemeData(
