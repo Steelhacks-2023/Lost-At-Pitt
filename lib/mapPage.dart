@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_flutter_web/google_maps_flutter_web.dart'
-    as GWebMap;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lost_found_steelhacks/Utils.dart';
@@ -16,8 +14,10 @@ import 'package:lost_found_steelhacks/lostAndFoundObject.dart';
 import 'package:lost_found_steelhacks/postPage.dart';
 import 'package:lost_found_steelhacks/listPage.dart';
 import 'package:lost_found_steelhacks/itemRequest.dart';
+import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:icon_forest/icon_forest.dart';
+import 'package:flutter/gestures.dart';
 
 class mapPage extends StatefulWidget {
   const mapPage({super.key});
@@ -90,8 +90,6 @@ class _mapPageState extends State<mapPage> {
     });
   }
 
-
-
   final Stream<QuerySnapshot> _lostCollectionStream =
       FirebaseFirestore.instance.collection('Lost').snapshots();
 
@@ -123,7 +121,6 @@ class _mapPageState extends State<mapPage> {
                     lostSnapshot.connectionState == ConnectionState.waiting) {
                   return Text("Waiting Getting Data");
                 }
-      
 
                 List<LostAndFoundObject> lostObjects = [];
                 List<LostAndFoundObject> foundObjects = [];
@@ -139,52 +136,61 @@ class _mapPageState extends State<mapPage> {
                   //_add(geo.latitude, geo.longitude);
                   final MarkerId temp = MarkerId(singleDoc.id);
                   final Marker marker = Marker(
-                    markerId: temp,
-                    icon: foundMarkerIcon,
-                    position: LatLng(geo.latitude, geo.longitude),
-                    onTap: () => showDialog(
-                      barrierDismissible: true,
-                      context: context,
-                       builder: (BuildContext) => AlertDialog(
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(32.0))),
-                        title: Text("Item Information"),
-                        insetPadding: EdgeInsets.all(200),
-                        content: Column(children: [
-                          Flexible(
-                            flex: 2,
-                            fit: FlexFit.tight,
-                            child: Container(
-                              child: Text("Item Name: " + data["ItemName"])),
-                          ),
-                          Flexible(
-                            flex: 4,
-                            fit: FlexFit.tight,
-                            child: Container(
-                              child: Text("Item Description: " + data["Description"])),
-                          ),
-                          // Flexible(
-                          //   flex: 5,
-                          //   fit: FlexFit.tight,
-                          //   child: Container(
-                          //     child: Image.asset(data["Picture"]),
-                          //   )
-                          // ),
-                          Flexible(
-                            flex: 1,
-                            fit: FlexFit.tight,
-                            child: Container(
-                              child: Text("Contact Info: " + data["Phone"].toString())),
-                          )
-                        ],),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, "close"), 
-                            child: const Text("Close"))
-                        ],
-                        backgroundColor: Colors.lightGreenAccent,
-                       )),
-                  );
+                      markerId: temp,
+                      icon: foundMarkerIcon,
+                      position: LatLng(geo.latitude, geo.longitude),
+                      onTap: () => showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (BuildContext) => GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                child: AlertDialog(
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(32.0))),
+                                  title: Text("Item Information"),
+                                  insetPadding: EdgeInsets.all(200),
+                                  content: Column(
+                                    children: [
+                                      Flexible(
+                                        flex: 2,
+                                        fit: FlexFit.tight,
+                                        child: Container(
+                                            child: Text("Item Name: " +
+                                                data["ItemName"])),
+                                      ),
+                                      Flexible(
+                                        flex: 4,
+                                        fit: FlexFit.tight,
+                                        child: Container(
+                                            child: Text("Item Description: " +
+                                                data["Description"])),
+                                      ),
+                                      // Flexible(
+                                      //   flex: 5,
+                                      //   fit: FlexFit.tight,
+                                      //   child: Container(
+                                      //     child: Image.asset(data["Picture"]),
+                                      //   )
+                                      // ),
+                                      Flexible(
+                                        flex: 1,
+                                        fit: FlexFit.tight,
+                                        child: Container(
+                                            child: Text("Contact Info: " +
+                                                data["Phone"].toString())),
+                                      )
+                                    ],
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                        onPressed: () =>
+                                            Navigator.pop(context, "close"),
+                                        child: const Text("Close")),
+                                  ],
+                                  backgroundColor: Colors.lightGreenAccent,
+                                )),
+                          ));
 
                   markers[temp] = marker;
                 }
@@ -202,52 +208,60 @@ class _mapPageState extends State<mapPage> {
                   final MarkerId temp = MarkerId(singleDoc.id);
                   var markerIdVal = "Item Information";
                   final Marker marker = Marker(
-                    markerId: temp,
-                    icon: lostMarkerIcon,
-                    position: LatLng(geo.latitude, geo.longitude),
-                    onTap: () => showDialog(
-                      barrierDismissible: true,
-                      context: context,
-                       builder: (BuildContext) => AlertDialog(
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(32.0))),
-                        insetPadding: EdgeInsets.all(200),
-                        title: Text("Item Information"),
-                        content: Column(children: [
-                          Flexible(
-                            flex: 2,
-                            fit: FlexFit.tight,
-                            child: Container(
-                              child: Text("Item Name: " + data["ItemName"])),
-                          ),
-                          Flexible(
-                            flex: 4,
-                            fit: FlexFit.tight,
-                            child: Container(
-                              child: Text("Item Description: " + data["Description"])),
-                          ),
-                          // Flexible(
-                          //   flex: 5,
-                          //   fit: FlexFit.tight,
-                          //   child: Container(
-                          //     child: Image.asset(data["Picture"]),
-                          //   )
-                          // ),
-                          Flexible(
-                            flex: 1,
-                            fit: FlexFit.tight,
-                            child: Container(
-                              child: Text("Contact Info: " + data["Phone"].toString())),
-                          )
-                        ],),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, "close"), 
-                            child: const Text("Close"))
-                        ],
-                        backgroundColor: Colors.redAccent,
-                       )),
-                  );
+                      markerId: temp,
+                      icon: lostMarkerIcon,
+                      position: LatLng(geo.latitude, geo.longitude),
+                      onTap: () => showDialog(
+                            barrierDismissible: true,
+                            context: context,
+                            builder: (BuildContext) => GestureDetector(
+                                child: AlertDialog(
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(32.0))),
+                                  insetPadding: EdgeInsets.all(200),
+                                  title: Text("Item Information"),
+                                  content: Column(
+                                    children: [
+                                      Flexible(
+                                        flex: 2,
+                                        fit: FlexFit.tight,
+                                        child: Container(
+                                            child: Text("Item Name: " +
+                                                data["ItemName"])),
+                                      ),
+                                      Flexible(
+                                        flex: 4,
+                                        fit: FlexFit.tight,
+                                        child: Container(
+                                            child: Text("Item Description: " +
+                                                data["Description"])),
+                                      ),
+                                      // Flexible(
+                                      //   flex: 5,
+                                      //   fit: FlexFit.tight,
+                                      //   child: Container(
+                                      //     child: Image.asset(data["Picture"]),
+                                      //   )
+                                      // ),
+                                      Flexible(
+                                        flex: 1,
+                                        fit: FlexFit.tight,
+                                        child: Container(
+                                            child: Text("Contact Info: " +
+                                                data["Phone"].toString())),
+                                      )
+                                    ],
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                        onPressed: () =>
+                                            Navigator.pop(context, "close"),
+                                        child: const Text("Close"))
+                                  ],
+                                  backgroundColor: Colors.redAccent,
+                                )),
+                          ));
                   markers[temp] = marker;
                 }
 
@@ -266,11 +280,11 @@ class _mapPageState extends State<mapPage> {
                                     if (index == 1) {
                                       Navigator.push(
                                           context,
-                                          MaterialPageRoute(builder: (context) => listPage(
-                                            lostObjects: lostObjects,
-                                            foundObjects: foundObjects,
-                                            displayLostItems: true
-                                      )));
+                                          MaterialPageRoute(
+                                              builder: (context) => listPage(
+                                                  lostObjects: lostObjects,
+                                                  foundObjects: foundObjects,
+                                                  displayLostItems: true)));
                                     }
                                   });
                                 },
@@ -320,7 +334,8 @@ class _mapPageState extends State<mapPage> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => SwitchApp(coord: coords)));
+                                            builder: (context) =>
+                                                SwitchApp(coord: coords)));
                                   },
                                   markers: Set<Marker>.of(markers.values),
                                 ),

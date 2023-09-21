@@ -136,29 +136,43 @@ class _FormWidgetState extends State<FormWidget> {
               child: Column(
                 children: <Widget>[
                   Container(
-                      margin: EdgeInsets.all(15),
-                      padding: EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(15),
+                    margin: const EdgeInsets.all(15),
+                    padding: const EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(15),
+                      ),
+                      border: Border.all(color: Colors.white),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black12,
+                          offset: Offset(2, 2),
+                          spreadRadius: 2,
+                          blurRadius: 1,
                         ),
-                        border: Border.all(color: Colors.white),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            offset: Offset(2, 2),
-                            spreadRadius: 2,
-                            blurRadius: 1,
-                          ),
-                        ],
-                      ),
-                      ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
             UploadImageButton(),
-
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ButtonTheme(
+                minWidth: 150,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const mapPage()));
+                  },
+                  child: const Text('Close'),
+                ),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: ButtonTheme(
@@ -169,9 +183,9 @@ class _FormWidgetState extends State<FormWidget> {
                     // the form is invalid.
                     if (_formKey.currentState!.validate()) {
                       //this is where the form stuff is grabbed
-                      print(category);
-                      print(description);
-                      print(phone);
+                      //print(category);
+                      //print(description);
+                      //print(phone);
 
                       if (isSelected[0]) {
                         addLost();
