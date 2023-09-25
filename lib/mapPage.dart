@@ -206,51 +206,51 @@ class _mapPageState extends State<mapPage> {
                             context: context,
                             builder: (BuildContext) => GestureDetector(
                                 child: AlertDialog(
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(32.0))),
-                                  insetPadding: EdgeInsets.all(200),
-                                  title: Text("Item Information"),
-                                  content: Column(
-                                    children: [
-                                      Flexible(
-                                        flex: 2,
-                                        fit: FlexFit.tight,
-                                        child: Container(
-                                            child: Text("Item Name: " +
-                                                data["ItemName"])),
-                                      ),
-                                      Flexible(
-                                        flex: 4,
-                                        fit: FlexFit.tight,
-                                        child: Container(
-                                            child: Text("Item Description: " +
-                                                data["Description"])),
-                                      ),
-                                      // Flexible(
-                                      //   flex: 5,
-                                      //   fit: FlexFit.tight,
-                                      //   child: Container(
-                                      //     child: Image.asset(data["Picture"]),
-                                      //   )
-                                      // ),
-                                      Flexible(
-                                        flex: 1,
-                                        fit: FlexFit.tight,
-                                        child: Container(
-                                            child: Text("Contact Info: " +
-                                                data["Phone"].toString())),
-                                      )
-                                    ],
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(32.0))),
+                              insetPadding: EdgeInsets.all(200),
+                              title: Text("Item Information"),
+                              content: Column(
+                                children: [
+                                  Flexible(
+                                    flex: 2,
+                                    fit: FlexFit.tight,
+                                    child: Container(
+                                        child: Text(
+                                            "Item Name: " + data["ItemName"])),
                                   ),
-                                  actions: <Widget>[
-                                    TextButton(
-                                        onPressed: () =>
-                                            Navigator.pop(context, "close"),
-                                        child: const Text("Close"))
-                                  ],
-                                  backgroundColor: Colors.redAccent,
-                                )),
+                                  Flexible(
+                                    flex: 4,
+                                    fit: FlexFit.tight,
+                                    child: Container(
+                                        child: Text("Item Description: " +
+                                            data["Description"])),
+                                  ),
+                                  // Flexible(
+                                  //   flex: 5,
+                                  //   fit: FlexFit.tight,
+                                  //   child: Container(
+                                  //     child: Image.asset(data["Picture"]),
+                                  //   )
+                                  // ),
+                                  Flexible(
+                                    flex: 1,
+                                    fit: FlexFit.tight,
+                                    child: Container(
+                                        child: Text("Contact Info: " +
+                                            data["Phone"].toString())),
+                                  )
+                                ],
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(context, "close"),
+                                    child: const Text("Close"))
+                              ],
+                              backgroundColor: Colors.redAccent,
+                            )),
                           ));
                   markers[temp] = marker;
                 }
@@ -274,7 +274,7 @@ class _mapPageState extends State<mapPage> {
                                               builder: (context) => listPage(
                                                   lostObjects: lostObjects,
                                                   foundObjects: foundObjects,
-                                                  displayLostItems: true)));
+                                                  mode: true)));
                                     }
                                   });
                                 },

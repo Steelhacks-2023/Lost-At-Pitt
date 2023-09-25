@@ -6,6 +6,7 @@
 .DS_Store
 .atom/
 .buildlog/
+.vscode/
 .history
 .svn/
 migrate_working_dir/
@@ -32,6 +33,8 @@ pubspec.lock
 .pub-cache/
 .pub/
 /build/
+linux/
+macos/
 
 # Symbolication related
 app.*.symbols
@@ -49,3 +52,5 @@ app.*.map.json
 # /ios
 # /web
 # lib/firebase_options.dart
+
+
