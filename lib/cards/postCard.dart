@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lost_found_steelhacks/lostAndFoundObject.dart';
+import 'package:lost_found_steelhacks/pages/postPage.dart';
+import 'package:lost_found_steelhacks/routing/hero_dialog_route.dart';
 
 class PostCard extends StatelessWidget {
   final LostAndFoundObject item;
@@ -18,7 +20,7 @@ class PostCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () => handleTap(),
+        onTap: () => handleTap(context),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Container(
@@ -67,7 +69,7 @@ class PostCard extends StatelessWidget {
                         ])),
                         SizedBox(height: 5),
                         Row(
-                            children: generateTags(),
+                            children: generateTags(tags),
                             mainAxisAlignment: MainAxisAlignment.start)
                       ],
                     ),
@@ -88,7 +90,7 @@ class PostCard extends StatelessWidget {
         ));
   }
 
-  List<Widget> generateTags() {
+  List<Widget> generateTags(Map<String,Color> tags) {
     List<Widget> hashtags = [];
     for (String tag in tags.keys) {
       Color c = tags[tag] ?? Colors.black;
@@ -106,8 +108,10 @@ class PostCard extends StatelessWidget {
     return hashtags;
   }
 
-  void handleTap() {
-    // TODO: implement
+  void handleTap(BuildContext context) {
     // push to hero dialog route to animate the postPage popup
+    Navigator.of(context).push(HeroDialogRoute(builder: (context) {
+      return PostPage(item: item);
+    }));
   }
 }
