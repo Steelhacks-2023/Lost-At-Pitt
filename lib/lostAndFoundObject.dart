@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+// In the future we will want to override this class to lost vs. found objects
 class LostAndFoundObject {
   final String? itemName;
   final String? description;

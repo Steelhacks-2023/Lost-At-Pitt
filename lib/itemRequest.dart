@@ -81,124 +81,126 @@ class _FormWidgetState extends State<FormWidget> {
       padding: const EdgeInsets.fromLTRB(100, 10, 100, 12),
       child: Form(
         key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            //SwitchExample(),
-            const Text('Enter your item from: ',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                )),
-            Text(("N: " + lat.toString() + " \nS: " + long.toString() + "\n"),
-                style: TextStyle(
-                  fontSize: 18,
-                )),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              //SwitchExample(),
+              const Text('Enter your item from: ',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  )),
+              Text(("N: " + lat.toString() + " \nS: " + long.toString() + "\n"),
+                  style: TextStyle(
+                    fontSize: 18,
+                  )),
 
-            ToggleButtons(
-              isSelected: isSelected,
-              onPressed: (int index) {
-                setState(() {
-                  for (int buttonIndex = 0;
-                      buttonIndex < isSelected.length;
-                      buttonIndex++) {
-                    if (buttonIndex == index) {
-                      isSelected[buttonIndex] = true;
-                    } else {
-                      isSelected[buttonIndex] = false;
+              ToggleButtons(
+                isSelected: isSelected,
+                onPressed: (int index) {
+                  setState(() {
+                    for (int buttonIndex = 0;
+                        buttonIndex < isSelected.length;
+                        buttonIndex++) {
+                      if (buttonIndex == index) {
+                        isSelected[buttonIndex] = true;
+                      } else {
+                        isSelected[buttonIndex] = false;
+                      }
                     }
-                  }
-                });
-              },
-              borderRadius: const BorderRadius.all(Radius.circular(8)),
-              children: options,
-              color: Colors.blue,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: DropdownButt(),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: TextBox(),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: PhoneNumber(),
-            ),
-
-            Container(
-              color: Colors.white,
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    margin: const EdgeInsets.all(15),
-                    padding: const EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(15),
-                      ),
-                      border: Border.all(color: Colors.white),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black12,
-                          offset: Offset(2, 2),
-                          spreadRadius: 2,
-                          blurRadius: 1,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                  });
+                },
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                children: options,
+                color: Colors.blue,
               ),
-            ),
-            UploadImageButton(),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ButtonTheme(
-                minWidth: 150,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const mapPage()));
-                  },
-                  child: const Text('Close'),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: DropdownButt(),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: TextBox(),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: PhoneNumber(),
+              ),
+
+              Container(
+                color: Colors.white,
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      margin: const EdgeInsets.all(15),
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(15),
+                        ),
+                        border: Border.all(color: Colors.white),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black12,
+                            offset: Offset(2, 2),
+                            spreadRadius: 2,
+                            blurRadius: 1,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: ButtonTheme(
-                minWidth: 150,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Validate will return true if the form is valid, or false if
-                    // the form is invalid.
-                    if (_formKey.currentState!.validate()) {
-                      //this is where the form stuff is grabbed
-                      //print(category);
-                      //print(description);
-                      //print(phone);
-
-                      if (isSelected[0]) {
-                        addLost();
-                      } else {
-                        addFound();
-                      }
+              UploadImageButton(),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ButtonTheme(
+                  minWidth: 150,
+                  child: ElevatedButton(
+                    onPressed: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const mapPage()));
-                    }
-                  },
-                  child: const Text('Submit'),
+                    },
+                    child: const Text('Close'),
+                  ),
                 ),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: ButtonTheme(
+                  minWidth: 150,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Validate will return true if the form is valid, or false if
+                      // the form is invalid.
+                      if (_formKey.currentState!.validate()) {
+                        //this is where the form stuff is grabbed
+                        //print(category);
+                        //print(description);
+                        //print(phone);
+
+                        if (isSelected[0]) {
+                          addLost();
+                        } else {
+                          addFound();
+                        }
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const mapPage()));
+                      }
+                    },
+                    child: const Text('Submit'),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
