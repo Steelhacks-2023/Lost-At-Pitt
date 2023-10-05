@@ -7,6 +7,8 @@ import 'package:lost_found_steelhacks/Utils.dart';
 import 'package:lost_found_steelhacks/lostAndFoundObject.dart';
 import 'package:lost_found_steelhacks/listPage.dart';
 import 'package:lost_found_steelhacks/itemRequest.dart';
+import 'package:lost_found_steelhacks/routing/hero_dialog_route.dart';
+import 'package:lost_found_steelhacks/routing/nav_bar.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class mapPage extends StatefulWidget {
@@ -263,33 +265,9 @@ class _mapPageState extends State<mapPage> {
                         height: dim.height,
                         child: Column(children: [
                           Expanded(
-                              flex: 0,
-                              child: NavigationBar(
-                                onDestinationSelected: (int index) {
-                                  setState(() {
-                                    if (index == 1) {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => listPage(
-                                                  lostObjects: lostObjects,
-                                                  foundObjects: foundObjects,
-                                                  mode: true)));
-                                    }
-                                  });
-                                },
-                                selectedIndex: currentPageIndex,
-                                destinations: const <Widget>[
-                                  NavigationDestination(
-                                    icon: Icon(Icons.explore),
-                                    label: 'Map',
-                                  ),
-                                  NavigationDestination(
-                                    icon: Icon(Icons.format_list_numbered),
-                                    label: 'List',
-                                  ),
-                                ],
-                              )),
+                            flex: 0,
+                            child: NavBar(lostObjects: lostObjects, foundObjects: foundObjects, mode: true)
+                          ),
                           Expanded(
                               flex: 5,
                               child: SlidingUpPanel(
@@ -297,18 +275,8 @@ class _mapPageState extends State<mapPage> {
                                 minHeight: 0,
                                 isDraggable: false,
                                 maxHeight: dim.height * 0.5,
-
                                 controller: _panelController,
                                 backdropEnabled: true,
-                                // collapsed: Container(
-                                //     decoration: const BoxDecoration(
-                                //       color: Colors.blueGrey,
-                                //     ),
-                                //     child: const Center(
-                                //         child: Text(
-                                //       "Click on the map to place a pin",
-                                //       style: TextStyle(color: Colors.white),
-                                //   ))),
                                 panel: new SwitchApp(coord: tempCoords),
                                 body: GoogleMap(
                                   onMapCreated: _onMapCreated,

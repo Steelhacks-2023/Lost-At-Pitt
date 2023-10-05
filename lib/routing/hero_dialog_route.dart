@@ -46,3 +46,7 @@ class HeroDialogRoute<T> extends PageRoute<T> {
   @override
   String get barrierLabel => 'Popup dialog open';
 }
+
+void route(Widget page, BuildContext context) {
+  Navigator.push(context, HeroDialogRoute(builder: (context) => page));
+}

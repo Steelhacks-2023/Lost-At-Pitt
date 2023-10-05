@@ -27,16 +27,16 @@ class PostCard extends StatelessWidget {
             width: MediaQuery.of(context).size.width,
             child: Center(
                 child: Container(
-              padding: EdgeInsets.all(5),
-              constraints: BoxConstraints(maxWidth: 400),
+              padding: const EdgeInsets.all(5),
+              constraints: const BoxConstraints(maxWidth: 400),
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 255, 255, 255),
+                color: const Color.fromARGB(255, 255, 255, 255),
                 border: Border.all(
-                    width: 3, color: Color.fromARGB(255, 221, 221, 221)),
+                    width: 3, color: const Color.fromARGB(255, 221, 221, 221)),
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
-                    color: const Color.fromARGB(255, 122, 122, 122),
+                    color: Color.fromARGB(255, 122, 122, 122),
                     blurRadius: 2.0,
                     spreadRadius: 0.0,
                     offset: Offset(2.0, 2.0), // shadow direction: bottom right
@@ -55,9 +55,9 @@ class PostCard extends StatelessWidget {
                           shape: BoxShape.circle,
                           border: Border.all(
                               width: 3,
-                              color: Color.fromARGB(255, 70, 133, 243))),
+                              color: const Color.fromARGB(255, 70, 133, 243))),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -65,16 +65,16 @@ class PostCard extends StatelessWidget {
                             text: TextSpan(children: [
                           TextSpan(
                               text: "User found ${item.itemName}",
-                              style: TextStyle(fontSize: 16)),
+                              style: const TextStyle(fontSize: 16)),
                         ])),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         Row(
                             children: generateTags(tags),
                             mainAxisAlignment: MainAxisAlignment.start)
                       ],
                     ),
-                    Spacer(),
-                    Padding(
+                    const Spacer(),
+                    const Padding(
                       padding: EdgeInsets.only(right: 3),
                       child: Column(
                         children: [
@@ -95,14 +95,14 @@ class PostCard extends StatelessWidget {
     for (String tag in tags.keys) {
       Color c = tags[tag] ?? Colors.black;
       hashtags.add(Padding(
-        padding: EdgeInsets.only(right: 5),
+        padding: const EdgeInsets.only(right: 5),
         child: Container(
-            padding: EdgeInsets.all(2),
+            padding: const EdgeInsets.all(2),
             child: Text(tag, style: TextStyle(color: c)),
             decoration: BoxDecoration(
                 color: tags[tag]?.withOpacity(0.3),
                 border: Border.all(color: c, width: 2),
-                borderRadius: BorderRadius.all(Radius.circular(3)))),
+                borderRadius: const BorderRadius.all(Radius.circular(3)))),
       ));
     }
     return hashtags;
