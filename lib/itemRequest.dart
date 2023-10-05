@@ -28,56 +28,33 @@ final numberCheck =
 final List<bool> isSelected = <bool>[true, false];
 String description = "", category = "Water Bottle";
 int phone = 0;
-LatLng local = LatLng(0, 0);
 double lat = 0, long = 0;
 
 const List<Widget> options = <Widget>[
   Text('Lost'),
   Text('Found'),
 ];
-// void main() async{
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await Firebase.initializeApp();
-//   runApp(const SwitchApp());
-// }
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(SwitchApp(coord: local));
-}
 
-class SwitchApp extends StatelessWidget {
-  //const SwitchApp({super.key});
-  const SwitchApp({Key? key, required this.coord}) : super(key: key);
-
-  final LatLng coord;
-  @override
-  Widget build(BuildContext context) {
-    lat = coord.latitude;
-    long = coord.longitude;
-    return const MaterialApp(
-      home: Scaffold(
-        //appBar: AppBar(title: const Text('Switch Sample')),
-        body: FormWidget(),
-      ),
-    );
-  }
-}
-
-class FormWidget extends StatefulWidget {
-  const FormWidget({super.key});
+class ItemRequest extends StatefulWidget {
+  ItemRequest({super.key, required this.itemLoc});
+  final LatLng itemLoc;
 
   @override
-  State<FormWidget> createState() => _FormWidgetState();
+  State<ItemRequest> createState() => _ItemRequestState();
 }
 
-class _FormWidgetState extends State<FormWidget> {
+class _ItemRequestState extends State<ItemRequest> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final storageRef = FirebaseStorage.instance.ref();
 
   @override
   Widget build(BuildContext context) {
     File imageUrl;
-    return Padding(
+    lat = widget.itemLoc.latitude;
+    long = widget.itemLoc.longitude;
+
+    return Scaffold(
+        body: Padding(
       padding: const EdgeInsets.fromLTRB(100, 10, 100, 12),
       child: Form(
         key: _formKey,
@@ -203,7 +180,7 @@ class _FormWidgetState extends State<FormWidget> {
           ),
         ),
       ),
-    );
+    ));
   }
 }
 

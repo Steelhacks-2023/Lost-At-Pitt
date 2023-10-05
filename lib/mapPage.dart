@@ -256,8 +256,7 @@ class _mapPageState extends State<mapPage> {
                           ));
                   markers[temp] = marker;
                 }
-
-                PanelController _panelController = PanelController();
+                
                 var dim = MediaQuery.of(context).size;
                 return Scaffold(
                     resizeToAvoidBottomInset: false,
@@ -270,15 +269,7 @@ class _mapPageState extends State<mapPage> {
                           ),
                           Expanded(
                               flex: 5,
-                              child: SlidingUpPanel(
-                                defaultPanelState: PanelState.CLOSED,
-                                minHeight: 0,
-                                isDraggable: false,
-                                maxHeight: dim.height * 0.5,
-                                controller: _panelController,
-                                backdropEnabled: true,
-                                panel: new SwitchApp(coord: tempCoords),
-                                body: GoogleMap(
+                              child: GoogleMap(
                                   onMapCreated: _onMapCreated,
                                   initialCameraPosition: CameraPosition(
                                     target: _center,
@@ -288,16 +279,14 @@ class _mapPageState extends State<mapPage> {
                                     _add(coords.latitude, coords.longitude);
                                     tempCoords = coords;
                                     //_panelController.open();
-
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                SwitchApp(coord: coords)));
+                                                ItemRequest(itemLoc: coords)));
                                   },
                                   markers: Set<Marker>.of(markers.values),
-                                ),
-                              )),
+                                ),),
                         ])));
               });
         });
