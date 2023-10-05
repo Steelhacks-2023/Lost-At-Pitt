@@ -6,9 +6,10 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:lost_found_steelhacks/mapPage.dart';
+import 'package:lost_found_steelhacks/pages/map_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:lost_found_steelhacks/routing/hero_dialog_route.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -137,12 +138,7 @@ class _ItemRequestState extends State<ItemRequest> {
                 child: ButtonTheme(
                   minWidth: 150,
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const mapPage()));
-                    },
+                    onPressed: () => route(const MapPage(), context),
                     child: const Text('Close'),
                   ),
                 ),
@@ -166,10 +162,7 @@ class _ItemRequestState extends State<ItemRequest> {
                         } else {
                           addFound();
                         }
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const mapPage()));
+                        route(const MapPage(), context);
                       }
                     },
                     child: const Text('Submit'),

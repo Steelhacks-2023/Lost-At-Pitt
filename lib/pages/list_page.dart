@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:lost_found_steelhacks/cards/postCard.dart';
-import 'package:lost_found_steelhacks/lostAndFoundObject.dart';
+import 'package:lost_found_steelhacks/cards/post_card.dart';
+import 'package:lost_found_steelhacks/data/item.dart';
 import 'package:lost_found_steelhacks/routing/nav_bar.dart';
 
-class listPage extends StatefulWidget {
-  final List<LostAndFoundObject> lostObjects;
-  final List<LostAndFoundObject> foundObjects;
+class ListPage extends StatefulWidget {
+  final List<Item> lostObjects;
+  final List<Item> foundObjects;
   final bool mode;
 
-  const listPage(
+  const ListPage(
       {super.key,
       required this.lostObjects,
       required this.foundObjects,
       required this.mode});
 
   @override
-  State<listPage> createState() => _listPageState();
+  State<ListPage> createState() => _ListPageState();
 }
 
-class _listPageState extends State<listPage> {
+class _ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,9 +38,8 @@ class _listPageState extends State<listPage> {
 
   List<PostCard> getListEntries() {
     List<PostCard> cards = [];
-    List<LostAndFoundObject> objects =
-        widget.mode ? widget.lostObjects : widget.foundObjects;
-    for (LostAndFoundObject e in objects) {
+    List<Item> objects = widget.mode ? widget.lostObjects : widget.foundObjects;
+    for (Item e in objects) {
       cards.add(PostCard(item: e));
     }
     return cards;
