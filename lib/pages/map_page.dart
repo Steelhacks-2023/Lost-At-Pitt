@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lost_found_steelhacks/routing/hero_dialog_route.dart';
-import 'package:lost_found_steelhacks/utils.dart';
 import 'package:lost_found_steelhacks/data/item.dart';
 import 'package:lost_found_steelhacks/pages/item_request.dart';
 import 'package:lost_found_steelhacks/routing/nav_bar.dart';
+import 'package:lost_found_steelhacks/utils.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
