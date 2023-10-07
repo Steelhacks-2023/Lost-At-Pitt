@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:lost_found_steelhacks/lostAndFoundObject.dart';
-import 'package:lost_found_steelhacks/pages/postPage.dart';
+import 'package:lost_found_steelhacks/data/item.dart';
+import 'package:lost_found_steelhacks/pages/post_page.dart';
 import 'package:lost_found_steelhacks/routing/hero_dialog_route.dart';
 
 class PostCard extends StatelessWidget {
-  final LostAndFoundObject item;
+  final Item item;
   // Placeholder list of tags
   static Map<String, Color> tags = {
     "Tech": const Color.fromARGB(255, 133, 218, 136),
@@ -20,7 +20,7 @@ class PostCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () => handleTap(context),
+        onTap: () => route(PostPage(item: item), context),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Container(
@@ -90,7 +90,7 @@ class PostCard extends StatelessWidget {
         ));
   }
 
-  List<Widget> generateTags(Map<String,Color> tags) {
+  List<Widget> generateTags(Map<String, Color> tags) {
     List<Widget> hashtags = [];
     for (String tag in tags.keys) {
       Color c = tags[tag] ?? Colors.black;
@@ -106,12 +106,5 @@ class PostCard extends StatelessWidget {
       ));
     }
     return hashtags;
-  }
-
-  void handleTap(BuildContext context) {
-    // push to hero dialog route to animate the postPage popup
-    Navigator.of(context).push(HeroDialogRoute(builder: (context) {
-      return PostPage(item: item);
-    }));
   }
 }

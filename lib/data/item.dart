@@ -1,26 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 // In the future we will want to override this class to lost vs. found objects
-class LostAndFoundObject {
+class Item {
   final String? itemName;
   final String? description;
   final num? phone;
   final int? picture;
   final GeoPoint? location;
 
-  LostAndFoundObject(
+  Item(
       {this.itemName,
       this.description,
       this.phone,
       this.picture,
       this.location});
 
-  factory LostAndFoundObject.fromFirestore(
+  factory Item.fromFirestore(
     QueryDocumentSnapshot snapshot,
     SnapshotOptions? options,
   ) {
     //final data = snapshot.data();
-    return LostAndFoundObject(
+    return Item(
         itemName: snapshot.get('ItemName'),
         description: snapshot.get('Description'),
         location: snapshot.get('Location'),
