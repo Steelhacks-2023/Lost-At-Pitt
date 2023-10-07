@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lost_found_steelhacks/lostAndFoundObject.dart';
+import 'package:lost_found_steelhacks/data/item.dart';
 
 TextStyle theme =
     const TextStyle(fontSize: 18, color: Color.fromARGB(255, 29, 66, 30));
@@ -7,7 +7,7 @@ TextStyle theme =
 String err = "ERR";
 
 class PostPage extends StatelessWidget {
-  final LostAndFoundObject item;
+  final Item item;
   // we need to declare all useable "tags" somewhere, and then a LostAndFoundObject will have a list of tags. this is currently a placeholder for UI testing
   static Map<String, Color> tags = {
     "Tech": const Color.fromARGB(255, 133, 218, 136),
@@ -36,7 +36,8 @@ class PostPage extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: const Color.fromARGB(255, 255, 255, 255),
                   border: Border.all(
-                      width: 3, color: const Color.fromARGB(255, 221, 221, 221)),
+                      width: 3,
+                      color: const Color.fromARGB(255, 221, 221, 221)),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                   boxShadow: const [
                     BoxShadow(
@@ -74,7 +75,8 @@ class PostPage extends StatelessWidget {
                                         TextSpan(
                                             text:
                                                 "User found ${item.itemName}\n",
-                                            style: const TextStyle(fontSize: 20)),
+                                            style:
+                                                const TextStyle(fontSize: 20)),
                                         const TextSpan(
                                             text: "4 hours ago",
                                             style: TextStyle(
@@ -87,10 +89,14 @@ class PostPage extends StatelessWidget {
                       ),
                     ),
                     // placeholder
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.network(
-                          "https://www.hydroflask.com/media/catalog/product/w/6/w64bts474-lupine-straighton_1.jpg"),
+                    Expanded(
+                      flex: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.network(
+                          "https://www.hydroflask.com/media/catalog/product/w/6/w64bts474-lupine-straighton_1.jpg",
+                        ),
+                      ),
                     ),
                     Expanded(
                       child: Container(
@@ -114,10 +120,24 @@ class PostPage extends StatelessWidget {
                                                 fontSize: 15)),
                                         TextSpan(
                                             text: item.description,
-                                            style: const TextStyle(fontSize: 15)),
+                                            style:
+                                                const TextStyle(fontSize: 15)),
                                       ])),
                                   const Spacer(),
-                                  Row(children: generateTags(tags) + [const Spacer(), Material(color: const Color.fromARGB(255, 217, 235, 255), child: IconButton(icon: const Icon(Icons.message), onPressed: () => messageUser(),))])
+                                  Row(
+                                      children: generateTags(tags) +
+                                          [
+                                            const Spacer(),
+                                            Material(
+                                                color: const Color.fromARGB(
+                                                    255, 217, 235, 255),
+                                                child: IconButton(
+                                                  icon:
+                                                      const Icon(Icons.message),
+                                                  onPressed: () =>
+                                                      messageUser(),
+                                                ))
+                                          ])
                                 ]),
                           )),
                     )
@@ -147,7 +167,7 @@ class PostPage extends StatelessWidget {
     }
     return hashtags;
   }
-  
+
   // will route to a direct message with the user who created the post
   void messageUser() {
     // TODO
@@ -168,8 +188,8 @@ class ProfilePicture extends StatelessWidget {
       decoration: BoxDecoration(
           color: const Color.fromARGB(255, 118, 181, 233),
           shape: BoxShape.circle,
-          border:
-              Border.all(width: 3, color: const Color.fromARGB(255, 70, 133, 243))),
+          border: Border.all(
+              width: 3, color: const Color.fromARGB(255, 70, 133, 243))),
     );
   }
 }
