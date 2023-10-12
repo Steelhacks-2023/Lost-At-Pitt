@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lost_found_steelhacks/pages/post_page.dart';
-import 'package:lost_found_steelhacks/routing/hero_dialog_route.dart';
+import 'package:lost_found_steelhacks/routing/route.dart';
 import 'package:lost_found_steelhacks/data/item.dart';
 import 'package:lost_found_steelhacks/pages/item_request.dart';
 import 'package:lost_found_steelhacks/routing/nav_bar.dart';
 import 'package:lost_found_steelhacks/utils.dart';
-import 'package:pointer_interceptor/pointer_interceptor.dart';
-import 'package:rxdart/rxdart.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -27,7 +25,6 @@ class _MapPageState extends State<MapPage> {
 
   @override
   void initState() {
-    // loads initial data
     super.initState();
     setFoundIcon();
     setLostIcon();
@@ -60,36 +57,13 @@ class _MapPageState extends State<MapPage> {
   bool pageOpen = false;
   LatLng tempCoords = LatLng(0, 0);
 
-  void _add(double lat, double long) {
-    final MarkerId markerId = MarkerId("ID" + counter.toString());
-
-    // creating a new MARKER
-    final Marker marker = Marker(
-      markerId: markerId,
-      icon: lostMarkerIcon,
-      position: LatLng(
-        lat,
-        long,
-      ),
-      //infoWindow: InfoWindow(title: markerIdVal, snippet: '*'),
-      // onTap: () {
-      //   _onMarkerTapped(markerId);
-      // },
-    );
-    counter++;
-    setState(() {
-      // adding a new marker to map
-      markers[markerId] = marker;
-    });
-  }
-
   final Stream<QuerySnapshot> _lostCollectionStream =
       FirebaseFirestore.instance.collection('Lost').snapshots();
 
   final Stream<QuerySnapshot> _foundCollectionStream =
       FirebaseFirestore.instance.collection('Found').snapshots();
 
-  //University of Pittsburgh Coordinates
+  //University of Pittsburgh Coordinates - move to a JSON file
   final LatLng _center = const LatLng(40.4443533, -79.960835);
 
   void _onMapCreated(GoogleMapController controller) {
@@ -104,7 +78,7 @@ class _MapPageState extends State<MapPage> {
         builder:
             (BuildContext context, AsyncSnapshot<QuerySnapshot> foundSnapshot) {
           return StreamBuilder<QuerySnapshot>(
-              stream: _lostCollectionStream,
+              stream: _foundCollectionStream,
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> lostSnapshot) {
                 if (lostSnapshot.hasError || foundSnapshot.hasError) {
@@ -120,7 +94,7 @@ class _MapPageState extends State<MapPage> {
 
                 return Scaffold(
                     resizeToAvoidBottomInset: false,
-                    body: Container(
+                    body: SizedBox(
                         height: MediaQuery.of(context).size.height,
                         child: Column(children: [
                           Expanded(
@@ -146,13 +120,27 @@ class _MapPageState extends State<MapPage> {
         });
   }
 
+  // add a pin to the map
   void addPin(LatLng coords) {
-    _add(coords.latitude, coords.longitude);
+    final MarkerId markerId = MarkerId("ID" + counter.toString());
+
+    // creating a new MARKER
+    final Marker marker = Marker(
+      markerId: markerId,
+      icon: lostMarkerIcon,
+      position: coords
+    );
+    counter++;
+    setState(() {
+      // adding a new marker to map
+      markers[markerId] = marker;
+    });
     tempCoords = coords;
     routeSubpage(
         ItemRequest(itemLoc: coords), context);
   }
 
+  // Iterate through the snapshot of found items, return list of markers
   List<Item> getFoundItems(AsyncSnapshot<QuerySnapshot> foundSnapshot) {
     List<Item> foundObjects = [];
     //query database, go through each item in database, and create list of lost objects
@@ -173,6 +161,7 @@ class _MapPageState extends State<MapPage> {
     return foundObjects;
   }
 
+  // Iterate through the snapshot of lost items, return list of markers
   List<Item> getLostItems(AsyncSnapshot<QuerySnapshot> lostSnapshot) {
     List<Item> lostObjects = [];
     for (int i = 0; i < lostSnapshot.data!.size; i++) {

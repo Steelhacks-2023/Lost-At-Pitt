@@ -52,7 +52,8 @@ void routeSubpage(Widget page, BuildContext context) {
   Navigator.push(
       context,
       HeroDialogRoute(
-          builder: (context) => Hero(tag: "post-page", child: PointerInterceptor(child: page))));
+          builder: (context) =>
+              Hero(tag: "post-page", child: PointerInterceptor(child: page))));
 }
 
 void routePage(Widget page, BuildContext context) {
