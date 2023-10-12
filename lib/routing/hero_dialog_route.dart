@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pointer_interceptor/pointer_interceptor.dart';
 
 /// {@template hero_dialog_route}
 /// Custom [PageRoute] that creates an overlay dialog (popup effect).
@@ -47,6 +48,13 @@ class HeroDialogRoute<T> extends PageRoute<T> {
   String get barrierLabel => 'Popup dialog open';
 }
 
-void route(Widget page, BuildContext context) {
-  Navigator.push(context, HeroDialogRoute(builder: (context) => page));
+void routeSubpage(Widget page, BuildContext context) {
+  Navigator.push(
+      context,
+      HeroDialogRoute(
+          builder: (context) => Hero(tag: "post-page", child: PointerInterceptor(child: page))));
+}
+
+void routePage(Widget page, BuildContext context) {
+  Navigator.push(context, MaterialPageRoute(builder: (context) => page));
 }

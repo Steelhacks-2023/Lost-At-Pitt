@@ -24,11 +24,11 @@ class NavBar extends StatelessWidget {
       child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
         IconButton(
           icon: const Icon(Icons.explore),
-          onPressed: () => route(const MapPage(), context),
+          onPressed: () => routePage(const MapPage(), context),
         ),
         IconButton(
           icon: const Icon(Icons.format_list_numbered),
-          onPressed: () => route(
+          onPressed: () => routePage(
               ListPage(
                   lostObjects: lostObjects,
                   foundObjects: foundObjects,

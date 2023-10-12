@@ -20,7 +20,7 @@ class PostCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () => route(PostPage(item: item), context),
+        onTap: () => routeSubpage(PostPage(item: item), context),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Container(
