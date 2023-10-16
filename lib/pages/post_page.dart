@@ -8,7 +8,8 @@ String err = "ERR";
 
 class PostPage extends StatelessWidget {
   final Item item;
-  // we need to declare all useable "tags" somewhere, and then a LostAndFoundObject will have a list of tags. this is currently a placeholder for UI testing
+  // we need to declare all useable "tags" somewhere, and then a LostAndFoundObject will have a list of tags. 
+  // this is currently a placeholder for UI testing
   static Map<String, Color> tags = {
     "Tech": const Color.fromARGB(255, 133, 218, 136),
     "Clothing": const Color.fromARGB(255, 231, 100, 90),
