@@ -1,15 +1,11 @@
-//import 'dart:html';
 import 'dart:io';
-
-//import 'dart:html';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lost_found_steelhacks/pages/map_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:lost_found_steelhacks/routing/hero_dialog_route.dart';
+import 'package:lost_found_steelhacks/routing/route.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -50,132 +46,113 @@ class _ItemRequestState extends State<ItemRequest> {
 
   @override
   Widget build(BuildContext context) {
-    File imageUrl;
     lat = widget.itemLoc.latitude;
     long = widget.itemLoc.longitude;
 
-    return Scaffold(
-        body: Padding(
-      padding: const EdgeInsets.fromLTRB(100, 10, 100, 12),
-      child: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              //SwitchExample(),
-              const Text('Enter your item from: ',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  )),
-              Text(("N: " + lat.toString() + " \nS: " + long.toString() + "\n"),
-                  style: TextStyle(
-                    fontSize: 18,
-                  )),
-
-              ToggleButtons(
-                isSelected: isSelected,
-                onPressed: (int index) {
-                  setState(() {
-                    for (int buttonIndex = 0;
-                        buttonIndex < isSelected.length;
-                        buttonIndex++) {
-                      if (buttonIndex == index) {
-                        isSelected[buttonIndex] = true;
-                      } else {
-                        isSelected[buttonIndex] = false;
-                      }
+    return buildSubPage(
+      Scaffold(
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const Text('Enter your item from: ',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                )),
+            Text(("N: " + lat.toString() + " \nS: " + long.toString() + "\n"),
+                style: TextStyle(
+                  fontSize: 18,
+                )),
+            ToggleButtons(
+              isSelected: isSelected,
+              onPressed: (int index) {
+                setState(() {
+                  for (int buttonIndex = 0;
+                      buttonIndex < isSelected.length;
+                      buttonIndex++) {
+                    if (buttonIndex == index) {
+                      isSelected[buttonIndex] = true;
+                    } else {
+                      isSelected[buttonIndex] = false;
                     }
-                  });
-                },
-                borderRadius: const BorderRadius.all(Radius.circular(8)),
-                children: options,
-                color: Colors.blue,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: DropdownButt(),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: TextBox(),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: PhoneNumber(),
-              ),
-
-              Container(
-                color: Colors.white,
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      margin: const EdgeInsets.all(15),
-                      padding: const EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(15),
-                        ),
-                        border: Border.all(color: Colors.white),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            offset: Offset(2, 2),
-                            spreadRadius: 2,
-                            blurRadius: 1,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              UploadImageButton(),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ButtonTheme(
-                  minWidth: 150,
-                  child: ElevatedButton(
-                    onPressed: () => route(const MapPage(), context),
-                    child: const Text('Close'),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: ButtonTheme(
-                  minWidth: 150,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Validate will return true if the form is valid, or false if
-                      // the form is invalid.
-                      if (_formKey.currentState!.validate()) {
-                        //this is where the form stuff is grabbed
-                        //print(category);
-                        //print(description);
-                        //print(phone);
-
-                        if (isSelected[0]) {
-                          addLost();
-                        } else {
-                          addFound();
-                        }
-                        route(const MapPage(), context);
+                  }
+                });
+              },
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
+              children: options,
+              color: Colors.blue,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.0),
+              child: DropdownButt(),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.0),
+              child: TextBox(),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.0),
+              child: PhoneNumber(),
+            ),
+            UploadImageButton(),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: ButtonTheme(
+                minWidth: 150,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      if (isSelected[0]) {
+                        addLost();
+                      } else {
+                        addFound();
                       }
-                    },
-                    child: const Text('Submit'),
-                  ),
+                      routePage(const MapPage(), context);
+                    }
+                  },
+                  child: const Text('Submit'),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-    ));
+    );
+  }
+
+  // move this somewhere else so we can use the same container style for all subpages?
+  Widget buildSubPage(Widget body) {
+    return Padding(
+      padding: const EdgeInsets.all(30.0),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: Center(
+            child: Container(
+                padding: const EdgeInsets.all(5),
+                constraints: const BoxConstraints(maxWidth: 500),
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 255, 255, 255),
+                  border: Border.all(
+                      width: 3,
+                      color: const Color.fromARGB(255, 221, 221, 221)),
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color.fromARGB(255, 122, 122, 122),
+                      blurRadius: 2.0,
+                      spreadRadius: 0.0,
+                      offset:
+                          Offset(2.0, 2.0), // shadow direction: bottom right
+                    )
+                  ],
+                ),
+                child: body)),
+      ),
+    );
   }
 }
+
+// all these classes im cringing help me i mean i guess its good to encapsulate but there's too much stuff in this file
 
 class TextBox extends StatelessWidget {
   @override

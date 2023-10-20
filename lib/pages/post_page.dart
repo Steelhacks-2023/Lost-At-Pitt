@@ -21,9 +21,8 @@ class PostPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-        tag: "post-page",
-        child: DefaultTextStyle(
+    return 
+        DefaultTextStyle(
           style: theme,
           child: Padding(
             padding: const EdgeInsets.all(30.0),
@@ -146,7 +145,7 @@ class PostPage extends StatelessWidget {
               )),
             ),
           ),
-        ));
+        );
   }
 
   // this is duplicate code from postCard.dart and should be moved

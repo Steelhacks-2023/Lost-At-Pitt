@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lost_found_steelhacks/data/item.dart';
 import 'package:lost_found_steelhacks/pages/post_page.dart';
-import 'package:lost_found_steelhacks/routing/hero_dialog_route.dart';
+import 'package:lost_found_steelhacks/routing/route.dart';
 
 class PostCard extends StatelessWidget {
   final Item item;
@@ -20,7 +20,7 @@ class PostCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () => route(PostPage(item: item), context),
+        onTap: () => routeSubpage(PostPage(item: item), context),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Container(
