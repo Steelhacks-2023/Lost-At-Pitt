@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lost_found_steelhacks/authentication/auth.dart';
 import 'package:lost_found_steelhacks/pages/list_page.dart';
 import 'package:lost_found_steelhacks/data/item.dart';
 import 'package:lost_found_steelhacks/pages/map_page.dart';
 import 'package:lost_found_steelhacks/routing/hero_dialog_route.dart';
+import 'package:provider/provider.dart';
 
 class NavBar extends StatelessWidget {
   NavBar(
@@ -17,6 +20,7 @@ class NavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
     return Container(
       padding: const EdgeInsets.all(8),
       color: const Color.fromARGB(255, 217, 235, 255),
@@ -39,6 +43,12 @@ class NavBar extends StatelessWidget {
           icon: const Icon(Icons.message),
           onPressed: () => {},
         ),
+        IconButton(
+            icon: const Icon(Icons.logout_outlined),
+            onPressed: () async {
+              await authService.signOut();
+              Navigator.pushNamed(context, "/");
+            }),
       ]),
     );
   }
