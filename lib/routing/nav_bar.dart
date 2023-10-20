@@ -4,8 +4,8 @@ import 'package:lost_found_steelhacks/authentication/auth.dart';
 import 'package:lost_found_steelhacks/pages/list_page.dart';
 import 'package:lost_found_steelhacks/data/item.dart';
 import 'package:lost_found_steelhacks/pages/map_page.dart';
-import 'package:lost_found_steelhacks/routing/hero_dialog_route.dart';
 import 'package:provider/provider.dart';
+import 'package:lost_found_steelhacks/routing/route.dart';
 
 class NavBar extends StatelessWidget {
   NavBar(
@@ -16,7 +16,7 @@ class NavBar extends StatelessWidget {
 
   final List<Item> lostObjects;
   final List<Item> foundObjects;
-  bool mode = true;
+  final bool mode;
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +28,11 @@ class NavBar extends StatelessWidget {
       child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
         IconButton(
           icon: const Icon(Icons.explore),
-          onPressed: () => route(const MapPage(), context),
+          onPressed: () => routePage(const MapPage(), context),
         ),
         IconButton(
           icon: const Icon(Icons.format_list_numbered),
-          onPressed: () => route(
+          onPressed: () => routePage(
               ListPage(
                   lostObjects: lostObjects,
                   foundObjects: foundObjects,
