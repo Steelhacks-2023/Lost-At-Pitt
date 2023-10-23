@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:lost_found_steelhacks/authentication/wrapper.dart';
 import 'package:lost_found_steelhacks/pages/post_page.dart';
 import 'package:lost_found_steelhacks/routing/route.dart';
 import 'package:lost_found_steelhacks/data/item.dart';
@@ -81,13 +82,11 @@ class _MapPageState extends State<MapPage> {
               stream: _foundCollectionStream,
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> lostSnapshot) {
-                if (lostSnapshot.hasError || foundSnapshot.hasError) {
-                  return Text("Something Has Gone Wrong Please Refresh");
-                } else if (lostSnapshot.connectionState ==
-                        ConnectionState.waiting ||
-                    lostSnapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: Text("Waiting Getting Data"));
-                }
+                bool error = lostSnapshot.hasError || foundSnapshot.hasError;
+                bool waiting =
+                    lostSnapshot.connectionState == ConnectionState.waiting ||
+                        lostSnapshot.connectionState == ConnectionState.waiting;
+                if (error || waiting) return Wrapper();
 
                 List<Item> lostItems = getLostItems(lostSnapshot);
                 List<Item> foundItems = getFoundItems(foundSnapshot);
@@ -125,19 +124,15 @@ class _MapPageState extends State<MapPage> {
     final MarkerId markerId = MarkerId("ID" + counter.toString());
 
     // creating a new MARKER
-    final Marker marker = Marker(
-      markerId: markerId,
-      icon: lostMarkerIcon,
-      position: coords
-    );
+    final Marker marker =
+        Marker(markerId: markerId, icon: lostMarkerIcon, position: coords);
     counter++;
     setState(() {
       // adding a new marker to map
       markers[markerId] = marker;
     });
     tempCoords = coords;
-    routeSubpage(
-        ItemRequest(itemLoc: coords), context);
+    routeSubpage(ItemRequest(itemLoc: coords), context);
   }
 
   // Iterate through the snapshot of found items, return list of markers

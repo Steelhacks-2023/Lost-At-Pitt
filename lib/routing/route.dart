@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:lost_found_steelhacks/authentication/auth.dart';
+import 'package:lost_found_steelhacks/authentication/wrapper.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
+import 'package:provider/provider.dart';
 
 /// {@template hero_dialog_route}
 /// Custom [PageRoute] that creates an overlay dialog (popup effect).

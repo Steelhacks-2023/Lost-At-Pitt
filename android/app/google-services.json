@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "780072412373-t7gbn47men8l2e1ie49qpjasr9p4br8s.apps.googleusercontent.com",
+          "client_id": "780072412373-aov1v6hqnn72esrlfofkflc1i9t13qmf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.lost_found_steelhacks",
+            "certificate_hash": "b3bf851de85e9ff36fbbe31180051343ef98827f"
+          }
+        },
+        {
+          "client_id": "780072412373-f6vnf56j6go2c64nsr5qg6tau0on3fs2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,8 +35,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "780072412373-t7gbn47men8l2e1ie49qpjasr9p4br8s.apps.googleusercontent.com",
+              "client_id": "780072412373-f6vnf56j6go2c64nsr5qg6tau0on3fs2.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "780072412373-nm7lgj09mlfs7vb3f644amagt6e1nuf1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.lostFoundSteelhacks"
+              }
             }
           ]
         }
