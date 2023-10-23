@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lost_found_steelhacks/authentication/auth.dart';
+import 'package:lost_found_steelhacks/authentication/wrapper.dart';
 import 'package:lost_found_steelhacks/pages/list_page.dart';
 import 'package:lost_found_steelhacks/data/item.dart';
 import 'package:lost_found_steelhacks/pages/map_page.dart';
@@ -47,7 +48,7 @@ class NavBar extends StatelessWidget {
             icon: const Icon(Icons.logout_outlined),
             onPressed: () async {
               await authService.signOut();
-              Navigator.pushNamed(context, "/");
+              routePage(Wrapper(), context);
             }),
       ]),
     );

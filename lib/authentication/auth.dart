@@ -14,6 +14,10 @@ class AuthService extends ChangeNotifier {
     return user != null ? MyUser(uid: user.uid) : null;
   }
 
+  bool isSignedIn() { 
+    return _auth.currentUser != null;
+  }
+
   //auth change user stream
   Stream<MyUser?> get user {
     return _auth.authStateChanges().map(_userFromFirebaseUser);

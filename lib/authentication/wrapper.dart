@@ -6,6 +6,8 @@ import 'package:lost_found_steelhacks/pages/map_page.dart';
 import 'package:provider/provider.dart';
 
 class Wrapper extends StatelessWidget {
+  const Wrapper({super.key});
+
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
@@ -16,7 +18,7 @@ class Wrapper extends StatelessWidget {
             final MyUser? user = snapshot.data;
             return user == null ? LoginPage() : MapPage();
           } else {
-            return Scaffold(
+            return const Scaffold(
               body: Center(child: CircularProgressIndicator()),
             );
           }
