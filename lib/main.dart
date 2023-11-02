@@ -4,9 +4,10 @@ import 'package:lost_found_steelhacks/authentication/auth.dart';
 import 'package:lost_found_steelhacks/authentication/wrapper.dart';
 import 'package:lost_found_steelhacks/pages/login_page.dart';
 import 'package:lost_found_steelhacks/pages/map_page.dart';
+import 'package:lost_found_steelhacks/themes/app_theme.dart';
+import 'package:lost_found_steelhacks/themes/theme_manager.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
-import 'package:lost_found_steelhacks/authentication/user.dart';
 
 void main() async {
   await Firebase.initializeApp(
@@ -15,8 +16,34 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+ThemeManager themeManager = ThemeManager();
+
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  @override
+  void dispose() {
+    themeManager.removeListener(themeListener);
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    themeManager.addListener(themeListener);
+    super.initState();
+  }
+
+  themeListener() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
 
   // This widget is the root of your application.
   @override
@@ -28,11 +55,13 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           routes: {
-            'loginPage': (context) => LoginPage(),
-            'mapPage': (context) => MapPage(),
-            '/': (context) => Wrapper()
+            'loginPage': (context) => const LoginPage(),
+            'mapPage': (context) => const MapPage(),
+            '/': (context) => const Wrapper()
           },
           initialRoute: '/',
+          theme: AppTheme.getTheme(),
+          themeMode: themeManager.themeMode
         ));
   }
 }

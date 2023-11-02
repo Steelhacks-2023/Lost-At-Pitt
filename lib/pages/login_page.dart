@@ -11,6 +11,8 @@ import 'package:lost_found_steelhacks/authentication/user.dart';
 import 'package:lost_found_steelhacks/pages/map_page.dart';
 import 'package:lost_found_steelhacks/pages/signup_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:lost_found_steelhacks/routing/route.dart';
+import 'package:lost_found_steelhacks/themes/app_theme.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
@@ -21,7 +23,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formKey = new GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String _email = '';
@@ -30,40 +32,15 @@ class _LoginPageState extends State<LoginPage> {
   bool _hidePassword = true;
   bool loading = false;
 
-  final kHintTextStyle = TextStyle(
-    color: Colors.white54,
-    fontFamily: 'OpenSans',
-  );
-
-  final kLabelStyle = TextStyle(
-    color: Colors.white,
-    fontWeight: FontWeight.bold,
-    fontFamily: 'OpenSans',
-  );
-
-  final kBoxDecorationStyle = BoxDecoration(
-    borderRadius: BorderRadius.circular(10.0),
-    boxShadow: [
-      BoxShadow(
-        color: Colors.black12,
-        blurRadius: 6.0,
-        offset: Offset(0, 2),
-      ),
-    ],
-  );
-
-  Widget _buildEmailTF() {
+  Widget _buildEmailTF(AppTheme theme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
-          'Email',
-          style: kLabelStyle,
-        ),
+        Text('Email', style: theme.subtitleStyle),
         SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
-          decoration: kBoxDecorationStyle,
+          decoration: theme.textFieldDecoration,
           height: 60.0,
           child: TextFormField(
             onChanged: (value) => setState(() {
@@ -76,38 +53,27 @@ class _LoginPageState extends State<LoginPage> {
                 ? 'Please enter valid email.'
                 : null,
             keyboardType: TextInputType.emailAddress,
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'OpenSans',
-            ),
             decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14.0),
-              prefixIcon: Icon(
-                Icons.email,
-                color: Colors.white,
-              ),
-              hintText: 'Enter your Email',
-              hintStyle: kHintTextStyle,
-            ),
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.only(top: 14.0),
+                prefixIcon: Icon(Icons.email, color: theme.dark),
+                hintText: 'Enter your Email',
+                hintStyle: theme.hintStyle),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildPasswordTF() {
+  Widget _buildPasswordTF(AppTheme theme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
-          'Password',
-          style: kLabelStyle,
-        ),
+        Text('Password', style: theme.subtitleStyle),
         SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
-          decoration: kBoxDecorationStyle,
+          decoration: theme.textFieldDecoration,
           height: 60.0,
           child: TextFormField(
             onChanged: (value) => setState(() {
@@ -117,115 +83,78 @@ class _LoginPageState extends State<LoginPage> {
             validator: (val) =>
                 val == null || val.isEmpty ? 'Enter valid password' : null,
             obscureText: _hidePassword,
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'OpenSans',
-            ),
             decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14.0),
-              prefixIcon: Icon(
-                Icons.lock,
-                color: Colors.white,
-              ),
-              suffixIcon: IconButton(
-                icon: Icon(
-                    color: Colors.white,
-                    _hidePassword ? Icons.visibility_off : Icons.visibility),
-                onPressed: () async {
-                  setState(() {
-                    _hidePassword = !_hidePassword;
-                  });
-                },
-              ),
-              hintText: 'Enter your Password',
-              hintStyle: kHintTextStyle,
-            ),
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.only(top: 14.0),
+                prefixIcon: Icon(Icons.lock, color: theme.dark),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                      color: theme.dark,
+                      _hidePassword ? Icons.visibility_off : Icons.visibility),
+                  onPressed: () async {
+                    setState(() {
+                      _hidePassword = !_hidePassword;
+                    });
+                  },
+                ),
+                hintText: 'Enter your Password',
+                hintStyle: theme.hintStyle),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildForgotPasswordBtn() {
+  Widget _buildForgotPasswordBtn(AppTheme theme) {
     return Container(
       alignment: Alignment.centerRight,
       child: TextButton(
-        onPressed: () => Navigator.of(context)
-            .push(MaterialPageRoute(builder: ((context) => SignUpPage()))),
-        //style: TextButton.styleFrom(padding: EdgeInsets.fromLTRB(left, top, right, bottom)
-        child: Text(
-          'Forgot Password?',
-          style: kLabelStyle,
-        ),
+        onPressed: () => routePage(SignUpPage(), context),
+        child: Text('Forgot Password?', style: theme.subtitleStyle),
       ),
     );
   }
 
-  Widget _buildLoginBtn(authService) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 25.0),
-      width: double.infinity,
-      child: OutlinedButton(
-        //elevation: 5.0,
-        onPressed: () async {
-          if (_formKey.currentState!.validate()) {
-            setState(() => loading = true);
-            try {
-              MyUser? result = await authService.signInWithEmailAndPassword(_email, _password);
+  Widget _buildLoginBtn(
+      AppTheme theme, bool loading, AuthService authService) {
+    return loading
+        ? const Loading()
+        : Container(
+            padding: EdgeInsets.symmetric(vertical: 25.0),
+            child: Container(
+              decoration: theme.cardBodyDecoration,
+              child: TextButton(
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    setState(() => loading = true);
+                    try {
+                      MyUser? result = await authService
+                          .signInWithEmailAndPassword(_email, _password);
 
-              if (result == null) {
-                throw FirebaseAuthException(code: "Sign in failed");
-              }
+                      if (result == null) {
+                        throw FirebaseAuthException(code: "Sign in failed");
+                      }
 
-              setState(() {
-                loading = false;
-              });
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: ((context) => MapPage())));
-            } on FirebaseAuthException catch (e) {
-              setState(() {
-                _error =
-                    'The email or password is incorrect. Please try again.';
-                loading = false;
-              });
-            }
-          }
-        },
-        child: Text(
-          'LOGIN',
-          style: TextStyle(
-            color: Color.fromARGB(255, 255, 255, 255),
-            letterSpacing: 1.5,
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'OpenSans',
-          ),
-        ),
-      ),
-    );
+                      setState(() {
+                        loading = false;
+                      });
+                      routePage(MapPage(), context);
+                    } on FirebaseAuthException catch (e) {
+                      setState(() {
+                        _error =
+                            'The email or password is incorrect. Please try again.';
+                        loading = false;
+                      });
+                    }
+                  }
+                },
+                child: Text('LOGIN', style: theme.titleStyle),
+              ),
+            ),
+          );
   }
 
-  Widget _buildSignInWithText() {
-    return Column(
-      children: <Widget>[
-        Text(
-          '- OR -',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-        SizedBox(height: 20.0),
-        Text(
-          'Sign in with',
-          style: kLabelStyle,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSocialBtnRow(authService) {
+  Widget _buildSocialBtnRow(AppTheme theme, AuthService authService) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 15.0),
       child: Row(
@@ -240,59 +169,51 @@ class _LoginPageState extends State<LoginPage> {
                       _error = "Google sign in failed. Please try again.";
                     });
                   } else {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: ((context) => MapPage())));
+                    routePage(MapPage(), context);
                   }
                 });
               },
-              icon: Icon(
-                Ionicons.logo_google,
-                size: 40,
-                color: Colors.white,
-              ))
+              // global colors
+              icon: Icon(Ionicons.logo_google, size: 40, color: theme.dark))
         ],
       ),
     );
   }
 
-  Widget _buildSignupBtn() {
+  Widget _buildSignupBtn(AppTheme theme) {
     return GestureDetector(
-      onTap: () => Navigator.of(context)
-          .push(MaterialPageRoute(builder: ((context) => SignUpPage()))),
+      onTap: () => routePage(SignUpPage(), context),
       child: RichText(
         text: TextSpan(
           children: [
             TextSpan(
-              text: 'Don\'t have an Account? ',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 13.0,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
+                text: 'Don\'t have an Account? ', style: theme.regularStyle.copyWith(color: theme.dark)),
             TextSpan(
-              text: 'Sign Up',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 13.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+                text: 'Sign Up',
+                style:
+                    theme.regularStyle.copyWith(fontWeight: FontWeight.bold, color: theme.dark)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildErrorMsg() {
-    return Text(_error,
-        style: TextStyle(fontSize: 13.0, color: Colors.red),
-        textAlign: TextAlign.center);
-  }
+  Widget _buildErrorMsg(AppTheme theme) => Text(_error,
+      style: theme.regularStyle.copyWith(color: Colors.red),
+      textAlign: TextAlign.center);
+
+  Widget _buildSpacing() => const SizedBox(height: 30);
+
+  Widget _buildTitle(AppTheme theme) =>
+      Text('Sign In', style: theme.titleStyle.copyWith(fontSize: 40));
 
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context);
+    final AuthService authService = Provider.of<AuthService>(context);
+    final AppTheme theme =
+        Theme.of(context).extension<AppTheme>()!;
+    const Widget spacing = SizedBox(height: 30);
+
     return Scaffold(
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
@@ -301,54 +222,32 @@ class _LoginPageState extends State<LoginPage> {
           child: Stack(
             children: <Widget>[
               Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0xFFE0D2C7),
-                      Color.fromARGB(255, 68, 176, 158)
-                    ],
-                    stops: [0.1, 0.9],
-                  ),
-                ),
-              ),
+                  height: double.infinity,
+                  width: double.infinity,
+
+                  // move to theme
+                  decoration: theme.gradientBackgroundDecoration),
               Container(
                 height: double.infinity,
                 child: SingleChildScrollView(
                     physics: AlwaysScrollableScrollPhysics(),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 40.0,
-                      vertical: 120.0,
-                    ),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 40.0, vertical: 120.0),
                     child: Form(
                       key: _formKey,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text(
-                            'Sign In',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'OpenSans',
-                              fontSize: 30.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 30.0),
-                          _buildEmailTF(),
-                          SizedBox(
-                            height: 30.0,
-                          ),
-                          _buildPasswordTF(),
-                          _buildForgotPasswordBtn(),
-                          _buildErrorMsg(),
-                          loading ? Loading() : _buildLoginBtn(authService),
-                          _buildSignInWithText(),
-                          _buildSocialBtnRow(authService),
-                          _buildSignupBtn(),
+                          _buildTitle(theme),
+                          _buildSpacing(),
+                          _buildEmailTF(theme),
+                          _buildSpacing(),
+                          _buildPasswordTF(theme),
+                          _buildForgotPasswordBtn(theme),
+                          _buildErrorMsg(theme),
+                          _buildLoginBtn(theme, loading, authService),
+                          _buildSocialBtnRow(theme, authService),
+                          _buildSignupBtn(theme),
                         ],
                       ),
                     )),
