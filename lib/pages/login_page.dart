@@ -208,7 +208,7 @@ class _LoginPageState extends State<LoginPage> {
     final AuthService authService = Provider.of<AuthService>(context);
     final AppTheme theme =
         Theme.of(context).extension<AppTheme>()!;
-    const Widget spacing = SizedBox(height: 30);
+    //const Widget spacing = SizedBox(height: 30);
 
     return Scaffold(
       body: AnnotatedRegion<SystemUiOverlayStyle>(
