@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lost_found_steelhacks/cards/post_card.dart';
 import 'package:lost_found_steelhacks/data/item.dart';
 import 'package:lost_found_steelhacks/routing/nav_bar.dart';
+import 'package:lost_found_steelhacks/themes/app_theme.dart';
 
 class ListPage extends StatefulWidget {
   final List<Item> lostObjects;
@@ -21,6 +22,8 @@ class ListPage extends StatefulWidget {
 class _ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
+    final AppTheme theme = Theme.of(context).extension<AppTheme>()!;
+    
     return Scaffold(
       body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
         NavBar(
@@ -28,7 +31,8 @@ class _ListPageState extends State<ListPage> {
             foundObjects: widget.foundObjects,
             mode: widget.mode),
         Expanded(
-          child: SizedBox(
+          child: Container(
+              decoration: theme.constantBackgroundDecoration,
               height: MediaQuery.of(context).size.height,
               child: ListView(children: getListEntries())),
         )
