@@ -6,7 +6,7 @@ import 'package:lost_found_steelhacks/authentication/user.dart';
 import 'package:rxdart/rxdart.dart';
 
 class AuthService extends ChangeNotifier {
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  //final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // create user obj based on FirebaseUser

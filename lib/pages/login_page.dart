@@ -1,7 +1,4 @@
-import 'dart:js_interop';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ionicons/ionicons.dart';
@@ -10,7 +7,6 @@ import 'package:lost_found_steelhacks/authentication/loading_animation.dart';
 import 'package:lost_found_steelhacks/authentication/user.dart';
 import 'package:lost_found_steelhacks/pages/map_page.dart';
 import 'package:lost_found_steelhacks/pages/signup_page.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lost_found_steelhacks/routing/route.dart';
 import 'package:lost_found_steelhacks/themes/app_theme.dart';
 import 'package:provider/provider.dart';
