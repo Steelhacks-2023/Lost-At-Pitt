@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -6,11 +7,17 @@ import 'package:lost_found_steelhacks/pages/map_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:lost_found_steelhacks/routing/route.dart';
+import 'package:lost_found_steelhacks/themes/app_theme.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:image_picker/image_picker.dart';
+import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 
 CollectionReference lost = FirebaseFirestore.instance.collection('Lost');
 CollectionReference found = FirebaseFirestore.instance.collection('Found');
+String _imgFromDeviceError = '';
+Image? uploadedImg = null;
+String uploadImgName = '';
 
 const List<String> list = <String>[
   'Water Bottle',
@@ -20,6 +27,7 @@ const List<String> list = <String>[
   'Coat',
   'Other'
 ];
+
 final numberCheck =
     RegExp(r'^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$');
 final List<bool> isSelected = <bool>[true, false];
@@ -152,6 +160,9 @@ class _ItemRequestState extends State<ItemRequest> {
   }
 }
 
+Widget _buildErrMessage(AppTheme theme) => Text(_imgFromDeviceError,
+    style: theme.regularStyle.copyWith(color: Colors.red),
+    textAlign: TextAlign.center);
 // all these classes im cringing help me i mean i guess its good to encapsulate but there's too much stuff in this file
 
 class TextBox extends StatelessWidget {
@@ -253,32 +264,57 @@ class _UploadImageButtonState extends State<UploadImageButton> {
   }
 
   uploadImage() async {
-    final _firebaseStorage = FirebaseStorage.instance.ref();
-    String filePath = '';
+    // final ImagePicker _picker = ImagePicker();
+    // final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
 
-    File file;
+    // print("Image Name: " + image!.name);
+    final AppTheme theme = Theme.of(context).extension<AppTheme>()!;
 
-    if (kIsWeb) {
-      var picked = await FilePicker.platform.pickFiles(type: FileType.image);
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(type: FileType.image);
 
-      if (picked != null) {
-        file = File(picked.files.single.name);
-        setState(() {
-          var imageUrl = file;
-        });
-        try {
-          await _firebaseStorage.putFile(file);
-        } on Exception catch (_, e) {
-          print("HI");
-        }
-      }
+    if (result != null) {
+      Uint8List imgBytes = result.files.single.bytes!;
+      String imgName = result.files.first.name;
+      print("Image Name: " + imgName);
+      setState(() {
+        uploadedImg = Image.memory(imgBytes);
+        uploadImgName = imgName;
+      });
     } else {
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String filePath = '${appDocDir.absolute}';
-      file = File(filePath);
-
-      await _firebaseStorage.putFile(file);
+      // User canceled the picker
+      setState(() {
+        _buildErrMessage(theme);
+        uploadedImg = null;
+      });
     }
+
+    // final _firebaseStorage = FirebaseStorage.instance.ref();
+    // String filePath = '';
+
+    // File file;
+
+    // if (kIsWeb) {
+    //   var picked = await FilePicker.platform.pickFiles(type: FileType.image);
+
+    //   if (picked != null) {
+    //     file = File(picked.files.single.name);
+    //     setState(() {
+    //       var imageUrl = file;
+    //     });
+    //     try {
+    //       await _firebaseStorage.putFile(file);
+    //     } on Exception catch (_, e) {
+    //       print("HI");
+    //     }
+    //   }
+    // } else {
+    //   Directory appDocDir = await getApplicationDocumentsDirectory();
+    //   String filePath = '${appDocDir.absolute}';
+    //   file = File(filePath);
+
+    //   await _firebaseStorage.putFile(file);
+    // }
   }
 }
 
