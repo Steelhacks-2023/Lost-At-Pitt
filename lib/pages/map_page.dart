@@ -5,7 +5,7 @@ import 'package:lost_found_steelhacks/authentication/wrapper.dart';
 import 'package:lost_found_steelhacks/pages/post_page.dart';
 import 'package:lost_found_steelhacks/routing/route.dart';
 import 'package:lost_found_steelhacks/data/item.dart';
-import 'package:lost_found_steelhacks/pages/item_request.dart';
+import 'package:lost_found_steelhacks/pages/item_request2.dart';
 import 'package:lost_found_steelhacks/routing/nav_bar.dart';
 import 'package:lost_found_steelhacks/utils.dart';
 import 'package:multiple_stream_builder/multiple_stream_builder.dart';
