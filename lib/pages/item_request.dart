@@ -17,6 +17,8 @@ import 'package:image_picker_platform_interface/image_picker_platform_interface.
 CollectionReference lost = FirebaseFirestore.instance.collection('Lost');
 CollectionReference found = FirebaseFirestore.instance.collection('Found');
 String _imgFromDeviceError = '';
+Uint8List? imgBytesToFirebase;
+String _imgName = '';
 
 const List<String> list = <String>[
   'Water Bottle',
@@ -49,14 +51,27 @@ class ItemRequest extends StatefulWidget {
 
 class _ItemRequestState extends State<ItemRequest> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final storageRef = FirebaseStorage.instance.ref();
+  //final storageRef = FirebaseStorage.instance.ref();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _phoneNumController = TextEditingController();
 
   String title = '';
-  //String _error = '';
+  String _error = '';
 
-  Widget _buildErrMessage(AppTheme theme) => Text(_imgFromDeviceError,
+  uploadImageToFirebase() async {
+    final storageRef = FirebaseStorage.instance.ref();
+    final imageRef = storageRef.child(_imgName);
+    try {
+      await imageRef.putData(imgBytesToFirebase!);
+      return true;
+    } on FirebaseException catch (e) {
+      setState(() {
+        _error = "Failed to upload";
+      });
+    }
+  }
+
+  Widget _buildErrMessage(AppTheme theme) => Text(_error,
       style: theme.regularStyle.copyWith(color: Colors.red),
       textAlign: TextAlign.center);
 
@@ -191,8 +206,10 @@ class _ItemRequestState extends State<ItemRequest> {
                                           if (_formKey.currentState!
                                               .validate()) {
                                             if (isSelected[0]) {
+                                              uploadImageToFirebase();
                                               addLost();
                                             } else {
+                                              uploadImageToFirebase();
                                               addFound();
                                             }
                                             routePage(const MapPage(), context);
@@ -280,7 +297,10 @@ class _UploadImageButtonState extends State<UploadImageButton> {
     if (image != null) {
       Uint8List imageData = await image.readAsBytes();
       uploadedImg = Image.memory(imageData);
-      setState(() {});
+      setState(() {
+        imgBytesToFirebase = imageData;
+        _imgName = image.path.split('/').last;
+      });
     }
 
     // print("Image Name: " + image!.name);
