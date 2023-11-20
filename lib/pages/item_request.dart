@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lost_found_steelhacks/pages/map_page.dart';
@@ -51,9 +50,8 @@ class ItemRequest extends StatefulWidget {
 
 class _ItemRequestState extends State<ItemRequest> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  //final storageRef = FirebaseStorage.instance.ref();
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _phoneNumController = TextEditingController();
+  // final TextEditingController _titleController = TextEditingController();
+  // final TextEditingController _phoneNumController = TextEditingController();
 
   String title = '';
   String _error = '';
@@ -153,7 +151,14 @@ class _ItemRequestState extends State<ItemRequest> {
             width: MediaQuery.of(context).size.width,
             child: Center(
                 child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 100),
+                    //border around form popup
+                    constraints: const BoxConstraints(maxWidth: 500),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          width: 3,
+                          color: const Color.fromARGB(255, 221, 221, 221)),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    ),
                     child: Form(
                       key: _formKey,
                       child: Scaffold(
@@ -171,6 +176,10 @@ class _ItemRequestState extends State<ItemRequest> {
                                     Text("N: $lat\nS: $long\n",
                                         style: theme.subtitleStyle),
                                     ToggleButtons(
+                                      selectedBorderColor: Colors.green.shade900,
+                                      selectedColor: Colors.white,
+                                      fillColor: Colors.lightGreen.shade600,
+                                      color: Colors.black,
                                       isSelected: isSelected,
                                       onPressed: (int index) {
                                         setState(() {
@@ -187,7 +196,6 @@ class _ItemRequestState extends State<ItemRequest> {
                                       },
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(8)),
-                                      color: Colors.green.shade800,
                                       children: options,
                                     ),
                                     SizedBox(height: 10),
@@ -202,6 +210,7 @@ class _ItemRequestState extends State<ItemRequest> {
                                     ButtonTheme(
                                       minWidth: 150,
                                       child: ElevatedButton(
+                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green.shade800)),
                                         onPressed: () async {
                                           if (_formKey.currentState!
                                               .validate()) {
@@ -256,9 +265,9 @@ class _DropdownButtState extends State<DropdownButt> {
       alignment: Alignment.center,
       value: dropdownValue,
       borderRadius: BorderRadius.circular(14),
-      icon: const Icon(Icons.arrow_downward),
+      icon: const Icon(Icons.arrow_drop_down),
       elevation: 16,
-      style: const TextStyle(color: Colors.blue),
+      style: const TextStyle(color: Color(0xFF2E7D32)),
       underline: Container(
         height: 2,
         color: Colors.blue,
@@ -300,58 +309,9 @@ class _UploadImageButtonState extends State<UploadImageButton> {
       setState(() {
         imgBytesToFirebase = imageData;
         _imgName = image.path.split('/').last;
+        print("Image Name ${_imgName}");
       });
     }
-
-    // print("Image Name: " + image!.name);
-
-    // final AppTheme theme = Theme.of(context).extension<AppTheme>()!;
-
-    // FilePickerResult? result =
-    //     await FilePicker.platform.pickFiles(type: FileType.image);
-
-    // if (result != null) {
-    //   Uint8List imgBytes = result.files.single.bytes!;
-    //   String imgName = result.files.first.name;
-    //   print("Image Name: " + imgName);
-    //   setState(() {
-    //     uploadedImg = Image.memory(imgBytes);
-    //     uploadImgName = imgName;
-    //   });
-    // } else {
-    //   // User canceled the picker
-    //   setState(() {
-    //     _buildErrMessage(AppTheme());
-    //     uploadedImg = null;
-    //   });
-    // }
-
-    // final _firebaseStorage = FirebaseStorage.instance.ref();
-    // String filePath = '';
-
-    // File file;
-
-    // if (kIsWeb) {
-    //   var picked = await FilePicker.platform.pickFiles(type: FileType.image);
-
-    //   if (picked != null) {
-    //     file = File(picked.files.single.name);
-    //     setState(() {
-    //       var imageUrl = file;
-    //     });
-    //     try {
-    //       await _firebaseStorage.putFile(file);
-    //     } on Exception catch (_, e) {
-    //       print("HI");
-    //     }
-    //   }
-    // } else {
-    //   Directory appDocDir = await getApplicationDocumentsDirectory();
-    //   String filePath = '${appDocDir.absolute}';
-    //   file = File(filePath);
-
-    //   await _firebaseStorage.putFile(file);
-    // }
   }
 
   @override
@@ -366,6 +326,7 @@ class _UploadImageButtonState extends State<UploadImageButton> {
   Widget build(BuildContext context) {
     return Column(children: [
       ElevatedButton(
+        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green.shade800)),
         child: Text("Upload Image"),
         onPressed: () {
           uploadImage();
