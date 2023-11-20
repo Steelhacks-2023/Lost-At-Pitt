@@ -262,9 +262,11 @@ class _DropdownButtState extends State<DropdownButt> {
   Widget build(BuildContext context) {
     return DropdownButtonHideUnderline(
         child: DropdownButton<String>(
+      padding: EdgeInsets.symmetric(horizontal: 10.0),
+      //isExpanded: true,
       alignment: Alignment.center,
       value: dropdownValue,
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(12),
       icon: const Icon(Icons.arrow_drop_down),
       elevation: 16,
       style: const TextStyle(color: Color(0xFF2E7D32)),
