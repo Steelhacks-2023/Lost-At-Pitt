@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -16,8 +17,6 @@ import 'package:image_picker_platform_interface/image_picker_platform_interface.
 CollectionReference lost = FirebaseFirestore.instance.collection('Lost');
 CollectionReference found = FirebaseFirestore.instance.collection('Found');
 String _imgFromDeviceError = '';
-Image? uploadedImg = null;
-String uploadImgName = '';
 
 const List<String> list = <String>[
   'Water Bottle',
@@ -51,129 +50,26 @@ class ItemRequest extends StatefulWidget {
 class _ItemRequestState extends State<ItemRequest> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final storageRef = FirebaseStorage.instance.ref();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _phoneNumController = TextEditingController();
 
-  @override
-  Widget build(BuildContext context) {
-    lat = widget.itemLoc.latitude;
-    long = widget.itemLoc.longitude;
+  String title = '';
+  //String _error = '';
 
-    return buildSubPage(
-      Scaffold(
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const Text('Enter your item from: ',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                )),
-            Text(("N: " + lat.toString() + " \nS: " + long.toString() + "\n"),
-                style: TextStyle(
-                  fontSize: 18,
-                )),
-            ToggleButtons(
-              isSelected: isSelected,
-              onPressed: (int index) {
-                setState(() {
-                  for (int buttonIndex = 0;
-                      buttonIndex < isSelected.length;
-                      buttonIndex++) {
-                    if (buttonIndex == index) {
-                      isSelected[buttonIndex] = true;
-                    } else {
-                      isSelected[buttonIndex] = false;
-                    }
-                  }
-                });
-              },
-              borderRadius: const BorderRadius.all(Radius.circular(8)),
-              children: options,
-              color: Colors.blue,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: DropdownButt(),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: TextBox(),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: PhoneNumber(),
-            ),
-            UploadImageButton(),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: ButtonTheme(
-                minWidth: 150,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      if (isSelected[0]) {
-                        addLost();
-                      } else {
-                        addFound();
-                      }
-                      routePage(const MapPage(), context);
-                    }
-                  },
-                  child: const Text('Submit'),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  Widget _buildErrMessage(AppTheme theme) => Text(_imgFromDeviceError,
+      style: theme.regularStyle.copyWith(color: Colors.red),
+      textAlign: TextAlign.center);
 
-  // move this somewhere else so we can use the same container style for all subpages?
-  Widget buildSubPage(Widget body) {
-    return Padding(
-      padding: const EdgeInsets.all(30.0),
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: Center(
-            child: Container(
-                padding: const EdgeInsets.all(5),
-                constraints: const BoxConstraints(maxWidth: 500),
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 255, 255, 255),
-                  border: Border.all(
-                      width: 3,
-                      color: const Color.fromARGB(255, 221, 221, 221)),
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color.fromARGB(255, 122, 122, 122),
-                      blurRadius: 2.0,
-                      spreadRadius: 0.0,
-                      offset:
-                          Offset(2.0, 2.0), // shadow direction: bottom right
-                    )
-                  ],
-                ),
-                child: body)),
-      ),
-    );
-  }
-}
-
-Widget _buildErrMessage(AppTheme theme) => Text(_imgFromDeviceError,
-    style: theme.regularStyle.copyWith(color: Colors.red),
-    textAlign: TextAlign.center);
-// all these classes im cringing help me i mean i guess its good to encapsulate but there's too much stuff in this file
-
-class TextBox extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildTitleTF(AppTheme theme) {
     return SizedBox(
         child: TextFormField(
       decoration: const InputDecoration(
         hintText: 'Description of Lost Item',
         border: OutlineInputBorder(),
       ),
+      onChanged: (value) => setState(() {
+        title = value;
+      }),
       validator: (String? value) {
         if (value == null || value.isEmpty) {
           return 'Please enter some text';
@@ -184,11 +80,8 @@ class TextBox extends StatelessWidget {
       },
     ));
   }
-}
 
-class PhoneNumber extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildPhoneNumTF(AppTheme theme) {
     return TextFormField(
       decoration: const InputDecoration(
         hintText: 'Enter your phone number',
@@ -203,6 +96,131 @@ class PhoneNumber extends StatelessWidget {
         return null;
       },
     );
+  }
+
+  Future<void> addLost() {
+    // Calling the collection to add a new user
+    return lost
+        //adding to firebase collection
+        .add({
+      //Data added in the form of a dictionary into the document.
+      'Description': description,
+      'ItemName': category,
+      'Location': GeoPoint(lat, long),
+      'Phone': phone,
+      'Picture': 0
+    });
+  }
+
+  Future<void> addFound() {
+    // Calling the collection to add a new user
+    return found
+        //adding to firebase collection
+        .add({
+      //Data added in the form of a dictionary into the document.
+      'Description': description,
+      'ItemName': category,
+      'Location': GeoPoint(lat, long),
+      'Phone': phone,
+      'Picture': 0
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final AppTheme theme = Theme.of(context).extension<AppTheme>()!;
+    lat = widget.itemLoc.latitude;
+    long = widget.itemLoc.longitude;
+
+    return Padding(
+        padding: const EdgeInsets.all(30.0),
+        child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Center(
+                child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 100),
+                    child: Form(
+                      key: _formKey,
+                      child: Scaffold(
+                          backgroundColor: Color.fromARGB(255, 233, 227, 206),
+                          body: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 16.0, vertical: 16.0),
+                              child: Stack(children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text('Enter your item from: ',
+                                        style: theme.titleStyle),
+                                    SizedBox(height: 10),
+                                    Text("N: $lat\nS: $long\n",
+                                        style: theme.subtitleStyle),
+                                    ToggleButtons(
+                                      isSelected: isSelected,
+                                      onPressed: (int index) {
+                                        setState(() {
+                                          //weird math to set selected index to true and other to false
+                                          if (isSelected[(2 - index) % 2]) {
+                                            isSelected[(2 - index + 1) % 2] =
+                                                false;
+                                          } else {
+                                            isSelected[(2 - index) % 2] = true;
+                                            isSelected[(2 - index + 1) % 2] =
+                                                false;
+                                          }
+                                        });
+                                      },
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(8)),
+                                      color: Colors.green.shade800,
+                                      children: options,
+                                    ),
+                                    SizedBox(height: 10),
+                                    DropdownButt(),
+                                    SizedBox(height: 10),
+                                    _buildTitleTF(theme),
+                                    SizedBox(height: 10),
+                                    _buildPhoneNumTF(theme),
+                                    SizedBox(height: 10),
+                                    UploadImageButton(),
+                                    SizedBox(height: 10.0),
+                                    ButtonTheme(
+                                      minWidth: 150,
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            if (isSelected[0]) {
+                                              addLost();
+                                            } else {
+                                              addFound();
+                                            }
+                                            routePage(const MapPage(), context);
+                                          }
+                                        },
+                                        child: const Text('Submit'),
+                                      ),
+                                    ),
+                                    _buildErrMessage(theme),
+                                  ],
+                                ),
+                                Align(
+                                    alignment: Alignment.topRight,
+                                    child: IconButton(
+                                      icon: Icon(Icons.close),
+                                      onPressed: () {
+                                        setState(() {
+                                          Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          const MapPage()));
+                                        });
+                                      },
+                                    ))
+                              ]))),
+                    )))));
   }
 }
 
@@ -253,41 +271,40 @@ class UploadImageButton extends StatefulWidget {
 }
 
 class _UploadImageButtonState extends State<UploadImageButton> {
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      child: Text("Upload Image"),
-      onPressed: () {
-        uploadImage();
-      },
-    );
-  }
+  late ImagePicker _picker;
+  late Image? uploadedImg;
 
-  uploadImage() async {
-    // final ImagePicker _picker = ImagePicker();
-    // final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+  Future uploadImage() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      Uint8List imageData = await image.readAsBytes();
+      uploadedImg = Image.memory(imageData);
+      setState(() {});
+    }
 
     // print("Image Name: " + image!.name);
-    final AppTheme theme = Theme.of(context).extension<AppTheme>()!;
 
-    FilePickerResult? result =
-        await FilePicker.platform.pickFiles(type: FileType.image);
+    // final AppTheme theme = Theme.of(context).extension<AppTheme>()!;
 
-    if (result != null) {
-      Uint8List imgBytes = result.files.single.bytes!;
-      String imgName = result.files.first.name;
-      print("Image Name: " + imgName);
-      setState(() {
-        uploadedImg = Image.memory(imgBytes);
-        uploadImgName = imgName;
-      });
-    } else {
-      // User canceled the picker
-      setState(() {
-        _buildErrMessage(theme);
-        uploadedImg = null;
-      });
-    }
+    // FilePickerResult? result =
+    //     await FilePicker.platform.pickFiles(type: FileType.image);
+
+    // if (result != null) {
+    //   Uint8List imgBytes = result.files.single.bytes!;
+    //   String imgName = result.files.first.name;
+    //   print("Image Name: " + imgName);
+    //   setState(() {
+    //     uploadedImg = Image.memory(imgBytes);
+    //     uploadImgName = imgName;
+    //   });
+    // } else {
+    //   // User canceled the picker
+    //   setState(() {
+    //     _buildErrMessage(AppTheme());
+    //     uploadedImg = null;
+    //   });
+    // }
 
     // final _firebaseStorage = FirebaseStorage.instance.ref();
     // String filePath = '';
@@ -316,32 +333,32 @@ class _UploadImageButtonState extends State<UploadImageButton> {
     //   await _firebaseStorage.putFile(file);
     // }
   }
-}
 
-Future<void> addLost() {
-  // Calling the collection to add a new user
-  return lost
-      //adding to firebase collection
-      .add({
-    //Data added in the form of a dictionary into the document.
-    'Description': description,
-    'ItemName': category,
-    'Location': GeoPoint(lat, long),
-    'Phone': phone,
-    'Picture': 0
-  });
-}
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _picker = ImagePicker();
+    uploadedImg = null;
+  }
 
-Future<void> addFound() {
-  // Calling the collection to add a new user
-  return found
-      //adding to firebase collection
-      .add({
-    //Data added in the form of a dictionary into the document.
-    'Description': description,
-    'ItemName': category,
-    'Location': GeoPoint(lat, long),
-    'Phone': phone,
-    'Picture': 0
-  });
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      ElevatedButton(
+        child: Text("Upload Image"),
+        onPressed: () {
+          uploadImage();
+        },
+      ),
+      SizedBox(height: 10),
+      uploadedImg == null
+          ? SizedBox()
+          : SizedBox(
+              width: 300,
+              height: 300,
+              child: uploadedImg,
+            )
+    ]);
+  }
 }
