@@ -19,13 +19,13 @@ class Item {
     QueryDocumentSnapshot snapshot,
     SnapshotOptions? options,
   ) {
-    //final data = snapshot.data();
+    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
     return Item(
-        itemName: snapshot.get('ItemName'),
-        description: snapshot.get('Description'),
-        location: snapshot.get('Location'),
-        phone: snapshot.get('Phone'),
-        picture: snapshot.get('Picture'));
+        itemName: data['ItemName'],
+        description: data['Description'],
+        location: data['Location'],
+        phone: data['Phone'],
+        picture: data['Picture']);
   }
 
   Map<String, dynamic> toFirestore() {
