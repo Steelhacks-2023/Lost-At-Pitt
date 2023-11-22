@@ -123,7 +123,7 @@ class _ItemRequestState extends State<ItemRequest> {
       'ItemName': category,
       'Location': GeoPoint(lat, long),
       'Phone': phone,
-      'Picture': 0
+      'Picture': _imgName
     });
   }
 
@@ -137,7 +137,7 @@ class _ItemRequestState extends State<ItemRequest> {
       'ItemName': category,
       'Location': GeoPoint(lat, long),
       'Phone': phone,
-      'Picture': 0
+      'Picture': _imgName
     });
   }
 
@@ -329,7 +329,7 @@ class _UploadImageButtonState extends State<UploadImageButton> {
       setState(() {
         imgBytesToFirebase = imageData;
         _imgName = image.path.split('/').last;
-        print("Image Name ${_imgName}");
+        //print("Image Name ${_imgName}");
       });
     }
   }
@@ -340,6 +340,7 @@ class _UploadImageButtonState extends State<UploadImageButton> {
     super.initState();
     _picker = ImagePicker();
     uploadedImg = null;
+    _imgName = '';
   }
 
   @override
