@@ -56,16 +56,18 @@ class _ItemRequestState extends State<ItemRequest> {
   String title = '';
   String _error = '';
 
-  uploadImageToFirebase() async {
+  uploadImageToFirebase(String category) async {
     final storageRef = FirebaseStorage.instance.ref();
-    final imageRef = storageRef.child(_imgName);
+
+    final imageRef = storageRef.child("$category/$_imgName");
     try {
       await imageRef.putData(imgBytesToFirebase!);
       return true;
     } on FirebaseException catch (e) {
       setState(() {
-        _error = "Failed to upload";
+        _error = "Failed to upload to database. Please try again later.";
       });
+      return false;
     }
   }
 
@@ -176,7 +178,8 @@ class _ItemRequestState extends State<ItemRequest> {
                                     Text("N: $lat\nS: $long\n",
                                         style: theme.subtitleStyle),
                                     ToggleButtons(
-                                      selectedBorderColor: Colors.green.shade900,
+                                      selectedBorderColor:
+                                          Colors.green.shade900,
                                       selectedColor: Colors.white,
                                       fillColor: Colors.lightGreen.shade600,
                                       color: Colors.black,
@@ -210,21 +213,36 @@ class _ItemRequestState extends State<ItemRequest> {
                                     ButtonTheme(
                                       minWidth: 150,
                                       child: ElevatedButton(
-                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green.shade800)),
+                                        style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    Colors.green.shade800)),
                                         onPressed: () async {
                                           if (_formKey.currentState!
                                               .validate()) {
                                             if (isSelected[0]) {
-                                              uploadImageToFirebase();
-                                              addLost();
+                                              if (uploadImageToFirebase(
+                                                  "lost")) {
+                                                addLost();
+                                              }
                                             } else {
-                                              uploadImageToFirebase();
-                                              addFound();
+                                              if (uploadImageToFirebase(
+                                                  "found")) {
+                                                addFound();
+                                              }
                                             }
                                             routePage(const MapPage(), context);
+                                          } else {
+                                            setState(() {
+                                              _error =
+                                                  "Form incorrect, please correct fields.";
+                                            });
                                           }
                                         },
-                                        child: const Text('Submit'),
+                                        child: const Text(
+                                          'Submit',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                       ),
                                     ),
                                     _buildErrMessage(theme),
@@ -328,8 +346,9 @@ class _UploadImageButtonState extends State<UploadImageButton> {
   Widget build(BuildContext context) {
     return Column(children: [
       ElevatedButton(
-        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green.shade800)),
-        child: Text("Upload Image"),
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.green.shade800)),
+        child: Text("Upload Image", style: TextStyle(color: Colors.white)),
         onPressed: () {
           uploadImage();
         },
@@ -338,8 +357,8 @@ class _UploadImageButtonState extends State<UploadImageButton> {
       uploadedImg == null
           ? SizedBox()
           : SizedBox(
-              width: 300,
-              height: 300,
+              width: 150,
+              height: 150,
               child: uploadedImg,
             )
     ]);
