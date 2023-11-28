@@ -5,7 +5,6 @@ import 'package:ionicons/ionicons.dart';
 import 'package:lost_found_steelhacks/authentication/auth.dart';
 import 'package:lost_found_steelhacks/authentication/loading_animation.dart';
 import 'package:lost_found_steelhacks/authentication/user.dart';
-import 'package:lost_found_steelhacks/pages/list_page.dart';
 import 'package:lost_found_steelhacks/pages/map_page.dart';
 import 'package:lost_found_steelhacks/pages/signup_page.dart';
 import 'package:lost_found_steelhacks/routing/route.dart';

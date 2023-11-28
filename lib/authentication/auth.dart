@@ -46,7 +46,6 @@ class AuthService extends ChangeNotifier {
   Future signInWithEmailAndPassword(String _email, String _password) async {
     UserCredential result = await _auth.signInWithEmailAndPassword(
         email: _email, password: _password);
-    print(_auth);
     return _userFromFirebaseUser(result.user);
   }
 
