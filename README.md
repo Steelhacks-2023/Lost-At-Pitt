@@ -1,4 +1,7 @@
-![image](assets/logo-light.png)
+<p align="center">
+  <img src="assets/logo-light.png" style="width:40%;"/>
+</p>
+
 ---
 **Lost @ Pitt** is a multi-platform, lost and found tracking app, built with **Flutter, Firebase, and the Google Maps API**. It aims to digitize and expidite the process of finding your lost items!
 
