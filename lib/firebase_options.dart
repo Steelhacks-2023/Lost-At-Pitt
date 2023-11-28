@@ -4,6 +4,8 @@ import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
 
+const String defaultError = "Unsupported platform. Please use Web, IOS, or Android";
+
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
 /// Example:
@@ -14,11 +16,9 @@ import 'package:flutter/foundation.dart'
 ///   options: DefaultFirebaseOptions.currentPlatform,
 /// );
 /// ```
-class DefaultFirebaseOptions {
+class ProductionFirebaseOptions {
   static FirebaseOptions get currentPlatform {
-    if (kIsWeb) {
-      return web;
-    }
+    if (kIsWeb) return web;
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
@@ -26,20 +26,8 @@ class DefaultFirebaseOptions {
         return ios;
       case TargetPlatform.macOS:
         return macos;
-      case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
-      case TargetPlatform.linux:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for linux - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
       default:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions are not supported for this platform.',
-        );
+        throw UnsupportedError(defaultError);
     }
   }
 
@@ -80,4 +68,30 @@ class DefaultFirebaseOptions {
     iosClientId: '780072412373-nm7lgj09mlfs7vb3f644amagt6e1nuf1.apps.googleusercontent.com',
     iosBundleId: 'com.example.lostFoundSteelhacks',
   );
+}
+
+class DevelopmentFirebaseOptions {
+  static FirebaseOptions get currentPlatform {
+      if (kIsWeb) return web;
+      switch (defaultTargetPlatform) {        
+        case TargetPlatform.android:
+          throw UnsupportedError("No Android development environment as of now. Please test on web");
+        case TargetPlatform.iOS:
+          throw UnsupportedError("No IOS development environment as of now. Please test on web");
+        default:
+          throw UnsupportedError(defaultError);
+      }
+    }
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: "AIzaSyCPatdhg87sBtlYPSkx4dUjJaijYQ-1IJ0",
+    authDomain: "lost-at-pitt-dev.firebaseapp.com",
+    projectId: "lost-at-pitt-dev",
+    storageBucket: "lost-at-pitt-dev.appspot.com",
+    messagingSenderId: "868037729371",
+    appId: "1:868037729371:web:c6a8062e2444ae5883337e",
+    measurementId: "G-VJ2X16H6N9"
+  );
+
+  /* Add other development options here. not really needed right now */
 }

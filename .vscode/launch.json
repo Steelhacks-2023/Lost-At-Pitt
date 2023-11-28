@@ -1,37 +1,25 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "lost_found_steelhacks",
-            "request": "launch",
-            "type": "dart",
-            "args": [
-                "--web-port",
-                "65459"
-            ]
-        },
-        {
-            "name": "lost_found_steelhacks (profile mode)",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
-        },
-        {
-            "name": "lost_found_steelhacks (release mode)",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
-        },
-        {
-            "name": "Flutter (Chrome)",
-            "program": "lib/main.dart",
-            "deviceId": "chrome",
-            "request": "launch",
-            "type": "dart",
-            "args": [
-                "--web-port",
-                "65459"
-            ]
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "lost_found_steelhacks (profile mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "lost_found_steelhacks (release mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release"
+    },
+    {
+      "name": "Flutter (Chrome)",
+      "program": "lib/main.dart",
+      "deviceId": "chrome",
+      "request": "launch",
+      "type": "dart",
+      "args": ["--web-port", "65459", "--dart-define=\"MODE=development\""]
+    }
+  ]
 }
