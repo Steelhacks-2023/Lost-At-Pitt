@@ -34,7 +34,8 @@ class PostPage extends StatelessWidget {
             padding: const EdgeInsets.all(5),
             constraints: const BoxConstraints(maxWidth: 500),
             decoration: theme.cardBodyDecoration,
-            child: Column(
+            child: Scaffold(
+                body: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
@@ -43,30 +44,35 @@ class PostPage extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const ProfilePicture(image: null),
-                          const SizedBox(width: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              RichText(
-                                  textAlign: TextAlign.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const ProfilePicture(image: null),
+                        const SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            RichText(
+                                textAlign: TextAlign.start,
 
-                                  // Text should pull global font
-                                  text: TextSpan(children: [
-                                    TextSpan(
-                                        text: "User found ${item.itemName}\n",
-                                        style: theme.titleStyle),
-                                    TextSpan(
-                                        text: "4 hours ago",
-                                        style: theme.decoratedRegularStyle)
-                                  ])),
-                            ],
-                          ),
-                        ]),
+                                // Text should pull global font
+                                text: TextSpan(children: [
+                                  TextSpan(
+                                      text: "User found ${item.itemName}\n",
+                                      style: theme.titleStyle),
+                                  TextSpan(
+                                      text: "4 hours ago",
+                                      style: theme.decoratedRegularStyle)
+                                ])),
+                          ],
+                        ),
+                        Spacer(),
+                        IconButton(
+                            icon: Icon(Icons.close),
+                            onPressed: () => Navigator.pop(context))
+                      ],
+                    ),
                   ),
                 ),
                 // placeholder
@@ -96,8 +102,7 @@ class PostPage extends StatelessWidget {
                                     // Text should pull global font
                                     TextSpan(
                                         text: "Description\n",
-                                        style: theme.subtitleStyle
-                                        ),
+                                        style: theme.subtitleStyle),
 
                                     TextSpan(
                                         text: item.description,
@@ -123,7 +128,7 @@ class PostPage extends StatelessWidget {
                       )),
                 )
               ],
-            ),
+            )),
           )),
         ),
       ),
