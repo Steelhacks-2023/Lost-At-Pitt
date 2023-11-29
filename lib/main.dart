@@ -56,6 +56,7 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider<AuthService>(create: (_) => AuthService()),
         ],
         child: MaterialApp(
+            title: 'Lost@Pitt | For Students By Students',
             debugShowCheckedModeBanner: false,
             routes: {
               'loginPage': (context) => const LoginPage(),
