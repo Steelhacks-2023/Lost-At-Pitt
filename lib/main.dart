@@ -16,8 +16,7 @@ const String errorMessage =
 void main() async {
   const mode =
       bool.hasEnvironment("MODE") ? String.fromEnvironment("MODE") : null;
-  if (mode == null) throw Exception(errorMessage);
-  FirebaseOptions options = mode == "production"
+  FirebaseOptions options = mode == "production" || mode == null
       ? ProductionFirebaseOptions.currentPlatform
       : DevelopmentFirebaseOptions.currentPlatform;
   await Firebase.initializeApp(options: options);
