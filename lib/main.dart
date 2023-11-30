@@ -10,10 +10,17 @@ import 'package:lost_found_steelhacks/themes/theme_manager.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
+const String errorMessage =
+    "Must declare MODE as either production or development. Supply --dart-define=\"MODE=mode\" via command line or launch arguments";
+
 void main() async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  const mode =
+      bool.hasEnvironment("MODE") ? String.fromEnvironment("MODE") : null;
+  if (mode == null) throw Exception(errorMessage);
+  FirebaseOptions options = mode == "production"
+      ? ProductionFirebaseOptions.currentPlatform
+      : DevelopmentFirebaseOptions.currentPlatform;
+  await Firebase.initializeApp(options: options);
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(const MyApp());
