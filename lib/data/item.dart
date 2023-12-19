@@ -5,7 +5,7 @@ class Item {
   final String? itemName;
   final String? description;
   final num? phone;
-  final int? picture;
+  final String? picture;
   final GeoPoint? location;
 
   Item(
@@ -20,6 +20,10 @@ class Item {
     SnapshotOptions? options,
   ) {
     Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+    if (data['Picture'] is int) {
+      data['Picture'] = "";
+    }
+    
     return Item(
         itemName: data['ItemName'],
         description: data['Description'],
