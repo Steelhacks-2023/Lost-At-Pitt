@@ -53,7 +53,7 @@ class AuthService extends ChangeNotifier {
     _firestore.collection('users').doc(result.user!.uid).set({
         'uid' : result.user!.uid,
         'email' : result.user!.email,
-      });
+      }, SetOptions(merge: true));
     return _userFromFirebaseUser(result.user);
   }
 
@@ -84,7 +84,7 @@ class AuthService extends ChangeNotifier {
       _firestore.collection('users').doc(result.user!.uid).set({
         'uid' : result.user!.uid,
         'email' : result.user!.email,
-      });
+      }, SetOptions(merge: true));
       return _userFromFirebaseUser(user);
     } on FirebaseAuthException catch (e) {
       return null;
