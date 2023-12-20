@@ -4,17 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lost_found_steelhacks/authentication/user.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthService extends ChangeNotifier {
   //final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // create user obj based on FirebaseUser
   MyUser? _userFromFirebaseUser(User? user) {
     return user != null ? MyUser(uid: user.uid) : null;
   }
 
-  bool isSignedIn() { 
+  bool isSignedIn() {
     return _auth.currentUser != null;
   }
 
@@ -31,9 +33,10 @@ class AuthService extends ChangeNotifier {
           email: _email, password: _password);
       User? user = result.user;
 
-      //create a new document for the user with the uid
-      // await DatabaseService(uid: user!.uid)
-      //     .updateUserData('0', 'New Username', _email, user!.uid);
+      _firestore.collection('users').doc(result.user!.uid).set({
+        'uid' : result.user!.uid,
+        'email' : result.user!.email,
+      });
 
       return _userFromFirebaseUser(user);
     } catch (e) {
@@ -46,6 +49,11 @@ class AuthService extends ChangeNotifier {
   Future signInWithEmailAndPassword(String _email, String _password) async {
     UserCredential result = await _auth.signInWithEmailAndPassword(
         email: _email, password: _password);
+    
+    _firestore.collection('users').doc(result.user!.uid).set({
+        'uid' : result.user!.uid,
+        'email' : result.user!.email,
+      });
     return _userFromFirebaseUser(result.user);
   }
 
@@ -55,7 +63,6 @@ class AuthService extends ChangeNotifier {
     try {
       if (kIsWeb) {
         GoogleAuthProvider googleProvider = GoogleAuthProvider();
-
         // googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
         // googleProvider.setCustomParameters({
         //   'login_hint': 'user@example.com'
@@ -74,6 +81,10 @@ class AuthService extends ChangeNotifier {
       }
 
       User? user = result.user;
+      _firestore.collection('users').doc(result.user!.uid).set({
+        'uid' : result.user!.uid,
+        'email' : result.user!.email,
+      });
       return _userFromFirebaseUser(user);
     } on FirebaseAuthException catch (e) {
       return null;
