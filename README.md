@@ -1,17 +1,16 @@
-## Inspiration
-As college students, we have all known the pain of leaving items around campus and having to track them back down. At the same time, often we find lost items around campus, with no way of returning them to their owner. Our app looks to remedy these problems.
+<p align="center">
+  <img src="assets/logo-readme.png" style="width:60%;"/>
+</p>
 
-## What it does
-Lost @ Pitt allows users to drop pins around campus and submit "posts" either:
-1. describing an item that was lost in that approximate location
-2. describing an item they found in that location
-The posts also contain contact information, so the items can be returned to their owners.
+**Lost @ Pitt** is a multi-platform, lost and found tracking app, built with **Flutter, Firebase, and the Google Maps API**. It aims to digitize and expidite the process of finding your lost items!
 
-## How we built it
-We used Flutter to create our app, in order for multiple platforms to be able to use it (web, Android, IOS...). For the backend, we used Firebase as a database to store the information and update the app in real time across multiple devices.
+## How does it work?
+Users that find items can submit "posts" with a description & location, an image of the item, and contact information in order to return the item to its owner. 
 
-## Challenges we ran into
-We ran into trouble trying to get images to display after pulling from the database. Images can be uploaded, but at the moment we can't grab those images and tie them back to the posts.
+Users that have lost items can also submit posts, allowing other students to contact them if the item is found.
 
-## What's next for Lost @ Pitt
-Beautification & fixing bugs!
+## Current Development
+**Lost @ Pitt** is currently in the process of developing a user authentication system and user direct messaging, to move away from using personal contact information as a method of returning items.
+
+## Contributing
+Take a look at our GitHub issues, and check out ```CONTRIBUTING.md``` for more information.

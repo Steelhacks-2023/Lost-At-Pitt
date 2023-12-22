@@ -20,16 +20,13 @@ class Item {
     SnapshotOptions? options,
   ) {
     Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-    if (data['Picture'] is int) {
-      data['Picture'] = "";
-    }
-    
+
     return Item(
         itemName: data['ItemName'],
         description: data['Description'],
         location: data['Location'],
         phone: data['Phone'],
-        picture: data['Picture']);
+        picture: data['Picture'] is int ? '' : data['Picture']); //because some pictures entries are of numbers
   }
 
   Map<String, dynamic> toFirestore() {

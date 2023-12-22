@@ -20,7 +20,7 @@ jobs:
 
       - run: flutter clean
       - run: flutter pub get
-      - run: flutter build web --release
+      - run: flutter build web --release --dart-define="MODE=production"
 
       # Web deploy now is contained in build/web directory
       - run: |
