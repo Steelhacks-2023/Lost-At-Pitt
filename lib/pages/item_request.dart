@@ -1,8 +1,11 @@
 import 'dart:io';
+import 'dart:js_interop';
 import 'dart:typed_data';
 import 'dart:ui';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:lost_found_steelhacks/authentication/auth.dart';
 import 'package:lost_found_steelhacks/pages/map_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -12,6 +15,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
+import 'package:provider/provider.dart';
 
 CollectionReference lost = FirebaseFirestore.instance.collection('Lost');
 CollectionReference found = FirebaseFirestore.instance.collection('Found');
@@ -19,6 +23,7 @@ String _imgFromDeviceError = '';
 Uint8List? imgBytesToFirebase;
 String _imgName = '';
 
+//currently getting sorted in build method but should probably just order it here
 List<String> list = <String>[
   'Water Bottle',
   'ID',
@@ -55,6 +60,7 @@ class _ItemRequestState extends State<ItemRequest> {
 
   String title = '';
   String _error = '';
+
 
   uploadImageToFirebase(String category) async {
     final storageRef = FirebaseStorage.instance.ref();
@@ -115,7 +121,7 @@ class _ItemRequestState extends State<ItemRequest> {
 
   Future<void> addLost() {
     // Calling the collection to add a new user
-    return lost
+    return lost 
         //adding to firebase collection
         .add({
       //Data added in the form of a dictionary into the document.
@@ -124,7 +130,8 @@ class _ItemRequestState extends State<ItemRequest> {
       'ItemName': category,
       'Location': GeoPoint(lat, long),
       'Phone': phone,
-      'Picture': _imgName
+      'Picture': _imgName,
+      'User' : FirebaseAuth.instance.currentUser!.uid
     });
   }
 
@@ -139,7 +146,8 @@ class _ItemRequestState extends State<ItemRequest> {
       'ItemName': category,
       'Location': GeoPoint(lat, long),
       'Phone': phone,
-      'Picture': _imgName
+      'Picture': _imgName,
+      'User': FirebaseAuth.instance.currentUser!.uid
     });
   }
 
@@ -223,12 +231,12 @@ class _ItemRequestState extends State<ItemRequest> {
                                           if (_formKey.currentState!
                                               .validate()) {
                                             if (isSelected[0]) {
-                                              if (uploadImageToFirebase(
+                                              if (await uploadImageToFirebase(
                                                   "lost")) {
                                                 addLost();
                                               }
                                             } else {
-                                              if (uploadImageToFirebase(
+                                              if (await uploadImageToFirebase(
                                                   "found")) {
                                                 addFound();
                                               }
