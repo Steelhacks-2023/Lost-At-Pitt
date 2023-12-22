@@ -19,7 +19,7 @@ String _imgFromDeviceError = '';
 Uint8List? imgBytesToFirebase;
 String _imgName = '';
 
-const List<String> list = <String>[
+List<String> list = <String>[
   'Water Bottle',
   'ID',
   'Wallet',
@@ -119,6 +119,7 @@ class _ItemRequestState extends State<ItemRequest> {
         //adding to firebase collection
         .add({
       //Data added in the form of a dictionary into the document.
+      'Date Created': Timestamp.now(),
       'Description': description,
       'ItemName': category,
       'Location': GeoPoint(lat, long),
@@ -133,6 +134,7 @@ class _ItemRequestState extends State<ItemRequest> {
         //adding to firebase collection
         .add({
       //Data added in the form of a dictionary into the document.
+      'Date Created': Timestamp.now(),
       'Description': description,
       'ItemName': category,
       'Location': GeoPoint(lat, long),
@@ -146,7 +148,7 @@ class _ItemRequestState extends State<ItemRequest> {
     final AppTheme theme = Theme.of(context).extension<AppTheme>()!;
     lat = widget.itemLoc.latitude;
     long = widget.itemLoc.longitude;
-
+    list.sort((a, b) => a.compareTo(b));
     return Padding(
         padding: const EdgeInsets.all(30.0),
         child: SizedBox(
