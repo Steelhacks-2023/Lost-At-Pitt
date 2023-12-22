@@ -33,9 +33,13 @@ class AuthService extends ChangeNotifier {
           email: _email, password: _password);
       User? user = result.user;
 
+      //create entry if firestore of user info
       _firestore.collection('users').doc(result.user!.uid).set({
-        'uid' : result.user!.uid,
-        'email' : result.user!.email,
+        'uid': result.user!.uid,
+        'email': result.user!.email,
+        'firstName': _firstName,
+        'lastName': _lastName,
+        'location': GeoPoint(40.4440279, -79.9700647)
       });
 
       return _userFromFirebaseUser(user);
@@ -49,11 +53,13 @@ class AuthService extends ChangeNotifier {
   Future signInWithEmailAndPassword(String _email, String _password) async {
     UserCredential result = await _auth.signInWithEmailAndPassword(
         email: _email, password: _password);
-    
+
     _firestore.collection('users').doc(result.user!.uid).set({
-        'uid' : result.user!.uid,
-        'email' : result.user!.email,
-      }, SetOptions(merge: true));
+      'uid': result.user!.uid,
+      'email': result.user!.email,
+      'location': GeoPoint(40.4440279, -79.9700647)
+    }, SetOptions(merge: true));
+
     return _userFromFirebaseUser(result.user);
   }
 
@@ -81,9 +87,24 @@ class AuthService extends ChangeNotifier {
       }
 
       User? user = result.user;
+
+      String? firstName;
+      String? lastName;
+
+      //this needed to add user info and splits via first and last name
+      //works for GoogleAuth if we extend to other methods need to check more
+      for (final providerProfile in user!.providerData) {
+        String? name = providerProfile.displayName;
+        firstName = name!.split(' ')[0];
+        lastName = name.split(' ')[1];
+      }
+
       _firestore.collection('users').doc(result.user!.uid).set({
-        'uid' : result.user!.uid,
-        'email' : result.user!.email,
+        'uid': result.user!.uid,
+        'email': result.user!.email,
+        'firstName' : firstName ?? '',
+        'lastName': lastName ?? '',
+        'location': GeoPoint(40.4440279, -79.9700647)
       }, SetOptions(merge: true));
       return _userFromFirebaseUser(user);
     } on FirebaseAuthException catch (e) {
