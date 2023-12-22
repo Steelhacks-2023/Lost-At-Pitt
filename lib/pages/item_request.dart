@@ -119,6 +119,7 @@ class _ItemRequestState extends State<ItemRequest> {
         //adding to firebase collection
         .add({
       //Data added in the form of a dictionary into the document.
+      'Date Created': Timestamp.now(),
       'Description': description,
       'ItemName': category,
       'Location': GeoPoint(lat, long),
@@ -133,6 +134,7 @@ class _ItemRequestState extends State<ItemRequest> {
         //adding to firebase collection
         .add({
       //Data added in the form of a dictionary into the document.
+      'Date Created': Timestamp.now(),
       'Description': description,
       'ItemName': category,
       'Location': GeoPoint(lat, long),
