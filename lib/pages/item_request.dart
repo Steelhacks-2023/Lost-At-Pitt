@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lost_found_steelhacks/authentication/auth.dart';
+import 'package:lost_found_steelhacks/authentication/loading_animation.dart';
 import 'package:lost_found_steelhacks/pages/map_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -60,7 +61,7 @@ class _ItemRequestState extends State<ItemRequest> {
 
   String title = '';
   String _error = '';
-
+  bool loading = false;
 
   uploadImageToFirebase(String category) async {
     final storageRef = FirebaseStorage.instance.ref();
@@ -121,7 +122,7 @@ class _ItemRequestState extends State<ItemRequest> {
 
   Future<void> addLost() {
     // Calling the collection to add a new user
-    return lost 
+    return lost
         //adding to firebase collection
         .add({
       //Data added in the form of a dictionary into the document.
@@ -131,7 +132,7 @@ class _ItemRequestState extends State<ItemRequest> {
       'Location': GeoPoint(lat, long),
       'Phone': phone,
       'Picture': _imgName,
-      'User' : FirebaseAuth.instance.currentUser!.uid
+      'User': FirebaseAuth.instance.currentUser!.uid
     });
   }
 
@@ -220,41 +221,50 @@ class _ItemRequestState extends State<ItemRequest> {
                                     SizedBox(height: 10),
                                     UploadImageButton(),
                                     SizedBox(height: 10.0),
-                                    ButtonTheme(
-                                      minWidth: 150,
-                                      child: ElevatedButton(
-                                        style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.green.shade800)),
-                                        onPressed: () async {
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            if (isSelected[0]) {
-                                              if (await uploadImageToFirebase(
-                                                  "lost")) {
-                                                addLost();
-                                              }
-                                            } else {
-                                              if (await uploadImageToFirebase(
-                                                  "found")) {
-                                                addFound();
-                                              }
-                                            }
-                                            routePage(const MapPage(), context);
-                                          } else {
-                                            setState(() {
-                                              _error =
-                                                  "Form incorrect, please correct fields.";
-                                            });
-                                          }
-                                        },
-                                        child: const Text(
-                                          'Submit',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
-                                    ),
+                                    loading
+                                        ? Loading()
+                                        : ButtonTheme(
+                                            minWidth: 150,
+                                            child: ElevatedButton(
+                                              style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          Colors
+                                                              .green.shade800)),
+                                              onPressed: () async {
+                                                setState(() {
+                                                  loading = true;
+                                                });
+                                                if (_formKey.currentState!
+                                                    .validate()) {
+                                                  if (isSelected[0]) {
+                                                    //we wait to see if upload image is successful, this requires image to need to be uploaded
+                                                    if (await uploadImageToFirebase(
+                                                        "lost")) {
+                                                      addLost();
+                                                    }
+                                                  } else {
+                                                    if (await uploadImageToFirebase(
+                                                        "found")) {
+                                                      addFound();
+                                                    }
+                                                  }
+                                                  routePage(
+                                                      const MapPage(), context);
+                                                } else {
+                                                  setState(() {
+                                                    _error =
+                                                        "Form incorrect, please correct fields.";
+                                                  });
+                                                }
+                                              },
+                                              child: const Text(
+                                                'Submit',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                          ),
                                     _buildErrMessage(theme),
                                   ],
                                 ),
