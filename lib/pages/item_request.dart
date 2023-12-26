@@ -1,26 +1,16 @@
-import 'dart:io';
-import 'dart:js_interop';
 import 'dart:typed_data';
-import 'dart:ui';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:lost_found_steelhacks/authentication/auth.dart';
-import 'package:lost_found_steelhacks/authentication/loading_animation.dart';
+import 'package:lost_found_steelhacks/models/item.dart';
 import 'package:lost_found_steelhacks/pages/map_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:lost_found_steelhacks/routing/route.dart';
+import 'package:lost_found_steelhacks/services/auth.dart';
+import 'package:lost_found_steelhacks/services/data.dart';
 import 'package:lost_found_steelhacks/themes/app_theme.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:image_picker/image_picker.dart';
-import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
-import 'package:provider/provider.dart';
 
-CollectionReference lost = FirebaseFirestore.instance.collection('Lost');
-CollectionReference found = FirebaseFirestore.instance.collection('Found');
-String _imgFromDeviceError = '';
 Uint8List? imgBytesToFirebase;
 String _imgName = '';
 
@@ -47,7 +37,7 @@ const List<Widget> options = <Widget>[
 ];
 
 class ItemRequest extends StatefulWidget {
-  ItemRequest({super.key, required this.itemLoc});
+  const ItemRequest({super.key, required this.itemLoc});
   final LatLng itemLoc;
 
   @override
@@ -70,7 +60,7 @@ class _ItemRequestState extends State<ItemRequest> {
     try {
       await imageRef.putData(imgBytesToFirebase!);
       return true;
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       setState(() {
         _error = "Failed to upload to database. Please try again later.";
       });
@@ -120,36 +110,18 @@ class _ItemRequestState extends State<ItemRequest> {
     );
   }
 
-  Future<void> addLost() {
-    // Calling the collection to add a new user
-    return lost
-        //adding to firebase collection
-        .add({
-      //Data added in the form of a dictionary into the document.
-      'Date Created': Timestamp.now(),
-      'Description': description,
-      'ItemName': category,
-      'Location': GeoPoint(lat, long),
-      'Phone': phone,
-      'Picture': _imgName,
-      'User': FirebaseAuth.instance.currentUser!.uid
-    });
+  Future<void> addLost() async {
+    Item item = Item(id: "", userId: AuthService.instance.user!.uid, timeCreated: Timestamp.now(), description: description, itemName: category, location: GeoPoint(lat, long),phone: phone, picture: _imgName);
+    DocumentReference ref = await FirebaseFirestore.instance.collection('lost').add(item.toFirestore());
+    item.id = ref.id;
+    DataService.instance.lostItems.add(item);
   }
 
-  Future<void> addFound() {
-    // Calling the collection to add a new user
-    return found
-        //adding to firebase collection
-        .add({
-      //Data added in the form of a dictionary into the document.
-      'Date Created': Timestamp.now(),
-      'Description': description,
-      'ItemName': category,
-      'Location': GeoPoint(lat, long),
-      'Phone': phone,
-      'Picture': _imgName,
-      'User': FirebaseAuth.instance.currentUser!.uid
-    });
+  Future<void> addFound() async {
+    Item item = Item(id: "", userId: AuthService.instance.user!.uid, timeCreated: Timestamp.now(), description: description, itemName: category, location: GeoPoint(lat, long),phone: phone, picture: _imgName);
+    DocumentReference ref = await FirebaseFirestore.instance.collection('found').add(item.toFirestore());
+    item.id = ref.id;
+    DataService.instance.foundItems.add(item);
   }
 
   @override
@@ -175,9 +147,9 @@ class _ItemRequestState extends State<ItemRequest> {
                     child: Form(
                       key: _formKey,
                       child: Scaffold(
-                          backgroundColor: Color.fromARGB(255, 233, 227, 206),
+                          backgroundColor: const Color.fromARGB(255, 233, 227, 206),
                           body: Padding(
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   horizontal: 16.0, vertical: 16.0),
                               child: Stack(children: [
                                 Column(
@@ -185,7 +157,7 @@ class _ItemRequestState extends State<ItemRequest> {
                                   children: [
                                     Text('Enter your item from: ',
                                         style: theme.titleStyle),
-                                    SizedBox(height: 10),
+                                    const SizedBox(height: 10),
                                     Text("N: $lat\nS: $long\n",
                                         style: theme.subtitleStyle),
                                     ToggleButtons(
@@ -212,66 +184,57 @@ class _ItemRequestState extends State<ItemRequest> {
                                           Radius.circular(8)),
                                       children: options,
                                     ),
-                                    SizedBox(height: 10),
-                                    DropdownButt(),
-                                    SizedBox(height: 10),
+                                    const SizedBox(height: 10),
+                                    const DropdownButt(),
+                                    const SizedBox(height: 10),
                                     _buildTitleTF(theme),
-                                    SizedBox(height: 10),
+                                    const SizedBox(height: 10),
                                     _buildPhoneNumTF(theme),
-                                    SizedBox(height: 10),
-                                    UploadImageButton(),
-                                    SizedBox(height: 10.0),
-                                    loading
-                                        ? Loading()
-                                        : ButtonTheme(
-                                            minWidth: 150,
-                                            child: ElevatedButton(
-                                              style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(
-                                                          Colors
-                                                              .green.shade800)),
-                                              onPressed: () async {
-                                                setState(() {
-                                                  loading = true;
-                                                });
-                                                if (_formKey.currentState!
-                                                    .validate()) {
-                                                  if (isSelected[0]) {
-                                                    //we wait to see if upload image is successful, this requires image to need to be uploaded
-                                                    if (await uploadImageToFirebase(
-                                                        "lost")) {
-                                                      addLost();
-                                                    }
-                                                  } else {
-                                                    if (await uploadImageToFirebase(
-                                                        "found")) {
-                                                      addFound();
-                                                    }
-                                                  }
-                                                  routePage(
-                                                      const MapPage(), context);
-                                                } else {
-                                                  setState(() {
-                                                    _error =
-                                                        "Form incorrect, please correct fields.";
-                                                  });
-                                                }
-                                              },
-                                              child: const Text(
-                                                'Submit',
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                          ),
+                                    const SizedBox(height: 10),
+                                    const UploadImageButton(),
+                                    const SizedBox(height: 10.0),
+                                    ButtonTheme(
+                                      minWidth: 150,
+                                      child: ElevatedButton(
+                                        style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    Colors.green.shade800)),
+                                        onPressed: () async {
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            if (isSelected[0]) {
+                                              if (await uploadImageToFirebase(
+                                                  "lost")) {
+                                                addLost();
+                                              }
+                                            } else {
+                                              if (await uploadImageToFirebase(
+                                                  "found")) {
+                                                addFound();
+                                              }
+                                            }
+                                            routeBack(context);
+                                          } else {
+                                            setState(() {
+                                              _error =
+                                                  "Form incorrect, please correct fields.";
+                                            });
+                                          }
+                                        },
+                                        child: const Text(
+                                          'Submit',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
                                     _buildErrMessage(theme),
                                   ],
                                 ),
                                 Align(
                                     alignment: Alignment.topRight,
                                     child: IconButton(
-                                      icon: Icon(Icons.close),
+                                      icon: const Icon(Icons.close),
                                       onPressed: () {
                                         setState(() {
                                           Navigator.pushReplacement(
@@ -300,7 +263,7 @@ class _DropdownButtState extends State<DropdownButt> {
   Widget build(BuildContext context) {
     return DropdownButtonHideUnderline(
         child: DropdownButton<String>(
-      padding: EdgeInsets.symmetric(horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
       //isExpanded: true,
       alignment: Alignment.center,
       value: dropdownValue,
@@ -356,7 +319,6 @@ class _UploadImageButtonState extends State<UploadImageButton> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _picker = ImagePicker();
     uploadedImg = null;
@@ -369,14 +331,14 @@ class _UploadImageButtonState extends State<UploadImageButton> {
       ElevatedButton(
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.green.shade800)),
-        child: Text("Upload Image", style: TextStyle(color: Colors.white)),
+        child: const Text("Upload Image", style: TextStyle(color: Colors.white)),
         onPressed: () {
           uploadImage();
         },
       ),
-      SizedBox(height: 10),
+      const SizedBox(height: 10),
       uploadedImg == null
-          ? SizedBox()
+          ? const SizedBox()
           : SizedBox(
               width: 150,
               height: 150,

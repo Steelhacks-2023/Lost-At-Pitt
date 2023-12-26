@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lost_found_steelhacks/cards/profile_picture.dart';
-import 'package:lost_found_steelhacks/cards/tag.dart';
-import 'package:lost_found_steelhacks/data/item.dart';
+import 'package:lost_found_steelhacks/widgets/profile_picture.dart';
+import 'package:lost_found_steelhacks/widgets/tag.dart';
+import 'package:lost_found_steelhacks/models/item.dart';
 import 'package:lost_found_steelhacks/pages/post_page.dart';
 import 'package:lost_found_steelhacks/routing/route.dart';
 import 'package:lost_found_steelhacks/themes/app_theme.dart';
@@ -22,7 +22,7 @@ class PostCard extends StatelessWidget {
         onTap: () => routeSubpage(PostPage(item: item), context),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: Container(
+          child: SizedBox(
             width: MediaQuery.of(context).size.width,
             child: Center(
                 child: Container(
@@ -33,7 +33,7 @@ class PostCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    ProfilePicture(image: null),
+                    const ProfilePicture(image: null),
                     const SizedBox(width: 10),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,13 +42,13 @@ class PostCard extends StatelessWidget {
                             style: theme.subtitleStyle),
                         const SizedBox(height: 5),
                         Row(
-                            children: generateTags(),
-                            mainAxisAlignment: MainAxisAlignment.start)
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: generateTags())
                       ],
                     ),
                     const Spacer(),
                     Padding(
-                      padding: EdgeInsets.only(right: 3),
+                      padding: const EdgeInsets.only(right: 3),
                       child: Column(
                         children: [
                           Text("4 hours ago",

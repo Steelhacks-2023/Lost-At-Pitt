@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:lost_found_steelhacks/authentication/auth.dart';
-import 'package:lost_found_steelhacks/authentication/wrapper.dart';
+import 'package:lost_found_steelhacks/pages/home_page.dart';
+import 'package:lost_found_steelhacks/services/auth.dart';
+import 'package:lost_found_steelhacks/routing/wrapper.dart';
 import 'package:lost_found_steelhacks/pages/login_page.dart';
-import 'package:lost_found_steelhacks/pages/map_page.dart';
 import 'package:lost_found_steelhacks/themes/app_theme.dart';
 import 'package:lost_found_steelhacks/themes/theme_manager.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +35,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
   @override
   void dispose() {
     themeManager.removeListener(themeListener);
@@ -66,7 +67,7 @@ class _MyAppState extends State<MyApp> {
             debugShowCheckedModeBanner: false,
             routes: {
               'loginPage': (context) => const LoginPage(),
-              'mapPage': (context) => const MapPage(),
+              'mapPage': (context) => const HomePage(),
               '/': (context) => const Wrapper()
             },
             initialRoute: '/',

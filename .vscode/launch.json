@@ -14,7 +14,7 @@
       "flutterMode": "release"
     },
     {
-      "name": "Flutter (Chrome)",
+      "name": "dev debug mode",
       "program": "lib/main.dart",
       "deviceId": "chrome",
       "request": "launch",

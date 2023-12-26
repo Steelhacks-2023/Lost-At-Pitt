@@ -53,8 +53,8 @@ class AppTheme extends ThemeExtension<AppTheme> {
     gradient: LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
-      colors: [Color(0xFFE0D2C7), clrs.medium],
-      stops: [0.1, 0.9],
+      colors: [const Color(0xFFE0D2C7), clrs.medium],
+      stops: const [0.1, 0.9],
     ),
   );
   final BoxDecoration cardSectionDecoration = BoxDecoration(
@@ -72,7 +72,7 @@ class AppTheme extends ThemeExtension<AppTheme> {
       BoxShadow(
         color: clrs.medium,
         blurRadius: 6.0,
-        offset: Offset(0, 2),
+        offset: const Offset(0, 2),
       ),
     ],
   );
