@@ -1,16 +1,20 @@
+// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: slash_for_doc_comments
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:lost_found_steelhacks/authentication/auth.dart';
-import 'package:lost_found_steelhacks/authentication/loading_animation.dart';
-import 'package:lost_found_steelhacks/authentication/user.dart';
-import 'package:lost_found_steelhacks/pages/map_page.dart';
+import 'package:lost_found_steelhacks/services/auth.dart';
+import 'package:lost_found_steelhacks/widgets/loading_animation.dart';
+import 'package:lost_found_steelhacks/models/app_user.dart';
 import 'package:lost_found_steelhacks/pages/signup_page.dart';
 import 'package:lost_found_steelhacks/routing/route.dart';
 import 'package:lost_found_steelhacks/themes/app_theme.dart';
-import 'package:provider/provider.dart';
 
+/**
+ * Login page for the application
+ */
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -33,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text('Email', style: theme.subtitleStyle),
-        SizedBox(height: 10.0),
+        const SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
           decoration: theme.textFieldDecoration,
@@ -51,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14.0),
+                contentPadding: const EdgeInsets.only(top: 14.0),
                 prefixIcon: Icon(Icons.email, color: theme.dark),
                 hintText: 'Enter your Email',
                 hintStyle: theme.hintStyle),
@@ -66,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text('Password', style: theme.subtitleStyle),
-        SizedBox(height: 10.0),
+        const SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
           decoration: theme.textFieldDecoration,
@@ -81,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
             obscureText: _hidePassword,
             decoration: InputDecoration(
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14.0),
+                contentPadding: const EdgeInsets.only(top: 14.0),
                 prefixIcon: Icon(Icons.lock, color: theme.dark),
                 suffixIcon: IconButton(
                   icon: Icon(
@@ -105,18 +109,17 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       alignment: Alignment.centerRight,
       child: TextButton(
-        onPressed: () => routePage(SignUpPage(), context),
+        onPressed: () => routePage(const SignUpPage(), context),
         child: Text('Forgot Password?', style: theme.subtitleStyle),
       ),
     );
   }
 
-  Widget _buildLoginBtn(
-      AppTheme theme, bool loading, AuthService authService) {
+  Widget _buildLoginBtn(AppTheme theme, bool loading) {
     return loading
         ? const Loading()
         : Container(
-            padding: EdgeInsets.symmetric(vertical: 25.0),
+            padding: const EdgeInsets.symmetric(vertical: 25.0),
             child: Container(
               decoration: theme.cardBodyDecoration,
               child: TextButton(
@@ -124,18 +127,15 @@ class _LoginPageState extends State<LoginPage> {
                   if (_formKey.currentState!.validate()) {
                     setState(() => loading = true);
                     try {
-                      MyUser? result = await authService
-                          .signInWithEmailAndPassword(_email, _password);
+                      AppUser? result = await AuthService.instance.signInWithEmailAndPassword(_email, _password);
 
                       if (result == null) {
                         throw FirebaseAuthException(code: "Sign in failed");
                       }
 
-                      setState(() {
-                        loading = false;
-                      });
-                      routePage(MapPage(), context);
-                    } on FirebaseAuthException catch (e) {
+                      setState(() => loading = false);
+                      routeHome(0, context);
+                    } on FirebaseAuthException {
                       setState(() {
                         _error =
                             'The email or password is incorrect. Please try again.';
@@ -150,22 +150,22 @@ class _LoginPageState extends State<LoginPage> {
           );
   }
 
-  Widget _buildSocialBtnRow(AppTheme theme, AuthService authService) {
+  Widget _buildSocialBtnRow(AppTheme theme) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 15.0),
+      padding: const EdgeInsets.symmetric(vertical: 15.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           IconButton(
               onPressed: () async {
-                Future result = authService.signInWithGoogle();
+                Future result = await AuthService.instance.signInWithGoogle();
                 result.then((value) {
                   if (value == null) {
                     setState(() {
                       _error = "Google sign in failed. Please try again.";
                     });
                   } else {
-                    routePage(MapPage(), context);
+                    routeHome(0, context);
                   }
                 });
               },
@@ -178,16 +178,17 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildSignupBtn(AppTheme theme) {
     return GestureDetector(
-      onTap: () => routePage(SignUpPage(), context),
+      onTap: () => routePage(const SignUpPage(), context),
       child: RichText(
         text: TextSpan(
           children: [
             TextSpan(
-                text: 'Don\'t have an Account? ', style: theme.regularStyle.copyWith(color: theme.dark)),
+                text: 'Don\'t have an Account? ',
+                style: theme.regularStyle.copyWith(color: theme.dark)),
             TextSpan(
                 text: 'Sign Up',
-                style:
-                    theme.regularStyle.copyWith(fontWeight: FontWeight.bold, color: theme.dark)),
+                style: theme.regularStyle
+                    .copyWith(fontWeight: FontWeight.bold, color: theme.dark)),
           ],
         ),
       ),
@@ -205,10 +206,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final AuthService authService = Provider.of<AuthService>(context);
-    final AppTheme theme =
-        Theme.of(context).extension<AppTheme>()!;
-    //const Widget spacing = SizedBox(height: 30);
+    final AppTheme theme = Theme.of(context).extension<AppTheme>()!;
 
     return Scaffold(
       body: AnnotatedRegion<SystemUiOverlayStyle>(
@@ -223,12 +221,12 @@ class _LoginPageState extends State<LoginPage> {
 
                   // move to theme
                   decoration: theme.gradientBackgroundDecoration),
-              Container(
+              SizedBox(
                 height: double.infinity,
                 child: SingleChildScrollView(
-                    physics: AlwaysScrollableScrollPhysics(),
+                    physics: const AlwaysScrollableScrollPhysics(),
                     padding:
-                        EdgeInsets.symmetric(horizontal: 40.0, vertical: 120.0),
+                        const EdgeInsets.symmetric(horizontal: 40.0, vertical: 120.0),
                     child: Form(
                       key: _formKey,
                       child: Column(
@@ -241,8 +239,8 @@ class _LoginPageState extends State<LoginPage> {
                           _buildPasswordTF(theme),
                           _buildForgotPasswordBtn(theme),
                           _buildErrorMsg(theme),
-                          _buildLoginBtn(theme, loading, authService),
-                          _buildSocialBtnRow(theme, authService),
+                          _buildLoginBtn(theme, loading),
+                          _buildSocialBtnRow(theme),
                           _buildSignupBtn(theme),
                         ],
                       ),

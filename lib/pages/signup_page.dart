@@ -1,13 +1,19 @@
+// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: slash_for_doc_comments
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:lost_found_steelhacks/authentication/auth.dart';
-import 'package:lost_found_steelhacks/authentication/loading_animation.dart';
+import 'package:lost_found_steelhacks/services/auth.dart';
+import 'package:lost_found_steelhacks/widgets/loading_animation.dart';
 import 'package:lost_found_steelhacks/pages/login_page.dart';
 import 'package:lost_found_steelhacks/routing/route.dart';
 import 'package:lost_found_steelhacks/themes/app_theme.dart';
 import 'package:provider/provider.dart';
 
+/**
+ * Sign up page for the application
+ */
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
 
@@ -34,20 +40,21 @@ class _SignUpPageState extends State<SignUpPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text('First Name', style: theme.subtitleStyle),
-        SizedBox(height: 10.0),
+        const SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
           decoration: theme.textFieldDecoration,
           height: 60.0,
           child: TextFormField(
             controller: _firstNameController,
+            onChanged: (value) => firstName = value,
             validator: (val) => val == null || val.isEmpty
                 ? 'First name cannot be empty.'
                 : null,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14.0),
+                contentPadding: const EdgeInsets.only(top: 14.0),
                 prefixIcon: Icon(Icons.person, color: theme.dark),
                 hintText: 'Enter your first name',
                 hintStyle: theme.hintStyle),
@@ -65,13 +72,13 @@ class _SignUpPageState extends State<SignUpPage> {
           'Last Name',
           style: theme.subtitleStyle,
         ),
-        SizedBox(height: 10.0),
+        const SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
           decoration: theme.textFieldDecoration,
           height: 60.0,
           child: TextFormField(
-            onChanged: (value) => firstName = value,
+            onChanged: (value) => lastName = value,
             controller: _lastNameController,
             validator: (val) => val == null || val.isEmpty
                 ? 'Last name cannot be empty.'
@@ -79,7 +86,7 @@ class _SignUpPageState extends State<SignUpPage> {
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14.0),
+                contentPadding: const EdgeInsets.only(top: 14.0),
                 prefixIcon: Icon(Icons.person, color: theme.dark),
                 hintText: 'Enter your first name',
                 hintStyle: theme.hintStyle),
@@ -94,7 +101,7 @@ class _SignUpPageState extends State<SignUpPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text('Email', style: theme.subtitleStyle),
-        SizedBox(height: 10.0),
+        const SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
           decoration: theme.textFieldDecoration,
@@ -112,7 +119,7 @@ class _SignUpPageState extends State<SignUpPage> {
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14.0),
+                contentPadding: const EdgeInsets.only(top: 14.0),
                 prefixIcon: Icon(Icons.email, color: theme.dark),
                 hintText: 'Enter your Email',
                 hintStyle: theme.hintStyle),
@@ -127,7 +134,7 @@ class _SignUpPageState extends State<SignUpPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text('Password', style: theme.subtitleStyle),
-        SizedBox(height: 10.0),
+        const SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
           decoration: theme.textFieldDecoration,
@@ -139,7 +146,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 val == null || val.isEmpty ? 'Enter valid password' : null,
             decoration: InputDecoration(
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14.0),
+                contentPadding: const EdgeInsets.only(top: 14.0),
                 prefixIcon: Icon(Icons.lock, color: theme.dark),
                 hintText: 'Enter your Password',
                 hintStyle: theme.hintStyle),
@@ -154,7 +161,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return loading
         ? const Loading()
         : Container(
-            padding: EdgeInsets.symmetric(vertical: 25.0),
+            padding: const EdgeInsets.symmetric(vertical: 25.0),
             child: Container(
               decoration: theme.cardBodyDecoration,
               child: OutlinedButton(
@@ -177,7 +184,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       setState(() {
                         loading = false;
                       });
-                      routePage(LoginPage(), context);
+                      routePage(const LoginPage(), context);
                     }
                   }
                 },
@@ -189,7 +196,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _buildSocialBtnRow(AppTheme theme, AuthService authService) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 15.0),
+      padding: const EdgeInsets.symmetric(vertical: 15.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
@@ -202,7 +209,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       _error = "Google sign in failed. Please try again.";
                     });
                   } else {
-                    routePage(LoginPage(), context);
+                    routePage(const LoginPage(), context);
                   }
                 });
               },
@@ -215,7 +222,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _buildSignInBtn(AppTheme theme) {
     return GestureDetector(
-      onTap: () => routePage(LoginPage(), context),
+      onTap: () => routePage(const LoginPage(), context),
       child: RichText(
         text: TextSpan(
           children: [
@@ -245,7 +252,6 @@ class _SignUpPageState extends State<SignUpPage> {
     final AuthService authService = Provider.of<AuthService>(context);
     final AppTheme theme =
         Theme.of(context).extension<AppTheme>()!;
-    //const Widget spacing = SizedBox(height: 30);
 
     return Scaffold(
       body: AnnotatedRegion<SystemUiOverlayStyle>(
@@ -258,11 +264,11 @@ class _SignUpPageState extends State<SignUpPage> {
                   height: double.infinity,
                   width: double.infinity,
                   decoration: theme.gradientBackgroundDecoration),
-              Container(
+              SizedBox(
                 height: double.infinity,
                 child: SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(
                     horizontal: 40.0,
                     vertical: 120.0,
                   ),
@@ -281,6 +287,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         _buildSpacing(),
                         _buildPasswordTF(theme),
                         _buildSignUpBtn(theme, loading, authService),
+                        _buildErrorMsg(theme),
                         _buildSocialBtnRow(theme, authService),
                         _buildSignInBtn(theme),
                       ],

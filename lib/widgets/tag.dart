@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:lost_found_steelhacks/themes/app_theme.dart';
 
-
 class Tag extends StatelessWidget {
   const Tag({
     super.key,

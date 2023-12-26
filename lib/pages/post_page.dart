@@ -1,11 +1,17 @@
+// ignore_for_file: slash_for_doc_comments
+
 import 'package:flutter/material.dart';
-import 'package:lost_found_steelhacks/cards/profile_picture.dart';
-import 'package:lost_found_steelhacks/cards/tag.dart';
-import 'package:lost_found_steelhacks/data/item.dart';
+import 'package:lost_found_steelhacks/routing/route.dart';
+import 'package:lost_found_steelhacks/widgets/profile_picture.dart';
+import 'package:lost_found_steelhacks/widgets/tag.dart';
+import 'package:lost_found_steelhacks/models/item.dart';
 import 'package:lost_found_steelhacks/themes/app_theme.dart';
 
 String err = "ERR";
 
+/**
+ * Displays a single post in a preview page
+ */
 class PostPage extends StatelessWidget {
   final Item item;
   // we need to declare all useable "tags" somewhere, and then a LostAndFoundObject will have a list of tags. this is currently a placeholder for UI testing
@@ -67,10 +73,10 @@ class PostPage extends StatelessWidget {
                                 ])),
                           ],
                         ),
-                        Spacer(),
+                        const Spacer(),
                         IconButton(
-                            icon: Icon(Icons.close),
-                            onPressed: () => Navigator.pop(context))
+                            icon: const Icon(Icons.close),
+                            onPressed: () => routeBack(context))
                       ],
                     ),
                   ),
@@ -137,6 +143,6 @@ class PostPage extends StatelessWidget {
 
   // will route to a direct message with the user who created the post
   void messageUser() {
-    // TODO
+    
   }
 }
