@@ -1,7 +1,8 @@
 ## Creating a PR
-1. Link the pull request with the associated issue(s)
-2. Tag reviewers (either ```@jeffzheng13``` or ```@tbeidlershenk``` depending on the issue)
-3. Write a bulleted summary of the changes made
+1. Use VSCode dart linter to clean up as many warnings as possible
+2. Link the pull request with the associated issue(s)
+3. Tag reviewers (either ```@jeffzheng13``` or ```@tbeidlershenk``` depending on the issue)
+4. Write a bulleted summary of the changes made
 
 ## Example PR
 ![Alt text](example-PR.png)
@@ -14,22 +15,22 @@ Any specific design choices that might not be immediately clear as to why it was
 
 ## Project Structure
 ```
-├── authentication
-│   ├── User data model
-│   ├── Loading animations
-│   ├── Auth service class
-├── cards
+├── services
+│   ├── Auth service
+│   ├── Data service
+│   ├── Firebase service
+├── widgets
 │   ├── Reused custom widgets
-├── data
+├── models
 │   ├── Firebase data models
 ├── pages
 │   ├── Login / Signup pages
 │   ├── Map view
 │   ├── List view
+│   ├── Home page
 │   ├── Individual post overlay
 │   ├── New post overlay
 ├── routing
-│   ├── Custom navigation widget
 │   ├── Routing functions
 ├── themes 
 │   ├── App theme data
@@ -76,3 +77,4 @@ flutter run -d chrome --web-port 65459 --dart-define="MODE=development"
 ## Resources
 1. [Flutter Widget Library](https://docs.flutter.dev/ui/widgets)
 2. [Dart documentation](https://dart.dev/guides)
+3. [Firestore+Dart documentation](https://firebase.flutter.dev/docs/firestore/usage/)
