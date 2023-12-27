@@ -1,8 +1,12 @@
 import 'dart:io';
+import 'dart:js_interop';
 import 'dart:typed_data';
 import 'dart:ui';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:lost_found_steelhacks/authentication/auth.dart';
+import 'package:lost_found_steelhacks/authentication/loading_animation.dart';
 import 'package:lost_found_steelhacks/pages/map_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -12,6 +16,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
+import 'package:provider/provider.dart';
 
 CollectionReference lost = FirebaseFirestore.instance.collection('Lost');
 CollectionReference found = FirebaseFirestore.instance.collection('Found');
@@ -19,6 +24,7 @@ String _imgFromDeviceError = '';
 Uint8List? imgBytesToFirebase;
 String _imgName = '';
 
+//currently getting sorted in build method but should probably just order it here
 List<String> list = <String>[
   'Water Bottle',
   'ID',
@@ -55,6 +61,7 @@ class _ItemRequestState extends State<ItemRequest> {
 
   String title = '';
   String _error = '';
+  bool loading = false;
 
   uploadImageToFirebase(String category) async {
     final storageRef = FirebaseStorage.instance.ref();
@@ -124,7 +131,8 @@ class _ItemRequestState extends State<ItemRequest> {
       'ItemName': category,
       'Location': GeoPoint(lat, long),
       'Phone': phone,
-      'Picture': _imgName
+      'Picture': _imgName,
+      'User': FirebaseAuth.instance.currentUser!.uid
     });
   }
 
@@ -139,7 +147,8 @@ class _ItemRequestState extends State<ItemRequest> {
       'ItemName': category,
       'Location': GeoPoint(lat, long),
       'Phone': phone,
-      'Picture': _imgName
+      'Picture': _imgName,
+      'User': FirebaseAuth.instance.currentUser!.uid
     });
   }
 
@@ -212,41 +221,50 @@ class _ItemRequestState extends State<ItemRequest> {
                                     SizedBox(height: 10),
                                     UploadImageButton(),
                                     SizedBox(height: 10.0),
-                                    ButtonTheme(
-                                      minWidth: 150,
-                                      child: ElevatedButton(
-                                        style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.green.shade800)),
-                                        onPressed: () async {
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            if (isSelected[0]) {
-                                              if (uploadImageToFirebase(
-                                                  "lost")) {
-                                                addLost();
-                                              }
-                                            } else {
-                                              if (uploadImageToFirebase(
-                                                  "found")) {
-                                                addFound();
-                                              }
-                                            }
-                                            routePage(const MapPage(), context);
-                                          } else {
-                                            setState(() {
-                                              _error =
-                                                  "Form incorrect, please correct fields.";
-                                            });
-                                          }
-                                        },
-                                        child: const Text(
-                                          'Submit',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
-                                    ),
+                                    loading
+                                        ? Loading()
+                                        : ButtonTheme(
+                                            minWidth: 150,
+                                            child: ElevatedButton(
+                                              style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          Colors
+                                                              .green.shade800)),
+                                              onPressed: () async {
+                                                setState(() {
+                                                  loading = true;
+                                                });
+                                                if (_formKey.currentState!
+                                                    .validate()) {
+                                                  if (isSelected[0]) {
+                                                    //we wait to see if upload image is successful, this requires image to need to be uploaded
+                                                    if (await uploadImageToFirebase(
+                                                        "lost")) {
+                                                      addLost();
+                                                    }
+                                                  } else {
+                                                    if (await uploadImageToFirebase(
+                                                        "found")) {
+                                                      addFound();
+                                                    }
+                                                  }
+                                                  routePage(
+                                                      const MapPage(), context);
+                                                } else {
+                                                  setState(() {
+                                                    _error =
+                                                        "Form incorrect, please correct fields.";
+                                                  });
+                                                }
+                                              },
+                                              child: const Text(
+                                                'Submit',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                          ),
                                     _buildErrMessage(theme),
                                   ],
                                 ),
