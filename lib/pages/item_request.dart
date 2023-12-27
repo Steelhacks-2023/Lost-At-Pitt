@@ -62,7 +62,6 @@ class _ItemRequestState extends State<ItemRequest> {
       await imageRef.putData(imgBytesToFirebase!);
       return true;
     } on FirebaseException {
-    } on FirebaseException {
       setState(() {
         _error = "Failed to upload to database. Please try again later.";
       });
