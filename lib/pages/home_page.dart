@@ -7,10 +7,12 @@ import 'package:lost_found_steelhacks/models/item.dart';
 import 'package:lost_found_steelhacks/pages/list_page.dart';
 import 'package:lost_found_steelhacks/pages/login_page.dart';
 import 'package:lost_found_steelhacks/pages/map_page.dart';
+import 'package:lost_found_steelhacks/pages/profile_page.dart';
 import 'package:lost_found_steelhacks/routing/wrapper.dart';
 import 'package:lost_found_steelhacks/services/auth.dart';
 import 'package:lost_found_steelhacks/services/data.dart';
 import 'package:lost_found_steelhacks/themes/app_theme.dart';
+import 'package:lost_found_steelhacks/widgets/loading_animation.dart';
 import 'package:multiple_stream_builder/multiple_stream_builder.dart';
 
 /**
@@ -28,11 +30,11 @@ class HomePageState extends State<HomePage> {
   int selectedPage = 0;
   AsyncSnapshot<QuerySnapshot> lostSnapshot = const AsyncSnapshot.nothing();
   AsyncSnapshot<QuerySnapshot> foundSnapshot = const AsyncSnapshot.nothing();
-  List<Widget> pages = const <Widget>[
+  List<Widget> pages = <Widget>[
     MapPage(),
     ListPage(mode: true),
     Center(child: Text("Chat")),
-    Center(child: Text("Profile")),
+    ProfilePage(),
     LoginPage()
   ];
 
@@ -118,7 +120,7 @@ class HomePageState extends State<HomePage> {
           /* Check if the snapshot can be parsed */
           if (!isValidSnapshot(lostSnapshot) ||
               !isValidSnapshot(foundSnapshot)) {
-            return const Wrapper();
+            return const Loading();
           }
 
           /* Update the item collections */

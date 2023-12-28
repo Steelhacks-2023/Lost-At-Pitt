@@ -16,11 +16,13 @@ class AuthService extends ChangeNotifier {
   static final AuthService instance = AuthService._internal();
   factory AuthService() => instance;
   AuthService._internal();
-
-  final GeoPoint defaultGeopoint = const GeoPoint(40.4440279, -79.9700647);
   AppUser? user;
 
+  final GeoPoint defaultGeopoint = const GeoPoint(40.4440279, -79.9700647);
+
   bool isSignedIn() => FirebaseAuth.instance.currentUser != null;
+
+  Future<void> updateAppUser(String uid) async => user = await FirebaseService.instance.getUser(uid);
 
   Stream<User?> get authUser => FirebaseAuth.instance.authStateChanges();
 
@@ -47,7 +49,8 @@ class AuthService extends ChangeNotifier {
   Future signInWithEmailAndPassword(String email, String password) async {
     UserCredential result = await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password);
-    return await FirebaseService.instance.getUser(result.user!.uid);
+    user = await FirebaseService.instance.getUser(result.user!.uid);
+    return user;
   }
 
   Future signInWithGoogle() async {

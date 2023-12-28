@@ -1,3 +1,5 @@
+// ignore_for_file: slash_for_doc_comments
+
 import 'package:flutter/material.dart';
 import 'package:lost_found_steelhacks/services/data.dart';
 import 'package:lost_found_steelhacks/widgets/post_card.dart';

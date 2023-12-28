@@ -2,7 +2,6 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lost_found_steelhacks/models/item.dart';
-import 'package:lost_found_steelhacks/models/item.dart';
 import 'package:lost_found_steelhacks/pages/map_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -113,16 +112,12 @@ class _ItemRequestState extends State<ItemRequest> {
 
   Future<void> addLost() async {
     Item item = Item(id: "", userId: AuthService.instance.user!.uid, timeCreated: Timestamp.now(), description: description, itemName: category, location: GeoPoint(lat, long),phone: phone, picture: _imgName);
-    DocumentReference ref = await FirebaseFirestore.instance.collection('lost').add(item.toFirestore());
-    item.id = ref.id;
-    DataService.instance.lostItems.add(item);
+    await FirebaseFirestore.instance.collection('lost').add(item.toFirestore());
   }
 
   Future<void> addFound() async {
     Item item = Item(id: "", userId: AuthService.instance.user!.uid, timeCreated: Timestamp.now(), description: description, itemName: category, location: GeoPoint(lat, long),phone: phone, picture: _imgName);
-    DocumentReference ref = await FirebaseFirestore.instance.collection('found').add(item.toFirestore());
-    item.id = ref.id;
-    DataService.instance.foundItems.add(item);
+    await FirebaseFirestore.instance.collection('found').add(item.toFirestore());
   }
 
   @override

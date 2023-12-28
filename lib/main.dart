@@ -65,12 +65,13 @@ class _MyAppState extends State<MyApp> {
         child: MaterialApp(
             title: 'Lost@Pitt | For Students By Students',
             debugShowCheckedModeBanner: false,
-            routes: {
-              'loginPage': (context) => const LoginPage(),
-              'mapPage': (context) => const HomePage(),
-              '/': (context) => const Wrapper()
-            },
-            initialRoute: '/',
+            home: const Wrapper(),
+            // routes: {
+            //   'loginPage': (context) => const LoginPage(),
+            //   'mapPage': (context) => const HomePage(),
+            //   '/': (context) => const Wrapper()
+            // },
+            // initialRoute: '/',
             theme: AppTheme.getTheme(),
             themeMode: themeManager.themeMode));
   }

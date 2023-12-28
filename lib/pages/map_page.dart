@@ -15,8 +15,6 @@ import 'package:lost_found_steelhacks/utils.dart';
  * Displays the posted items on a Google map
  */
 class MapPage extends StatefulWidget {
-  static BitmapDescriptor get lostMarkerIcon => BitmapDescriptor.defaultMarker;
-  static BitmapDescriptor get foundMarkerIcon => BitmapDescriptor.defaultMarker;
   const MapPage({super.key});
 
   @override
@@ -24,6 +22,8 @@ class MapPage extends StatefulWidget {
 }
 
 class MapPageState extends State<MapPage> {
+  BitmapDescriptor lostMarkerIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor foundMarkerIcon = BitmapDescriptor.defaultMarker;
   late List<Item> currentLostItems;
   late List<Item> currentFoundItems;
   late GoogleMapController mapController;
@@ -36,21 +36,21 @@ class MapPageState extends State<MapPage> {
     currentLostItems = DataService.instance.lostItems;
     currentFoundItems = DataService.instance.foundItems;
 
-    // BitmapDescriptor.fromAssetImage(
-    //         const ImageConfiguration(size: Size(40, 40)),
-    //         'assets/location-pin.png')
-    //     .then((icon) {
-    //   setState(() {
-    //     foundMarkerIcon = icon;
-    //   });
-    // });
-    // BitmapDescriptor.fromAssetImage(
-    //         const ImageConfiguration(size: Size(40, 40)), 'assets/lost-pin.png')
-    //     .then((icon) {
-    //   setState(() {
-    //     lostMarkerIcon = icon;
-    //   });
-    // });
+    BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(size: Size(40, 40)),
+            'assets/location-pin.png')
+        .then((icon) {
+      setState(() {
+        foundMarkerIcon = icon;
+      });
+    });
+    BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(size: Size(40, 40)), 'assets/lost-pin.png')
+        .then((icon) {
+      setState(() {
+        lostMarkerIcon = icon;
+      });
+    });
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -63,7 +63,7 @@ class MapPageState extends State<MapPage> {
 
     // creating a new MARKER
     final Marker marker = Marker(
-        markerId: markerId, icon: MapPage.lostMarkerIcon, position: coords);
+        markerId: markerId, icon: lostMarkerIcon, position: coords);
     counter++;
     setState(() {
       markers[markerId] = marker;
@@ -78,7 +78,7 @@ class MapPageState extends State<MapPage> {
       final MarkerId markerId = MarkerId(item.id);
       final Marker marker = Marker(
           markerId: markerId,
-          icon: lost ? MapPage.lostMarkerIcon : MapPage.foundMarkerIcon,
+          icon: lost ? lostMarkerIcon : foundMarkerIcon,
           position: LatLng(geo.latitude, geo.longitude),
           onTap: () => routeSubpage(PostPage(item: item), context));
       markers[markerId] = marker;
