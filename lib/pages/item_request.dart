@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lost_found_steelhacks/authentication/auth.dart';
 import 'package:lost_found_steelhacks/authentication/loading_animation.dart';
+import 'package:lost_found_steelhacks/authentication/user.dart';
 import 'package:lost_found_steelhacks/pages/map_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -18,8 +19,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 import 'package:provider/provider.dart';
 
-CollectionReference lost = FirebaseFirestore.instance.collection('Lost');
-CollectionReference found = FirebaseFirestore.instance.collection('Found');
+CollectionReference lost = FirebaseFirestore.instance.collection('lost');
+CollectionReference found = FirebaseFirestore.instance.collection('found');
 String _imgFromDeviceError = '';
 Uint8List? imgBytesToFirebase;
 String _imgName = '';
@@ -232,6 +233,9 @@ class _ItemRequestState extends State<ItemRequest> {
                                                           Colors
                                                               .green.shade800)),
                                               onPressed: () async {
+                                                // print((await context
+                                                //     .read<AuthService>()
+                                                //     .currentUser())!.uid);
                                                 setState(() {
                                                   loading = true;
                                                 });

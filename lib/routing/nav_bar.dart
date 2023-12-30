@@ -32,7 +32,7 @@ class NavBar extends StatelessWidget {
       child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
         IconButton(
           color: theme.dark,
-          icon: const Icon(Icons.explore),
+          icon: const   Icon(Icons.explore),
           onPressed: () => routePage(const MapPage(), context),
         ),
         IconButton(
