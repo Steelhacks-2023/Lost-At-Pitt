@@ -102,7 +102,7 @@ class AuthService extends ChangeNotifier {
       _firestore.collection('users').doc(result.user!.uid).set({
         'uid': result.user!.uid,
         'email': result.user!.email,
-        'firstName' : firstName ?? '',
+        'firstName': firstName ?? '',
         'lastName': lastName ?? '',
         'location': GeoPoint(40.4440279, -79.9700647)
       }, SetOptions(merge: true));
@@ -116,6 +116,8 @@ class AuthService extends ChangeNotifier {
   Future<void> signOut() async {
     try {
       await _auth.signOut();
+      //notifyListeners();
+      //print("Is user signed in ${isSignedIn()}");
       //Navigator.push("/");
     } catch (e) {
       print(e.toString());

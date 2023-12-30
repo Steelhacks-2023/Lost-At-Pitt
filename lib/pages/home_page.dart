@@ -75,7 +75,7 @@ class HomePageState extends State<HomePage> {
                     text: 'Logout',
                     textStyle: theme.regularStyle,
                     onPressed: () async =>
-                        {await Provider.of<AuthService>(context).signOut()})
+                        {await context.read<AuthService>().signOut()})
               ],
               selectedIndex: selectedPage,
               onTabChange: (index) {

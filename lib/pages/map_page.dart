@@ -32,22 +32,25 @@ class _MapPageState extends State<MapPage> {
 
   @override
   void initState() {
-    super.initState();
-    BitmapDescriptor.fromAssetImage(
-            const ImageConfiguration(size: Size(40, 40)),
-            'assets/location-pin.png')
-        .then((icon) {
-      setState(() {
-        foundMarkerIcon = icon;
+    if (mounted) {
+      super.initState();
+      BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(size: Size(40, 40)),
+              'assets/location-pin.png')
+          .then((icon) {
+        setState(() {
+          foundMarkerIcon = icon;
+        });
       });
-    });
-    BitmapDescriptor.fromAssetImage(
-            const ImageConfiguration(size: Size(40, 40)), 'assets/lost-pin.png')
-        .then((icon) {
-      setState(() {
-        lostMarkerIcon = icon;
+      BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(size: Size(40, 40)),
+              'assets/lost-pin.png')
+          .then((icon) {
+        setState(() {
+          lostMarkerIcon = icon;
+        });
       });
-    });
+    }
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -75,7 +78,8 @@ class _MapPageState extends State<MapPage> {
             return const Loading();
           }
 
-          return buildMap(context, getItems(lostSnapshot, true), getItems(foundSnapshot, false));
+          return buildMap(context, getItems(lostSnapshot, true),
+              getItems(foundSnapshot, false));
         });
   }
 
@@ -83,15 +87,13 @@ class _MapPageState extends State<MapPage> {
   Widget buildMap(
       BuildContext context, List<Item> lostItems, List<Item> foundItems) {
     return GoogleMap(
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: _center,
-                zoom: 16,
-              ),
-              onTap: (coords) => addPin(coords),
-              markers: Set<Marker>.of(markers.values)
-            
-        );
+        onMapCreated: _onMapCreated,
+        initialCameraPosition: CameraPosition(
+          target: _center,
+          zoom: 16,
+        ),
+        onTap: (coords) => addPin(coords),
+        markers: Set<Marker>.of(markers.values));
   }
 
   // Add a pin to the map
