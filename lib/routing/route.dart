@@ -1,4 +1,7 @@
+// ignore_for_file: slash_for_doc_comments
+
 import 'package:flutter/material.dart';
+import 'package:lost_found_steelhacks/pages/home_page.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 
 /// {@template hero_dialog_route}
@@ -48,14 +51,32 @@ class HeroDialogRoute<T> extends PageRoute<T> {
   String get barrierLabel => 'Popup dialog open';
 }
 
-void routeSubpage(Widget page, BuildContext context) {
-  Navigator.push(
-      context,
-      HeroDialogRoute(
-          builder: (context) =>
-              Hero(tag: "post-page", child: PointerInterceptor(child: page))));
-}
+/**
+ * Routes to a page that should be displayed overtop the current one
+ */
+void routeSubpage(Widget page, BuildContext context) => Navigator.push(
+    context,
+    HeroDialogRoute(
+        builder: (context) =>
+            Hero(tag: "post-page", child: PointerInterceptor(child: page))));
 
-void routePage(Widget page, BuildContext context) {
-  Navigator.push(context, MaterialPageRoute(builder: (context) => page));
-}
+/**
+ * Routes to another page
+ */
+void routePage(Widget page, BuildContext context) =>
+    Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+
+/**
+ * Routes back to previous page from a subpage
+ */
+void routeBack(BuildContext context) => Navigator.pop(context);
+
+/**
+ * Routes back to the page in HomePage
+ * 0 -> MapPage
+ * 1 -> ListPage
+ * 2 -> ChatPage
+ * 3 -> ProfilePage
+ */
+void routeHome(int page, BuildContext context) => Navigator.push(context,
+    MaterialPageRoute(builder: (context) => HomePage(startingPage: page)));

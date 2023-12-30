@@ -64,12 +64,7 @@ class _MyAppState extends State<MyApp> {
         child: MaterialApp(
             title: 'Lost@Pitt | For Students By Students',
             debugShowCheckedModeBanner: false,
-            routes: {
-              'loginPage': (context) => const LoginPage(),
-              'mapPage': (context) => const MapPage(),
-              '/': (context) => const Wrapper()
-            },
-            initialRoute: '/',
+            home: const Wrapper(),
             theme: AppTheme.getTheme(),
             themeMode: themeManager.themeMode));
   }

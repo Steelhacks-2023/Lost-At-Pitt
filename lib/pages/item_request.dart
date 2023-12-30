@@ -18,8 +18,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 import 'package:provider/provider.dart';
 
-CollectionReference lost = FirebaseFirestore.instance.collection('Lost');
-CollectionReference found = FirebaseFirestore.instance.collection('Found');
+CollectionReference lost = FirebaseFirestore.instance.collection('lost');
+CollectionReference found = FirebaseFirestore.instance.collection('found');
 String _imgFromDeviceError = '';
 Uint8List? imgBytesToFirebase;
 String _imgName = '';
@@ -126,13 +126,13 @@ class _ItemRequestState extends State<ItemRequest> {
         //adding to firebase collection
         .add({
       //Data added in the form of a dictionary into the document.
-      'Date Created': Timestamp.now(),
-      'Description': description,
-      'ItemName': category,
-      'Location': GeoPoint(lat, long),
-      'Phone': phone,
-      'Picture': _imgName,
-      'User': FirebaseAuth.instance.currentUser!.uid
+      'timeCreated': Timestamp.now(),
+      'description': description,
+      'itemName': category,
+      'location': GeoPoint(lat, long),
+      'phone': phone,
+      'picture': _imgName,
+      'user': FirebaseAuth.instance.currentUser!.uid
     });
   }
 
@@ -142,13 +142,13 @@ class _ItemRequestState extends State<ItemRequest> {
         //adding to firebase collection
         .add({
       //Data added in the form of a dictionary into the document.
-      'Date Created': Timestamp.now(),
-      'Description': description,
-      'ItemName': category,
-      'Location': GeoPoint(lat, long),
-      'Phone': phone,
-      'Picture': _imgName,
-      'User': FirebaseAuth.instance.currentUser!.uid
+      'timeCreated': Timestamp.now(),
+      'description': description,
+      'itemName': category,
+      'location': GeoPoint(lat, long),
+      'phone': phone,
+      'picture': _imgName,
+      'user': FirebaseAuth.instance.currentUser!.uid
     });
   }
 
@@ -249,8 +249,7 @@ class _ItemRequestState extends State<ItemRequest> {
                                                       addFound();
                                                     }
                                                   }
-                                                  routePage(
-                                                      const MapPage(), context);
+                                                  routeBack(context);
                                                 } else {
                                                   setState(() {
                                                     _error =
@@ -274,12 +273,7 @@ class _ItemRequestState extends State<ItemRequest> {
                                       icon: Icon(Icons.close),
                                       onPressed: () {
                                         setState(() {
-                                          Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          const MapPage()));
+                                          routeBack(context);
                                         });
                                       },
                                     ))
