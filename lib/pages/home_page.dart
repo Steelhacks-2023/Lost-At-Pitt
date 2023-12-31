@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:lost_found_steelhacks/authentication/auth.dart';
+import 'package:lost_found_steelhacks/data/item.dart';
 import 'package:lost_found_steelhacks/pages/chat_page.dart';
 import 'package:lost_found_steelhacks/pages/list_page.dart';
 import 'package:lost_found_steelhacks/pages/login_page.dart';
@@ -35,6 +36,8 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<AppTheme>()!;
+
+
     return Scaffold(
       body: Center(
         child: pages.elementAt(selectedPage),

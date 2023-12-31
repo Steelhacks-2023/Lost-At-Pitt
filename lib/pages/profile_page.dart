@@ -19,7 +19,7 @@ class ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text("Signed in: ${Provider.of<AuthService>(context).isSignedIn().toString()}"));
+    return Center(child: Text("Signed in: ${context.read<AuthService>().isSignedIn().toString()}"));
   }
 
 }
