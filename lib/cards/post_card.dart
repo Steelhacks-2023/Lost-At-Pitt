@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
-import 'package:lost_found_steelhacks/cards/tag.dart';
 import 'package:lost_found_steelhacks/data/item.dart';
 import 'package:lost_found_steelhacks/pages/post_page.dart';
 import 'package:lost_found_steelhacks/routing/route.dart';
@@ -30,6 +29,9 @@ class PostCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<AppTheme>()!;
+    final BoxDecoration bodyDecoration = BoxDecoration(
+      color: theme.medium,
+      borderRadius: const BorderRadius.all(Radius.circular(10)));
 
     Widget buildHeader() => Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -65,12 +67,11 @@ class PostCard extends StatelessWidget {
               style: theme.lightRegularStyle, textAlign: TextAlign.left),
         );
 
-    Widget buildButtons() => Row(children: [
+    Widget buildFooter() => Row(children: [
           IconButton(
               color: theme.dark,
               icon: Icon(Icons.map),
               onPressed: () => routeHome(0, context)),
-          Spacer(),
           IconButton(
               color: theme.dark,
               icon: Icon(Icons.chat),
@@ -87,19 +88,13 @@ class PostCard extends StatelessWidget {
                 child: Container(
                     padding: const EdgeInsets.all(5),
                     constraints: const BoxConstraints(maxWidth: 400),
-                    decoration: theme.cardSectionDecoration,
+                    decoration: bodyDecoration,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         buildHeader(),
-                        // Divider(
-                        //     color: theme.light,
-                        //     height: 8,
-                        //     thickness: 2,
-                        //     indent: 5,
-                        //     endIndent: 5),
                         buildBody(),
-                        buildButtons(),
+                        buildFooter(),
                       ],
                     ))),
           ),
