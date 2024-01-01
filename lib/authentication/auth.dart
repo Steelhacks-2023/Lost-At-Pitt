@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lost_found_steelhacks/authentication/user.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthService extends ChangeNotifier {
@@ -117,7 +115,6 @@ class AuthService extends ChangeNotifier {
       await _auth.signOut();
     } catch (e) {
       print(e.toString());
-      return null;
     }
   }
 

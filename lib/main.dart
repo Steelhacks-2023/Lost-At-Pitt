@@ -6,8 +6,6 @@ import 'package:lost_found_steelhacks/authentication/user.dart';
 import 'package:lost_found_steelhacks/authentication/wrapper.dart';
 import 'package:lost_found_steelhacks/services/firestore_service.dart';
 import 'package:lost_found_steelhacks/data/item.dart';
-import 'package:lost_found_steelhacks/pages/login_page.dart';
-import 'package:lost_found_steelhacks/pages/map_page.dart';
 import 'package:lost_found_steelhacks/themes/app_theme.dart';
 import 'package:lost_found_steelhacks/themes/theme_manager.dart';
 import 'package:provider/provider.dart';
