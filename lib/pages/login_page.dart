@@ -111,8 +111,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildLoginBtn(
-      AppTheme theme, bool loading, AuthService authService) {
+  Widget _buildLoginBtn(AppTheme theme, bool loading, AuthService authService) {
     return loading
         ? const Loading()
         : Container(
@@ -183,11 +182,12 @@ class _LoginPageState extends State<LoginPage> {
         text: TextSpan(
           children: [
             TextSpan(
-                text: 'Don\'t have an Account? ', style: theme.regularStyle.copyWith(color: theme.dark)),
+                text: 'Don\'t have an Account? ',
+                style: theme.regularStyle.copyWith(color: theme.dark)),
             TextSpan(
                 text: 'Sign Up',
-                style:
-                    theme.regularStyle.copyWith(fontWeight: FontWeight.bold, color: theme.dark)),
+                style: theme.regularStyle
+                    .copyWith(fontWeight: FontWeight.bold, color: theme.dark)),
           ],
         ),
       ),
@@ -205,9 +205,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final AuthService authService = Provider.of<AuthService>(context);
-    final AppTheme theme =
-        Theme.of(context).extension<AppTheme>()!;
+    final AuthService authService = AuthService();
+    final AppTheme theme = Theme.of(context).extension<AppTheme>()!;
     //const Widget spacing = SizedBox(height: 30);
 
     return Scaffold(
