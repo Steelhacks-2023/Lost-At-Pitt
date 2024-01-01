@@ -32,6 +32,7 @@ class _SignUpPageState extends State<SignUpPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text('First Name', style: theme.darkSubtitleStyle),
+        Text('First Name', style: theme.darkSubtitleStyle),
         SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
