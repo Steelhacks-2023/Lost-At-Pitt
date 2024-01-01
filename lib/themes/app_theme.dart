@@ -19,21 +19,34 @@ class AppTheme extends ThemeExtension<AppTheme> {
   final Color background = clrs.background;
 
   // Global text themes
+  final TextStyle veryDarkTitleStyle = TextStyle(
+      color: clrs.veryDark,
+      fontFamily: "Roboto",
+      fontWeight: FontWeight.bold,
+      fontSize: 18);
+  final TextStyle veryDarkSubtitleStyle = TextStyle(
+      color: clrs.veryDark,
+      fontFamily: "Roboto",
+      fontWeight: FontWeight.bold,
+      fontSize: 16);
+  final TextStyle veryDarkRegularStyle = TextStyle(
+      color: clrs.veryDark,
+      fontFamily: "Roboto",
+      fontSize: 14);
   final TextStyle darkTitleStyle = TextStyle(
       color: clrs.dark,
       fontFamily: "Roboto",
       fontWeight: FontWeight.bold,
       fontSize: 18);
   final TextStyle darkSubtitleStyle = TextStyle(
-      color: clrs.veryDark,
+      color: clrs.dark,
       fontFamily: "Roboto",
       fontWeight: FontWeight.bold,
       fontSize: 16);
   final TextStyle darkRegularStyle = TextStyle(
-      color: clrs.veryDark,
+      color: clrs.dark,
       fontFamily: "Roboto",
-      fontSize: 14,
-  );
+      fontSize: 14);
   final TextStyle lightTitleStyle = TextStyle(
       color: clrs.veryLight,
       fontFamily: "Roboto",
@@ -68,9 +81,6 @@ class AppTheme extends ThemeExtension<AppTheme> {
       stops: [0.1, 0.9],
     ),
   );
-  final BoxDecoration cardSectionDecoration = BoxDecoration(
-      color: clrs.medium,
-      borderRadius: const BorderRadius.all(Radius.circular(10)));
   final BoxDecoration cardBodyDecoration = BoxDecoration(
     color: clrs.medium,
     border: Border.all(width: 3, color: clrs.medium),

@@ -71,7 +71,7 @@ class _ItemRequestState extends State<ItemRequest> {
   }
 
   Widget _buildErrMessage(AppTheme theme) => Text(_error,
-      style: theme.darkRegularStyle.copyWith(color: Colors.red),
+      style: theme.veryDarkRegularStyle.copyWith(color: Colors.red),
       textAlign: TextAlign.center);
 
   Widget _buildTitleTF(AppTheme theme) {
@@ -174,10 +174,10 @@ class _ItemRequestState extends State<ItemRequest> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text('Enter your item from: ',
-                                        style: theme.darkTitleStyle),
+                                        style: theme.veryDarkTitleStyle),
                                     SizedBox(height: 10),
                                     Text("N: $lat\nS: $long\n",
-                                        style: theme.darkSubtitleStyle),
+                                        style: theme.veryDarkSubtitleStyle),
                                     ToggleButtons(
                                       selectedBorderColor:
                                           Colors.green.shade900,

@@ -31,8 +31,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text('First Name', style: theme.darkSubtitleStyle),
-        Text('First Name', style: theme.darkSubtitleStyle),
+        Text('First Name', style: theme.veryDarkSubtitleStyle),
         SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
@@ -62,7 +61,7 @@ class _SignUpPageState extends State<SignUpPage> {
       children: <Widget>[
         Text(
           'Last Name',
-          style: theme.darkSubtitleStyle,
+          style: theme.veryDarkSubtitleStyle,
         ),
         SizedBox(height: 10.0),
         Container(
@@ -92,7 +91,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text('Email', style: theme.darkSubtitleStyle),
+        Text('Email', style: theme.veryDarkSubtitleStyle),
         SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
@@ -125,7 +124,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text('Password', style: theme.darkSubtitleStyle),
+        Text('Password', style: theme.veryDarkSubtitleStyle),
         SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
@@ -179,7 +178,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     }
                   }
                 },
-                child: Text('SIGN UP', style: theme.darkTitleStyle),
+                child: Text('SIGN UP', style: theme.veryDarkTitleStyle),
               ),
             ),
           );
@@ -218,10 +217,10 @@ class _SignUpPageState extends State<SignUpPage> {
           children: [
             TextSpan(
                 text: 'Already have an Account? ',
-                style: theme.darkRegularStyle.copyWith(color: theme.dark)),
+                style: theme.veryDarkRegularStyle.copyWith(color: theme.dark)),
             TextSpan(
                 text: 'Sign In',
-                style: theme.darkRegularStyle
+                style: theme.veryDarkRegularStyle
                     .copyWith(fontWeight: FontWeight.bold, color: theme.dark)),
           ],
         ),
@@ -230,13 +229,13 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget _buildErrorMsg(AppTheme theme) => Text(_error,
-      style: theme.darkRegularStyle.copyWith(color: Colors.red),
+      style: theme.veryDarkRegularStyle.copyWith(color: Colors.red),
       textAlign: TextAlign.center);
 
   Widget _buildSpacing() => const SizedBox(height: 30);
 
   Widget _buildTitle(AppTheme theme) =>
-      Text('Sign Up', style: theme.darkTitleStyle.copyWith(fontSize: 40));
+      Text('Sign Up', style: theme.veryDarkTitleStyle.copyWith(fontSize: 40));
 
   @override
   Widget build(BuildContext context) {

@@ -40,8 +40,4 @@ class FirestoreService {
         ..addAll(b.docs.map((e) => Item.fromFirestore(e, null)).toList());
     });
   }
-
-  // Future<MyUser> getUser(String uid) {
-  //   return userRef.
-  // }
 }

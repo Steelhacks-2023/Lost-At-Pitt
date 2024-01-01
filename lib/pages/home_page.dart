@@ -60,19 +60,19 @@ class HomePageState extends State<HomePage> {
                 GButton(
                     icon: Icons.map,
                     text: 'Map',
-                    textStyle: theme.darkRegularStyle),
+                    textStyle: theme.veryDarkRegularStyle),
                 GButton(
                     icon: Icons.add_box,
                     text: 'Posts',
-                    textStyle: theme.darkRegularStyle),
+                    textStyle: theme.veryDarkRegularStyle),
                 GButton(
                     icon: Icons.chat,
                     text: 'Search',
-                    textStyle: theme.darkRegularStyle),
+                    textStyle: theme.veryDarkRegularStyle),
                 GButton(
                     icon: Icons.person,
                     text: 'Profile',
-                    textStyle: theme.darkRegularStyle),
+                    textStyle: theme.veryDarkRegularStyle),
               ],
               selectedIndex: selectedPage,
               onTabChange: (index) {
