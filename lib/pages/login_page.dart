@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text('Email', style: theme.subtitleStyle),
+        Text('Email', style: theme.darkSubtitleStyle),
         SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text('Password', style: theme.subtitleStyle),
+        Text('Password', style: theme.darkSubtitleStyle),
         const SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
@@ -103,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
       alignment: Alignment.centerRight,
       child: TextButton(
         onPressed: () => widget.toggleView(),
-        child: Text('Forgot Password?', style: theme.subtitleStyle),
+        child: Text('Forgot Password?', style: theme.darkSubtitleStyle),
       ),
     );
   }
@@ -140,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                     }
                   }
                 },
-                child: Text('LOGIN', style: theme.titleStyle),
+                child: Text('LOGIN', style: theme.darkTitleStyle),
               ),
             ),
           );
@@ -178,10 +178,10 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             TextSpan(
                 text: 'Don\'t have an Account? ',
-                style: theme.regularStyle.copyWith(color: theme.dark)),
+                style: theme.darkRegularStyle.copyWith(color: theme.dark)),
             TextSpan(
                 text: 'Sign Up',
-                style: theme.regularStyle
+                style: theme.darkRegularStyle
                     .copyWith(fontWeight: FontWeight.bold, color: theme.dark)),
           ],
         ),
@@ -190,13 +190,13 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildErrorMsg(AppTheme theme) => Text(_error,
-      style: theme.regularStyle.copyWith(color: Colors.red),
+      style: theme.darkRegularStyle.copyWith(color: Colors.red),
       textAlign: TextAlign.center);
 
   Widget _buildSpacing() => const SizedBox(height: 30);
 
   Widget _buildTitle(AppTheme theme) =>
-      Text('Sign In', style: theme.titleStyle.copyWith(fontSize: 40));
+      Text('Sign In', style: theme.darkTitleStyle.copyWith(fontSize: 40));
 
   @override
   Widget build(BuildContext context) {

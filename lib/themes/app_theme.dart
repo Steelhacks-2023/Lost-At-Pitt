@@ -1,6 +1,7 @@
 // ignore_for_file: null_check_always_fails
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lost_found_steelhacks/themes/const_settings.dart' as clrs;
 
 /// This class defines global themes for the app. Right now they are defined as
@@ -18,30 +19,40 @@ class AppTheme extends ThemeExtension<AppTheme> {
   final Color background = clrs.background;
 
   // Global text themes
-  final TextStyle titleStyle = TextStyle(
+  final TextStyle darkTitleStyle = TextStyle(
       color: clrs.dark,
-      fontFamily: "OpenSans",
+      fontFamily: "Roboto",
       fontWeight: FontWeight.bold,
-      fontSize: 20);
-  final TextStyle subtitleStyle = TextStyle(
-      color: clrs.dark,
-      fontFamily: "OpenSans",
+      fontSize: 18);
+  final TextStyle darkSubtitleStyle = TextStyle(
+      color: clrs.veryDark,
+      fontFamily: "Roboto",
       fontWeight: FontWeight.bold,
       fontSize: 16);
-  final TextStyle decoratedSubtitleStyle = TextStyle(
-      color: clrs.medium,
-      fontFamily: "OpenSans",
-      fontStyle: FontStyle.italic,
+  final TextStyle darkRegularStyle = TextStyle(
+      color: clrs.veryDark,
+      fontFamily: "Roboto",
+      fontSize: 14,
+  );
+  final TextStyle lightTitleStyle = TextStyle(
+      color: clrs.veryLight,
+      fontFamily: "Roboto",
+      fontWeight: FontWeight.bold,
+      fontSize: 18);
+  final TextStyle lightSubtitleStyle = TextStyle(
+      color: clrs.veryLight,
+      fontFamily: "Roboto",
+      fontWeight: FontWeight.bold,
       fontSize: 16);
-  final TextStyle regularStyle = TextStyle(
-    color: clrs.medium,
-    fontFamily: "OpenSans",
-    fontSize: 12,
+  final TextStyle lightRegularStyle = TextStyle(
+      color: clrs.veryLight,
+      fontFamily: "Roboto",
+      fontSize: 14,
   );
   final TextStyle decoratedRegularStyle = TextStyle(
       color: clrs.medium,
       fontStyle: FontStyle.italic,
-      fontFamily: "OpenSans",
+      fontFamily: "Roboto",
       fontSize: 12);
   final TextStyle hintStyle = TextStyle(
       color: clrs.light.withOpacity(0.7), fontFamily: "OpenSans", fontSize: 12);
@@ -58,11 +69,10 @@ class AppTheme extends ThemeExtension<AppTheme> {
     ),
   );
   final BoxDecoration cardSectionDecoration = BoxDecoration(
-      color: clrs.light,
-      border: Border.all(width: 3, color: clrs.medium),
+      color: clrs.medium,
       borderRadius: const BorderRadius.all(Radius.circular(10)));
   final BoxDecoration cardBodyDecoration = BoxDecoration(
-    color: clrs.veryLight,
+    color: clrs.medium,
     border: Border.all(width: 3, color: clrs.medium),
     borderRadius: const BorderRadius.all(Radius.circular(10)),
   );

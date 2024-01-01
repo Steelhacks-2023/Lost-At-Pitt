@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Item {
   final String id;
   final String userId;
-  final Timestamp? timeCreated;
+  final Timestamp timeCreated;
   final String itemName;
   final String description;
   final num phone;
