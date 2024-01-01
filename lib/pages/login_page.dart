@@ -5,6 +5,7 @@ import 'package:ionicons/ionicons.dart';
 import 'package:lost_found_steelhacks/authentication/auth.dart';
 import 'package:lost_found_steelhacks/authentication/loading_animation.dart';
 import 'package:lost_found_steelhacks/authentication/user.dart';
+import 'package:lost_found_steelhacks/pages/home_page.dart';
 import 'package:lost_found_steelhacks/pages/map_page.dart';
 import 'package:lost_found_steelhacks/pages/signup_page.dart';
 import 'package:lost_found_steelhacks/routing/route.dart';
@@ -133,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                       setState(() {
                         loading = false;
                       });
-                      routePage(MapPage(), context);
+                      //no need to route page as provider handles it
                     } on FirebaseAuthException catch (e) {
                       setState(() {
                         _error =
@@ -163,9 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                     setState(() {
                       _error = "Google sign in failed. Please try again.";
                     });
-                  } else {
-                    routePage(MapPage(), context);
-                  }
+                  } 
                 });
               },
               // global colors

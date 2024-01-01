@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:lost_found_steelhacks/authentication/auth.dart';
-import 'package:provider/provider.dart';
 
 /**
  * UI to display the user's profile. 
@@ -16,10 +15,18 @@ class ProfilePage extends StatefulWidget {
 }
 
 class ProfilePageState extends State<ProfilePage> {
-
+  final authService = AuthService();
+  
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text("Signed in: ${AuthService().isSignedIn().toString()}"));
+    return Center(
+        child: Column(children: [
+      Text("Signed in: ${authService.isSignedIn().toString()}"),
+      OutlinedButton(
+          onPressed: () async {
+            await authService.signOut();
+          },
+          child: const Icon(Icons.logout))
+    ]));
   }
-
 }

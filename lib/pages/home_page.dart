@@ -30,7 +30,6 @@ class HomePageState extends State<HomePage> {
     ListPage(),
     ChatPage(),
     ProfilePage(),
-    LoginPage()
   ];
 
   @override
@@ -73,12 +72,6 @@ class HomePageState extends State<HomePage> {
                     icon: Icons.person,
                     text: 'Profile',
                     textStyle: theme.regularStyle),
-                GButton(
-                    icon: Icons.logout,
-                    text: 'Logout',
-                    textStyle: theme.regularStyle,
-                    onPressed: () async =>
-                        {await AuthService().signOut()})
               ],
               selectedIndex: selectedPage,
               onTabChange: (index) {

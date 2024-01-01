@@ -62,17 +62,14 @@ class _MyAppState extends State<MyApp> {
     FlutterNativeSplash.remove();
     return MultiProvider(
         providers: [
-          //ChangeNotifierProvider<AuthService>(create: (_) => AuthService()),
           StreamProvider<MyUser?>.value(value: AuthService().user, initialData: null),
           StreamProvider<List<Item>>.value(
             value: FirestoreService().getFoundItems(),
             initialData: [],
             catchError: (context, error) {
-              print(error);
               return [];
             },
           ),
-          //StreamProvider<List<Item>>.value(value: FirestoreService().getFoundItems(), initialData: [],)
         ],
         child: MaterialApp(
             title: 'Lost@Pitt | For Students By Students',

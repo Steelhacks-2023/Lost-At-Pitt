@@ -242,7 +242,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    final AuthService authService = Provider.of<AuthService>(context);
+    final AuthService authService = AuthService();
     final AppTheme theme =
         Theme.of(context).extension<AppTheme>()!;
     //const Widget spacing = SizedBox(height: 30);

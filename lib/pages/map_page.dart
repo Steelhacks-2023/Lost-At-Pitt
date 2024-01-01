@@ -62,7 +62,6 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return buildMap(context, context.read<List<Item>>());
-    ;
   }
 
   // Builds the map Scaffold

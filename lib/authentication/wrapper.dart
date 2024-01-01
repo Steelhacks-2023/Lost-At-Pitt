@@ -11,20 +11,8 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //final authService = Provider.of<AuthService>(context);
     final user = Provider.of<MyUser?>(context);
-    // return StreamBuilder<MyUser?>(
-    //     stream: authService.user,
-    //     builder: (_, AsyncSnapshot<MyUser?> snapshot) {
-    //       if (snapshot.connectionState == ConnectionState.active) {
-    //         final MyUser? user = snapshot.data;
-    //         return user == null ? const LoginPage() : const HomePage();
-    //       } else {
-    //         return const Scaffold(
-    //           body: Loading(),
-    //         );
-    //       }
-    //     });
+
     if (user == null) {
       return LoginPage();
     } else {
