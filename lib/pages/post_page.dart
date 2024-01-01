@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lost_found_steelhacks/cards/profile_picture.dart';
 import 'package:lost_found_steelhacks/cards/tag.dart';
 import 'package:lost_found_steelhacks/data/item.dart';
 import 'package:lost_found_steelhacks/themes/app_theme.dart';
@@ -24,7 +23,7 @@ class PostPage extends StatelessWidget {
     final theme = Theme.of(context).extension<AppTheme>()!;
 
     return DefaultTextStyle(
-      style: theme.regularStyle,
+      style: theme.darkRegularStyle,
       child: Padding(
         padding: const EdgeInsets.all(30.0),
         child: SizedBox(
@@ -47,7 +46,6 @@ class PostPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        const ProfilePicture(image: null),
                         const SizedBox(width: 10),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,7 +58,7 @@ class PostPage extends StatelessWidget {
                                 text: TextSpan(children: [
                                   TextSpan(
                                       text: "User found ${item.itemName}\n",
-                                      style: theme.titleStyle),
+                                      style: theme.darkTitleStyle),
                                   TextSpan(
                                       text: "4 hours ago",
                                       style: theme.decoratedRegularStyle)
@@ -102,11 +100,11 @@ class PostPage extends StatelessWidget {
                                     // Text should pull global font
                                     TextSpan(
                                         text: "Description\n",
-                                        style: theme.subtitleStyle),
+                                        style: theme.darkSubtitleStyle),
 
                                     TextSpan(
                                         text: item.description,
-                                        style: theme.regularStyle),
+                                        style: theme.darkRegularStyle),
                                   ])),
                               const Spacer(),
                               Row(
