@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:lost_found_steelhacks/authentication/user.dart';
 import 'package:lost_found_steelhacks/data/item.dart';
 import 'package:rxdart/rxdart.dart';
 
 class FirestoreService {
   //create reference to database
   final lostRef = FirebaseFirestore.instance.collection('lost');
-
   final foundRef = FirebaseFirestore.instance.collection('found');
+  final userRef = FirebaseFirestore.instance.collection('users');
 
   //adding Item Object to backend
   Future<void> addItemToFirestore(Item item, bool lost) {
@@ -39,4 +40,8 @@ class FirestoreService {
         ..addAll(b.docs.map((e) => Item.fromFirestore(e, null)).toList());
     });
   }
+
+  // Future<MyUser> getUser(String uid) {
+  //   return userRef.
+  // }
 }

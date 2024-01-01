@@ -28,7 +28,7 @@ class Tag extends StatelessWidget {
             padding: const EdgeInsets.all(2),
             decoration: tagDecoration,
             child: Text(tag,
-                style: theme.regularStyle.copyWith(color: color))));
+                style: theme.darkRegularStyle.copyWith(color: color))));
   }
 }
 

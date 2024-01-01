@@ -34,9 +34,14 @@ class HomePageState extends State<HomePage> {
   ];
 
   @override
+  initState() {
+    super.initState();
+    selectedPage = widget.startingPage;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<AppTheme>()!;
-
 
     return Scaffold(
       body: Center(
@@ -60,23 +65,23 @@ class HomePageState extends State<HomePage> {
                 GButton(
                     icon: Icons.map,
                     text: 'Map',
-                    textStyle: theme.regularStyle),
+                    textStyle: theme.darkRegularStyle),
                 GButton(
                     icon: Icons.add_box,
                     text: 'Posts',
-                    textStyle: theme.regularStyle),
+                    textStyle: theme.darkRegularStyle),
                 GButton(
                     icon: Icons.chat,
                     text: 'Search',
-                    textStyle: theme.regularStyle),
+                    textStyle: theme.darkRegularStyle),
                 GButton(
                     icon: Icons.person,
                     text: 'Profile',
-                    textStyle: theme.regularStyle),
+                    textStyle: theme.darkRegularStyle),
                 GButton(
                     icon: Icons.logout,
                     text: 'Logout',
-                    textStyle: theme.regularStyle,
+                    textStyle: theme.darkRegularStyle,
                     onPressed: () async =>
                         {await AuthService().signOut()})
               ],
