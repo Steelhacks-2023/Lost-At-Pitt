@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:lost_found_steelhacks/authentication/auth.dart';
+import 'package:lost_found_steelhacks/authentication/user.dart';
 import 'package:lost_found_steelhacks/authentication/wrapper.dart';
-import 'package:lost_found_steelhacks/pages/login_page.dart';
-import 'package:lost_found_steelhacks/pages/map_page.dart';
+import 'package:lost_found_steelhacks/services/firestore_service.dart';
+import 'package:lost_found_steelhacks/data/item.dart';
 import 'package:lost_found_steelhacks/themes/app_theme.dart';
 import 'package:lost_found_steelhacks/themes/theme_manager.dart';
 import 'package:provider/provider.dart';
@@ -59,17 +60,19 @@ class _MyAppState extends State<MyApp> {
     FlutterNativeSplash.remove();
     return MultiProvider(
         providers: [
-          ChangeNotifierProvider<AuthService>(create: (_) => AuthService()),
+          StreamProvider<MyUser?>.value(value: AuthService().user, initialData: null),
+          StreamProvider<List<Item>>.value(
+            value: FirestoreService().getFoundItems(),
+            initialData: [],
+            catchError: (context, error) {
+              return [];
+            },
+          ),
         ],
         child: MaterialApp(
             title: 'Lost@Pitt | For Students By Students',
             debugShowCheckedModeBanner: false,
-            routes: {
-              'loginPage': (context) => const LoginPage(),
-              'mapPage': (context) => const MapPage(),
-              '/': (context) => const Wrapper()
-            },
-            initialRoute: '/',
+            home: const Wrapper(),
             theme: AppTheme.getTheme(),
             themeMode: themeManager.themeMode));
   }
