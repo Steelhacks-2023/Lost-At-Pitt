@@ -30,7 +30,6 @@ class _LoginPageState extends State<LoginPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text('Email', style: theme.veryDarkSubtitleStyle),
-        Text('Email', style: theme.veryDarkSubtitleStyle),
         SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,

@@ -59,9 +59,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
       await imageRef.putData(bytes!);
       return true;
     } on FirebaseException {
-      setState(() {
-        error = "Failed to upload to database. Please try again later.";
-      });
+      setError("Failed to upload to database. Please try again later.");
       return false;
     }
   }
@@ -96,17 +94,11 @@ class _SubmissionPageState extends State<SubmissionPage> {
 
   void submitItem() async {
     if (loading) {
-      setState(() {
-        error = "Form already submitted";
-      });
+      setError("Form already submitted");
     } else if (!formKey.currentState!.validate()) {
-      setState(() {
-        error = "Form incorrect, please correct fields.";
-      });
+      setError("Please fill in form fields");
     } else if (bytes == null) {
-      setState(() {
-        error = "Invalid or no image uploaded";
-      });
+      setError("Invalid or no image uploaded");
     } else {
       setState(() {
         loading = true;
@@ -129,13 +121,21 @@ class _SubmissionPageState extends State<SubmissionPage> {
     );
     itemNameOptions.sort((a, b) => a.compareTo(b));
 
-    Widget buildError() => Text(error,
-        style: theme.errorStyle,
-        textAlign: TextAlign.center);
+    Widget buildError() =>
+        Text(error, style: theme.errorStyle, textAlign: TextAlign.center);
 
-    Widget buildTitle() => Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text("Submit a found item", style: theme.darkTitleStyle),
+    Widget buildHeader() => Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text("Submit a found item", style: theme.darkTitleStyle),
+            ),
+            IconButton(
+                color: theme.dark,
+                icon: const Icon(Icons.keyboard_return_rounded),
+                onPressed: () => routeBack(context))
+          ],
         );
 
     Widget buildForm() => FastForm(
@@ -221,7 +221,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
                     child: Scaffold(
                       body: Column(
                         children: [
-                          buildTitle(),
+                          buildHeader(),
                           buildForm(),
                           buildUploadButton(),
                           const Spacer(),

@@ -55,7 +55,7 @@ class AppTheme extends ThemeExtension<AppTheme> {
   final TextStyle lightRegularStyle =
       TextStyle(color: consts.veryLight, fontFamily: consts.font, fontSize: 14);
   final TextStyle errorStyle =
-      TextStyle(color: consts.veryLight, fontFamily: consts.font, fontSize: 14);
+      TextStyle(color: consts.error, fontFamily: consts.font, fontSize: 14);
   final TextStyle hintStyle = TextStyle(
       color: consts.light.withOpacity(0.7),
       fontFamily: consts.font,
