@@ -2,8 +2,11 @@ import 'dart:io';
 import 'dart:js_interop';
 import 'dart:typed_data';
 import 'dart:ui';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lost_found_steelhacks/authentication/auth.dart';
 import 'package:lost_found_steelhacks/authentication/loading_animation.dart';
@@ -21,12 +24,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 import 'package:provider/provider.dart';
 
-String _imgFromDeviceError = '';
-Uint8List? imgBytesToFirebase;
-String _imgName = '';
-
-//currently getting sorted in build method but should probably just order it here
-List<String> list = <String>[
+Uint8List? bytes;
+String imageName = '';
+List<String> itemNameOptions = <String>[
   'Water Bottle',
   'ID',
   'Wallet',
@@ -34,21 +34,11 @@ List<String> list = <String>[
   'Coat',
   'Other'
 ];
-
-final numberCheck =
-    RegExp(r'^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$');
-final List<bool> isSelected = <bool>[true, false];
-String description = "", category = "Water Bottle";
-int phone = 0;
-double lat = 0, long = 0;
-
-const List<Widget> options = <Widget>[
-  Text('Lost'),
-  Text('Found'),
-];
+String description = "";
+String itemName = "";
 
 class ItemRequest extends StatefulWidget {
-  ItemRequest({super.key, required this.itemLoc});
+  const ItemRequest({super.key, required this.itemLoc});
   final LatLng itemLoc;
 
   @override
@@ -56,68 +46,50 @@ class ItemRequest extends StatefulWidget {
 }
 
 class _ItemRequestState extends State<ItemRequest> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  // final TextEditingController _titleController = TextEditingController();
-  // final TextEditingController _phoneNumController = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  String error = '';
+  bool buttonPressed = false;
 
-  String title = '';
-  String _error = '';
-  bool loading = false;
+  void setError(String msg) => setState(() => error = msg);
+  void setButton(bool pressed) => setState(() => buttonPressed = pressed);
 
   uploadImageToFirebase(String category) async {
     final storageRef = FirebaseStorage.instance.ref();
 
-    final imageRef = storageRef.child("$category/$_imgName");
+    final imageRef = storageRef.child("$category/$imageName");
     try {
-      await imageRef.putData(imgBytesToFirebase!);
+      await imageRef.putData(bytes!);
       return true;
     } on FirebaseException catch (e) {
       setState(() {
-        _error = "Failed to upload to database. Please try again later.";
+        error = "Failed to upload to database. Please try again later.";
       });
       return false;
     }
   }
 
-  Widget _buildErrMessage(AppTheme theme) => Text(_error,
-      style: theme.veryDarkRegularStyle.copyWith(color: Colors.red),
-      textAlign: TextAlign.center);
-
-  Widget _buildTitleTF(AppTheme theme) {
+  Widget buildDescription(AppTheme theme) {
     return SizedBox(
-        child: TextFormField(
-      decoration: const InputDecoration(
-        hintText: 'Description of Lost Item',
-        border: OutlineInputBorder(),
+      height: 40,
+      child: Row(
+        children: [
+          Icon(Icons.question_mark),
+          CupertinoTextFormFieldRow(
+            initialValue: "Description",
+            onChanged: (value) => setState(() {
+              description = value;
+            }),
+            validator: (String? value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter some text';
+              } else {
+                description = value;
+              }
+              return null;
+            },
+          ),
+        ],
       ),
-      onChanged: (value) => setState(() {
-        title = value;
-      }),
-      validator: (String? value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter some text';
-        } else {
-          description = value;
-        }
-        return null;
-      },
-    ));
-  }
-
-  Widget _buildPhoneNumTF(AppTheme theme) {
-    return TextFormField(
-      decoration: const InputDecoration(
-        hintText: 'Enter your phone number',
-        border: OutlineInputBorder(),
-      ),
-      validator: (String? value) {
-        if (value == null || value.isEmpty || !numberCheck.hasMatch(value)) {
-          return 'Please enter a valid phone number';
-        } else {
-          phone = int.parse(value.replaceAll('-', ''));
-        }
-        return null;
-      },
     );
   }
 
@@ -127,10 +99,10 @@ class _ItemRequestState extends State<ItemRequest> {
         userId: context.read<MyUser?>()!.uid,
         timeCreated: Timestamp.now(),
         description: description,
-        itemName: category,
-        location: GeoPoint(lat, long),
-        phone: phone,
-        picture: _imgName);
+        itemName: itemName,
+        location: GeoPoint(widget.itemLoc.latitude, widget.itemLoc.longitude),
+        phone: 1,
+        picture: imageName);
     // Calling the collection to add a new user
     return FirestoreService().addItemToFirestore(item, true);
   }
@@ -141,183 +113,119 @@ class _ItemRequestState extends State<ItemRequest> {
         userId: context.read<MyUser?>()!.uid,
         timeCreated: Timestamp.now(),
         description: description,
-        itemName: category,
-        location: GeoPoint(lat, long),
-        phone: phone,
-        picture: _imgName);
+        itemName: itemName,
+        location: GeoPoint(widget.itemLoc.latitude, widget.itemLoc.longitude),
+        phone: 1,
+        picture: imageName);
 
     // Calling the collection to add a new user
     return FirestoreService().addItemToFirestore(item, false);
   }
 
+  void submitItem() async {
+    if (buttonPressed) {
+      setState(() {
+        error = "Form already submitted";
+      });
+    } else if (!formKey.currentState!.validate()) {
+      setState(() {
+        error = "Form incorrect, please correct fields.";
+      });
+    } else if (bytes == null) {
+      setState(() {
+        error = "Invalid or no image uploaded";
+      });
+    } else {
+      setState(() {
+        buttonPressed = true;
+      });
+      bool success = await FirestoreService.uploadImageToFirebase("${itemName}/${imageName}", bytes!);
+      if (success) {
+        await addFound();
+      }
+      routeBack(context);
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
     final AppTheme theme = Theme.of(context).extension<AppTheme>()!;
-    lat = widget.itemLoc.latitude;
-    long = widget.itemLoc.longitude;
-    list.sort((a, b) => a.compareTo(b));
-    return Padding(
-        padding: const EdgeInsets.all(30.0),
-        child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: Center(
+    final BoxDecoration bodyDecoration = BoxDecoration(
+      color: theme.veryLight,
+      borderRadius: const BorderRadius.all(Radius.circular(10)),
+    );
+    itemNameOptions.sort((a, b) => a.compareTo(b));
+
+    Widget buildError() => Text(error,
+      style: theme.darkRegularStyle.copyWith(color: Colors.red),
+      textAlign: TextAlign.center);
+
+    return DefaultTextStyle(
+        style: theme.lightRegularStyle,
+        child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Container(
+                width: MediaQuery.of(context).size.width,
+                alignment: Alignment.topCenter,
                 child: Container(
-                    //border around form popup
-                    constraints: const BoxConstraints(maxWidth: 500),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                          width: 3,
-                          color: const Color.fromARGB(255, 221, 221, 221)),
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    ),
-                    child: Form(
-                      key: _formKey,
-                      child: Scaffold(
-                          backgroundColor: Color.fromARGB(255, 233, 227, 206),
-                          body: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 16.0, vertical: 16.0),
-                              child: Stack(children: [
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text('Enter your item from: ',
-                                        style: theme.veryDarkTitleStyle),
-                                    SizedBox(height: 10),
-                                    Text("N: $lat\nS: $long\n",
-                                        style: theme.veryDarkSubtitleStyle),
-                                    ToggleButtons(
-                                      selectedBorderColor:
-                                          Colors.green.shade900,
-                                      selectedColor: Colors.white,
-                                      fillColor: Colors.lightGreen.shade600,
-                                      color: Colors.black,
-                                      isSelected: isSelected,
-                                      onPressed: (int index) {
-                                        setState(() {
-                                          //weird math to set selected index to true and other to false
-                                          if (isSelected[(2 - index) % 2]) {
-                                            isSelected[(2 - index + 1) % 2] =
-                                                false;
-                                          } else {
-                                            isSelected[(2 - index) % 2] = true;
-                                            isSelected[(2 - index + 1) % 2] =
-                                                false;
-                                          }
-                                        });
-                                      },
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(8)),
-                                      children: options,
-                                    ),
-                                    SizedBox(height: 10),
-                                    DropdownButt(),
-                                    SizedBox(height: 10),
-                                    _buildTitleTF(theme),
-                                    SizedBox(height: 10),
-                                    _buildPhoneNumTF(theme),
-                                    SizedBox(height: 10),
-                                    UploadImageButton(),
-                                    SizedBox(height: 10.0),
-                                    loading
-                                        ? Loading()
-                                        : ButtonTheme(
-                                            minWidth: 150,
-                                            child: ElevatedButton(
-                                              style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(
-                                                          Colors
-                                                              .green.shade800)),
-                                              onPressed: () async {
-                                                setState(() {
-                                                  loading = true;
-                                                });
-                                                if (_formKey.currentState!
-                                                    .validate()) {
-                                                  if (isSelected[0]) {
-                                                    //we wait to see if upload image is successful, this requires image to need to be uploaded
-                                                    if (await uploadImageToFirebase(
-                                                        "lost")) {
-                                                      addLost();
-                                                    }
-                                                  } else {
-                                                    if (await uploadImageToFirebase(
-                                                        "found")) {
-                                                      addFound();
-                                                    }
-                                                  }
-                                                  routeBack(context);
-                                                } else {
-                                                  setState(() {
-                                                    _error =
-                                                        "Form incorrect, please correct fields.";
-                                                  });
-                                                }
-                                              },
-                                              child: const Text(
-                                                'Submit',
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                          ),
-                                    _buildErrMessage(theme),
-                                  ],
+                    padding: const EdgeInsets.all(5),
+                    constraints:
+                        const BoxConstraints(maxWidth: 500, maxHeight: 300),
+                    decoration: bodyDecoration,
+                    child: Scaffold(
+                      body: Column(
+                        children: [
+                          FastForm(
+                              inputDecorationTheme: InputDecorationTheme(
+                                disabledBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(width: 3),
                                 ),
-                                Align(
-                                    alignment: Alignment.topRight,
-                                    child: IconButton(
-                                      icon: Icon(Icons.close),
-                                      onPressed: () {
-                                        setState(() {
-                                          routeBack(context);
-                                        });
-                                      },
-                                    ))
-                              ]))),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: theme.medium, width: 3),
+                                ),
+                                focusedBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(width: 3),
+                                ),
+                                errorBorder: const OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.red, width: 3),
+                                ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.red[500]!, width: 2),
+                                ),
+                                filled: true,
+                                fillColor: theme.light,
+                              ),
+                              formKey: formKey,
+                              children: [
+                                FastDropdown(
+                                  initialValue: "Other",
+                                  name: "item_name_dropdown",
+                                  items: itemNameOptions,
+                                  onChanged: (value) =>
+                                      setState(() => itemName = value!),
+                          
+                                ),
+                                FastTextField(
+                                    name: "description_text_field",
+                                    labelText: "Description",                              validator: (String? value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter some text';
+                                    } else {
+                                      description = value;
+                                    }
+                                    return null;
+                                  },),
+                              ]),
+                              UploadImageButton(),
+                              IconButton(icon: Icon(Icons.add_box_rounded), onPressed: () => submitItem()),
+                              buildError()
+                        ],
+                      ),
+                          
                     )))));
-  }
-}
-
-class DropdownButt extends StatefulWidget {
-  const DropdownButt({super.key});
-  @override
-  State<DropdownButt> createState() => _DropdownButtState();
-}
-
-class _DropdownButtState extends State<DropdownButt> {
-  String dropdownValue = list.first;
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-      padding: EdgeInsets.symmetric(horizontal: 10.0),
-      //isExpanded: true,
-      alignment: Alignment.center,
-      value: dropdownValue,
-      borderRadius: BorderRadius.circular(12),
-      icon: const Icon(Icons.arrow_drop_down),
-      elevation: 16,
-      style: const TextStyle(color: Color(0xFF2E7D32)),
-      underline: Container(
-        height: 2,
-        color: Colors.blue,
-      ),
-      onChanged: (String? value) {
-        // This is called when the user selects an item.
-        setState(() {
-          dropdownValue = value!;
-          category = dropdownValue;
-        });
-      },
-      items: list.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-    ));
   }
 }
 
@@ -339,41 +247,29 @@ class _UploadImageButtonState extends State<UploadImageButton> {
       Uint8List imageData = await image.readAsBytes();
       uploadedImg = Image.memory(imageData);
       setState(() {
-        imgBytesToFirebase = imageData;
-        _imgName = image.path.split('/').last;
-        //print("Image Name ${_imgName}");
+        bytes = imageData;
+        imageName = image.path.split('/').last;
       });
     }
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _picker = ImagePicker();
     uploadedImg = null;
-    _imgName = '';
+    imageName = '';
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      ElevatedButton(
-        style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.green.shade800)),
-        child: Text("Upload Image", style: TextStyle(color: Colors.white)),
+    return 
+      TextButton.icon(
+        icon: Icon(Icons.upload),
+        label: Text("Upload image"),
         onPressed: () {
           uploadImage();
         },
-      ),
-      SizedBox(height: 10),
-      uploadedImg == null
-          ? SizedBox()
-          : SizedBox(
-              width: 150,
-              height: 150,
-              child: uploadedImg,
-            )
-    ]);
+      );
   }
 }
