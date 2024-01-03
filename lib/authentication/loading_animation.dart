@@ -9,14 +9,11 @@ class Loading extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<AppTheme>()!;
 
-    return Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0), color: theme.veryDark),
-        child: const Center(
-          child: SpinKitDoubleBounce(
-            duration: Duration(seconds: 2),
-            color: Colors.white,
-          ),
-        ));
+    return Center(
+      child: SpinKitDoubleBounce(
+        duration: const Duration(seconds: 1),
+        color: theme.medium,
+      ),
+    );
   }
 }

@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lost_found_steelhacks/pages/post_page.dart';
 import 'package:lost_found_steelhacks/routing/route.dart';
 import 'package:lost_found_steelhacks/data/item.dart';
-import 'package:lost_found_steelhacks/pages/item_request.dart';
+import 'package:lost_found_steelhacks/pages/submission_page.dart';
 import 'package:lost_found_steelhacks/utils.dart';
 import 'package:provider/provider.dart';
 
@@ -77,7 +77,7 @@ class _MapPageState extends State<MapPage> {
 
   // Add a pin to the map
   void addPin(LatLng coords) {
-    routeSubpage(ItemRequest(itemLoc: coords), context);
+    routeSubpage(SubmissionPage(itemLoc: coords), context);
   }
 
   void getMarkersFromItems(List<Item> items) {
