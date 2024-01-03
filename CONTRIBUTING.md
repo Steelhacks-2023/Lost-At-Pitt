@@ -1,8 +1,9 @@
 ## Creating a PR
 1. Use VSCode dart linter to clean up as many warnings as possible
-2. Link the pull request with the associated issue(s)
-3. Tag reviewers (either ```@jeffzheng13``` or ```@tbeidlershenk``` depending on the issue)
-4. Write a bulleted summary of the changes made
+2. Rebase your branch on ```main```
+3. Link the pull request with the associated issue(s)
+4. Tag reviewers (either ```@jeffzheng13``` or ```@tbeidlershenk``` depending on the issue)
+5. Write a bulleted summary of the changes made
 
 ## Example PR
 ![Alt text](example-PR.png)
