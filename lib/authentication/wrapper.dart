@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lost_found_steelhacks/authentication/auth.dart';
-import 'package:lost_found_steelhacks/authentication/loading_animation.dart';
 import 'package:lost_found_steelhacks/authentication/user.dart';
+import 'package:lost_found_steelhacks/pages/authenticate_page.dart';
 import 'package:lost_found_steelhacks/pages/home_page.dart';
 import 'package:lost_found_steelhacks/pages/login_page.dart';
 import 'package:provider/provider.dart';
@@ -11,22 +10,10 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //final authService = Provider.of<AuthService>(context);
     final user = Provider.of<MyUser?>(context);
-    // return StreamBuilder<MyUser?>(
-    //     stream: authService.user,
-    //     builder: (_, AsyncSnapshot<MyUser?> snapshot) {
-    //       if (snapshot.connectionState == ConnectionState.active) {
-    //         final MyUser? user = snapshot.data;
-    //         return user == null ? const LoginPage() : const HomePage();
-    //       } else {
-    //         return const Scaffold(
-    //           body: Loading(),
-    //         );
-    //       }
-    //     });
+
     if (user == null) {
-      return LoginPage();
+      return AuthenticatePage();
     } else {
       return HomePage();
     }

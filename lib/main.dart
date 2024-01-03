@@ -6,8 +6,6 @@ import 'package:lost_found_steelhacks/authentication/user.dart';
 import 'package:lost_found_steelhacks/authentication/wrapper.dart';
 import 'package:lost_found_steelhacks/services/firestore_service.dart';
 import 'package:lost_found_steelhacks/data/item.dart';
-import 'package:lost_found_steelhacks/pages/login_page.dart';
-import 'package:lost_found_steelhacks/pages/map_page.dart';
 import 'package:lost_found_steelhacks/themes/app_theme.dart';
 import 'package:lost_found_steelhacks/themes/theme_manager.dart';
 import 'package:provider/provider.dart';
@@ -62,17 +60,14 @@ class _MyAppState extends State<MyApp> {
     FlutterNativeSplash.remove();
     return MultiProvider(
         providers: [
-          //ChangeNotifierProvider<AuthService>(create: (_) => AuthService()),
           StreamProvider<MyUser?>.value(value: AuthService().user, initialData: null),
           StreamProvider<List<Item>>.value(
             value: FirestoreService().getFoundItems(),
             initialData: [],
             catchError: (context, error) {
-              print(error);
               return [];
             },
           ),
-          //StreamProvider<List<Item>>.value(value: FirestoreService().getFoundItems(), initialData: [],)
         ],
         child: MaterialApp(
             title: 'Lost@Pitt | For Students By Students',

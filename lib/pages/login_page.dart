@@ -5,14 +5,11 @@ import 'package:ionicons/ionicons.dart';
 import 'package:lost_found_steelhacks/authentication/auth.dart';
 import 'package:lost_found_steelhacks/authentication/loading_animation.dart';
 import 'package:lost_found_steelhacks/authentication/user.dart';
-import 'package:lost_found_steelhacks/pages/map_page.dart';
-import 'package:lost_found_steelhacks/pages/signup_page.dart';
-import 'package:lost_found_steelhacks/routing/route.dart';
 import 'package:lost_found_steelhacks/themes/app_theme.dart';
-import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final Function toggleView;
+  const LoginPage({super.key, required this.toggleView});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -33,6 +30,7 @@ class _LoginPageState extends State<LoginPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text('Email', style: theme.veryDarkSubtitleStyle),
+        Text('Email', style: theme.veryDarkSubtitleStyle),
         SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
@@ -51,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14.0),
+                contentPadding: const EdgeInsets.only(top: 14.0),
                 prefixIcon: Icon(Icons.email, color: theme.dark),
                 hintText: 'Enter your Email',
                 hintStyle: theme.hintStyle),
@@ -66,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text('Password', style: theme.veryDarkSubtitleStyle),
-        SizedBox(height: 10.0),
+        const SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
           decoration: theme.textFieldDecoration,
@@ -81,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
             obscureText: _hidePassword,
             decoration: InputDecoration(
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14.0),
+                contentPadding: const EdgeInsets.only(top: 14.0),
                 prefixIcon: Icon(Icons.lock, color: theme.dark),
                 suffixIcon: IconButton(
                   icon: Icon(
@@ -105,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       alignment: Alignment.centerRight,
       child: TextButton(
-        onPressed: () => routePage(SignUpPage(), context),
+        onPressed: () => widget.toggleView(),
         child: Text('Forgot Password?', style: theme.veryDarkSubtitleStyle),
       ),
     );
@@ -115,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
     return loading
         ? const Loading()
         : Container(
-            padding: EdgeInsets.symmetric(vertical: 25.0),
+            padding: const EdgeInsets.symmetric(vertical: 25.0),
             child: Container(
               decoration: theme.cardBodyDecoration,
               child: TextButton(
@@ -133,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                       setState(() {
                         loading = false;
                       });
-                      routePage(MapPage(), context);
+                      //no need to route page as provider handles it
                     } on FirebaseAuthException catch (e) {
                       setState(() {
                         _error =
@@ -151,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildSocialBtnRow(AppTheme theme, AuthService authService) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 15.0),
+      padding: const EdgeInsets.symmetric(vertical: 15.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
@@ -163,8 +161,6 @@ class _LoginPageState extends State<LoginPage> {
                     setState(() {
                       _error = "Google sign in failed. Please try again.";
                     });
-                  } else {
-                    routePage(MapPage(), context);
                   }
                 });
               },
@@ -177,16 +173,17 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildSignupBtn(AppTheme theme) {
     return GestureDetector(
-      onTap: () => routePage(SignUpPage(), context),
+      onTap: () => widget.toggleView(),
       child: RichText(
         text: TextSpan(
           children: [
             TextSpan(
-                text: 'Don\'t have an Account? ', style: theme.veryDarkRegularStyle.copyWith(color: theme.dark)),
+                text: 'Don\'t have an Account? ',
+                style: theme.veryDarkRegularStyle.copyWith(color: theme.dark)),
             TextSpan(
                 text: 'Sign Up',
-                style:
-                    theme.veryDarkRegularStyle.copyWith(fontWeight: FontWeight.bold, color: theme.dark)),
+                style: theme.veryDarkRegularStyle
+                    .copyWith(fontWeight: FontWeight.bold, color: theme.dark)),
           ],
         ),
       ),
@@ -221,12 +218,11 @@ class _LoginPageState extends State<LoginPage> {
 
                   // move to theme
                   decoration: theme.gradientBackgroundDecoration),
-              Container(
-                height: double.infinity,
+              SizedBox(
                 child: SingleChildScrollView(
-                    physics: AlwaysScrollableScrollPhysics(),
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 40.0, vertical: 120.0),
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40.0, vertical: 120.0),
                     child: Form(
                       key: _formKey,
                       child: Column(

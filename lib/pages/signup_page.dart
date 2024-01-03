@@ -3,13 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:lost_found_steelhacks/authentication/auth.dart';
 import 'package:lost_found_steelhacks/authentication/loading_animation.dart';
-import 'package:lost_found_steelhacks/pages/login_page.dart';
-import 'package:lost_found_steelhacks/routing/route.dart';
 import 'package:lost_found_steelhacks/themes/app_theme.dart';
-import 'package:provider/provider.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+  final Function toggleView;
+  const SignUpPage({super.key, required this.toggleView});
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -33,6 +31,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        Text('First Name', style: theme.veryDarkSubtitleStyle),
         Text('First Name', style: theme.veryDarkSubtitleStyle),
         SizedBox(height: 10.0),
         Container(
@@ -177,7 +176,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       setState(() {
                         loading = false;
                       });
-                      routePage(LoginPage(), context);
                     }
                   }
                 },
@@ -189,7 +187,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _buildSocialBtnRow(AppTheme theme, AuthService authService) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 15.0),
+      padding: const EdgeInsets.symmetric(vertical: 15.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
@@ -201,9 +199,8 @@ class _SignUpPageState extends State<SignUpPage> {
                     setState(() {
                       _error = "Google sign in failed. Please try again.";
                     });
-                  } else {
-                    routePage(LoginPage(), context);
                   }
+                  //no need to route, wrapper should pick up and log in
                 });
               },
               // global colors
@@ -215,16 +212,17 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _buildSignInBtn(AppTheme theme) {
     return GestureDetector(
-      onTap: () => routePage(LoginPage(), context),
+      onTap: () => widget.toggleView(),
       child: RichText(
         text: TextSpan(
           children: [
             TextSpan(
-                text: 'Already have an Account? ', style: theme.veryDarkRegularStyle.copyWith(color: theme.dark)),
+                text: 'Already have an Account? ',
+                style: theme.veryDarkRegularStyle.copyWith(color: theme.dark)),
             TextSpan(
                 text: 'Sign In',
-                style:
-                    theme.veryDarkRegularStyle.copyWith(fontWeight: FontWeight.bold, color: theme.dark)),
+                style: theme.veryDarkRegularStyle
+                    .copyWith(fontWeight: FontWeight.bold, color: theme.dark)),
           ],
         ),
       ),
@@ -242,9 +240,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    final AuthService authService = Provider.of<AuthService>(context);
-    final AppTheme theme =
-        Theme.of(context).extension<AppTheme>()!;
+    final AuthService authService = AuthService();
+    final AppTheme theme = Theme.of(context).extension<AppTheme>()!;
     //const Widget spacing = SizedBox(height: 30);
 
     return Scaffold(
@@ -258,11 +255,10 @@ class _SignUpPageState extends State<SignUpPage> {
                   height: double.infinity,
                   width: double.infinity,
                   decoration: theme.gradientBackgroundDecoration),
-              Container(
-                height: double.infinity,
+              SizedBox(
                 child: SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(
                     horizontal: 40.0,
                     vertical: 120.0,
                   ),

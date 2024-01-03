@@ -1,13 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lost_found_steelhacks/authentication/user.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthService extends ChangeNotifier {
-  //final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -116,12 +113,8 @@ class AuthService extends ChangeNotifier {
   Future<void> signOut() async {
     try {
       await _auth.signOut();
-      //notifyListeners();
-      //print("Is user signed in ${isSignedIn()}");
-      //Navigator.push("/");
     } catch (e) {
       print(e.toString());
-      return null;
     }
   }
 

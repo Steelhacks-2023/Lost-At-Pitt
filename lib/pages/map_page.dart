@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:lost_found_steelhacks/authentication/loading_animation.dart';
 import 'package:lost_found_steelhacks/pages/post_page.dart';
 import 'package:lost_found_steelhacks/routing/route.dart';
 import 'package:lost_found_steelhacks/data/item.dart';
 import 'package:lost_found_steelhacks/pages/item_request.dart';
 import 'package:lost_found_steelhacks/utils.dart';
-import 'package:multiple_stream_builder/multiple_stream_builder.dart';
 import 'package:provider/provider.dart';
 
 class MapPage extends StatefulWidget {
@@ -61,8 +59,7 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return buildMap(context, context.read<List<Item>>());
-    ;
+    return buildMap(context, context.watch<List<Item>>());
   }
 
   // Builds the map Scaffold
