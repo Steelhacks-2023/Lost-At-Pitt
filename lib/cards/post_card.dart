@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:lost_found_steelhacks/data/item.dart';
@@ -30,51 +29,51 @@ class PostCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<AppTheme>()!;
     final BoxDecoration bodyDecoration = BoxDecoration(
-      color: theme.medium,
-      borderRadius: const BorderRadius.all(Radius.circular(10)));
+        color: theme.medium,
+        borderRadius: const BorderRadius.all(Radius.circular(10)));
+
+    Widget buildProfilePicture() => Padding(
+        padding: const EdgeInsets.all(5),
+        child: Container(
+          decoration:
+              BoxDecoration(shape: BoxShape.circle, color: theme.veryLight),
+          padding: const EdgeInsets.all(3.0),
+          child: const ProfilePicture(name: "Name", radius: 12, fontsize: 12),
+        ));
 
     Widget buildHeader() => Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Container(
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: theme.veryLight),
-                      child: Padding(
-                        padding: const EdgeInsets.all(3.0),
-                        child: ProfilePicture(
-                            name: "Name", radius: 12, fontsize: 12),
-                      ))),
+              buildProfilePicture(),
               Padding(
                 padding: const EdgeInsets.all(5.0),
-                child: Text(item.itemName, style: theme.lightTitleStyle),
+                child: Text(item.itemName, style: theme.veryDarkTitleStyle),
               ),
               const Spacer(),
               Padding(
                 padding: const EdgeInsets.all(5.0),
-                child: Text(getDate(), style: theme.lightRegularStyle),
+                child: Text(getDate(), style: theme.veryDarkRegularStyle),
               ),
               Padding(
                   padding: const EdgeInsets.all(5.0),
-                  child: Icon(Icons.access_time_sharp, color: theme.veryLight)),
+                  child: Icon(Icons.access_time_sharp, color: theme.dark)),
             ]);
 
     Widget buildBody() => Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(item.description,
-              style: theme.lightRegularStyle, textAlign: TextAlign.left),
+              style: theme.veryDarkRegularStyle, textAlign: TextAlign.left),
         );
 
     Widget buildFooter() => Row(children: [
           IconButton(
               color: theme.dark,
-              icon: Icon(Icons.map),
+              icon: const Icon(Icons.map),
               onPressed: () => routeHome(0, context)),
           IconButton(
               color: theme.dark,
-              icon: Icon(Icons.chat),
+              icon: const Icon(Icons.chat),
               onPressed: () => routeHome(2, context))
         ]);
 

@@ -47,7 +47,10 @@ class PostPage extends StatelessWidget {
                 child: Text(item.itemName, style: theme.darkTitleStyle),
               ),
               const Spacer(),
-              IconButton(color: theme.dark, icon: Icon(Icons.keyboard_return_rounded), onPressed: () => routeBack(context))
+              IconButton(
+                  color: theme.dark,
+                  icon: Icon(Icons.close),
+                  onPressed: () => routeBack(context))
             ]);
 
     Widget buildBody() => Padding(

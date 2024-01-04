@@ -133,7 +133,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
             ),
             IconButton(
                 color: theme.dark,
-                icon: const Icon(Icons.keyboard_return_rounded),
+                icon: const Icon(Icons.close),
                 onPressed: () => routeBack(context))
           ],
         );
@@ -146,14 +146,14 @@ class _SubmissionPageState extends State<SubmissionPage> {
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: theme.medium, width: 3),
               ),
-              focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(width: 3),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: theme.medium, width: 3),
               ),
               errorBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: theme.error, width: 3),
               ),
               focusedErrorBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: theme.error, width: 2),
+                borderSide: BorderSide(color: theme.error, width: 3),
               ),
               filled: true,
               fillColor: theme.light,
@@ -163,21 +163,27 @@ class _SubmissionPageState extends State<SubmissionPage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: FastDropdown(
-                  initialValue: "Other",
+                  helperText: "Category",
                   name: "item_name_dropdown",
                   items: itemNameOptions,
-                  onChanged: (value) => setState(() => itemName = value!),
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select a category';
+                    }
+                    itemName = value;
+                    return null;
+                  },
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: FastTextField(
                   maxLines: 5,
+                  helperText: "Description",
                   name: "description_text_field",
-                  labelText: "Description",
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
+                      return 'Please enter a description';
                     }
                     description = value;
                     return null;
@@ -194,16 +200,30 @@ class _SubmissionPageState extends State<SubmissionPage> {
                 border: Border.all(color: theme.medium, width: 3),
                 borderRadius: const BorderRadius.all(Radius.circular(3))),
             child: TextButton.icon(
-                icon: const Icon(Icons.upload),
-                label: Text(bytes == null ? "Upload image" : "Change image"),
+                icon: Icon(Icons.upload, color: theme.dark),
+                label: Text(bytes == null ? "Upload image" : "Change image",
+                    style: theme.darkSubtitleStyle),
                 onPressed: () => loadImageIntoMemory()),
           ),
         );
 
+    Widget buildUploadedImage() => uploadedImg != null
+        ? Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Container(
+                constraints: const BoxConstraints(maxHeight: 200),
+                decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(3)),
+                    border: Border.all(color: theme.medium, width: 3)),
+                child: uploadedImg!),
+          )
+        : const SizedBox(height: 1);
+
     Widget buildSubmitButton() => loading
         ? const Loading()
-        : IconButton(
-            icon: const Icon(Icons.add_box_rounded),
+        : TextButton.icon(
+            label: Text("Submit", style: theme.darkSubtitleStyle),
+            icon: Icon(Icons.add_box_rounded, color: theme.dark),
             onPressed: () => submitItem());
 
     return DefaultTextStyle(
@@ -215,8 +235,9 @@ class _SubmissionPageState extends State<SubmissionPage> {
                 alignment: Alignment.topCenter,
                 child: Container(
                     padding: const EdgeInsets.all(5),
-                    constraints:
-                        const BoxConstraints(maxWidth: 500, maxHeight: 400),
+                    constraints: BoxConstraints(
+                        maxWidth: 500,
+                        maxHeight: MediaQuery.of(context).size.height - 20),
                     decoration: bodyDecoration,
                     child: Scaffold(
                       body: Column(
@@ -224,6 +245,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
                           buildHeader(),
                           buildForm(),
                           buildUploadButton(),
+                          buildUploadedImage(),
                           const Spacer(),
                           buildSubmitButton(),
                           buildError()
