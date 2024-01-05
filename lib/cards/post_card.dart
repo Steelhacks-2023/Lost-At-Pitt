@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
+import 'package:intl/intl.dart';
 import 'package:lost_found_steelhacks/data/item.dart';
 import 'package:lost_found_steelhacks/pages/post_page.dart';
 import 'package:lost_found_steelhacks/routing/route.dart';
@@ -22,7 +23,7 @@ class PostCard extends StatelessWidget {
     if (now.difference(date).inDays == 1) {
       return "Yesterday";
     }
-    return "${date.month}-${date.day}";
+    return DateFormat.MMMd().format(date);
   }
 
   @override

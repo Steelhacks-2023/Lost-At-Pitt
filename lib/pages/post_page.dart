@@ -3,6 +3,7 @@ import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:lost_found_steelhacks/data/item.dart';
 import 'package:lost_found_steelhacks/routing/route.dart';
 import 'package:lost_found_steelhacks/themes/app_theme.dart';
+import 'package:intl/intl.dart';
 
 String err = "ERR";
 
@@ -23,7 +24,7 @@ class PostPage extends StatelessWidget {
     if (now.difference(date).inDays == 1) {
       return "Yesterday";
     }
-    return "${date.month}-${date.day}";
+    return DateFormat.MMMd().format(date);
   }
 
   @override

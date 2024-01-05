@@ -163,7 +163,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: FastDropdown(
-                  helperText: "Category",
+                  labelText: "Category",
                   name: "item_name_dropdown",
                   items: itemNameOptions,
                   validator: (String? value) {
@@ -179,7 +179,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
                 padding: const EdgeInsets.all(8.0),
                 child: FastTextField(
                   maxLines: 5,
-                  helperText: "Description",
+                  labelText: "Description",
                   name: "description_text_field",
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
