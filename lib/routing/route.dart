@@ -27,13 +27,13 @@ class HeroDialogRoute<T> extends PageRoute<T> {
   bool get barrierDismissible => true;
 
   @override
-  Duration get transitionDuration => const Duration(milliseconds: 300);
+  Duration get transitionDuration => const Duration(milliseconds: 0);
 
   @override
   bool get maintainState => true;
 
   @override
-  Color get barrierColor => Colors.black54;
+  Color get barrierColor => Color.fromARGB(132, 0, 0, 0);
 
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,

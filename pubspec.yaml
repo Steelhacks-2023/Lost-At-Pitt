@@ -32,7 +32,6 @@ dependencies:
   flutter:
     sdk: flutter
   
-  sliding_up_panel: ^2.0.0+1
   icon_forest: ^1.1.8
   cupertino_icons: ^1.0.2
   firebase_core: ^2.8.0
@@ -53,6 +52,9 @@ dependencies:
   multiple_stream_builder: ^3.0.2
   flutter_native_splash: ^2.3.5
   google_nav_bar: ^5.0.6
+  flutter_profile_picture: ^2.0.0
+  flutter_fast_forms: ^14.1.0
+  intl: ^0.19.0
   
 dev_dependencies:
   flutter_test:

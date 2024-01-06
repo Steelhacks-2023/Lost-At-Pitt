@@ -5,17 +5,12 @@ import 'package:rxdart/rxdart.dart';
 class FirestoreService {
   //create reference to database
   final lostRef = FirebaseFirestore.instance.collection('lost');
-
   final foundRef = FirebaseFirestore.instance.collection('found');
 
   //adding Item Object to backend
-  Future<void> addItemToFirestore(Item item, bool lost) {
-    if (lost) {
-      return lostRef.doc().set(item.toFirestore());
-    } else {
-      return foundRef.doc().set(item.toFirestore());
-    }
-  }
+  Future<void> addItemToFirestore(Item item, bool lost) => lost
+      ? lostRef.doc().set(item.toFirestore())
+      : foundRef.doc().set(item.toFirestore());
 
   //stream Items
   Stream<List<Item>> getLostItems() {

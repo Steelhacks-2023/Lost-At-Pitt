@@ -29,6 +29,12 @@ class HomePageState extends State<HomePage> {
   ];
 
   @override
+  initState() {
+    super.initState();
+    selectedPage = widget.startingPage;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<AppTheme>()!;
 
@@ -54,19 +60,19 @@ class HomePageState extends State<HomePage> {
                 GButton(
                     icon: Icons.map,
                     text: 'Map',
-                    textStyle: theme.regularStyle),
+                    textStyle: theme.veryDarkRegularStyle),
                 GButton(
                     icon: Icons.add_box,
                     text: 'Posts',
-                    textStyle: theme.regularStyle),
+                    textStyle: theme.veryDarkRegularStyle),
                 GButton(
                     icon: Icons.chat,
                     text: 'Search',
-                    textStyle: theme.regularStyle),
+                    textStyle: theme.veryDarkRegularStyle),
                 GButton(
                     icon: Icons.person,
                     text: 'Profile',
-                    textStyle: theme.regularStyle),
+                    textStyle: theme.veryDarkRegularStyle),
               ],
               selectedIndex: selectedPage,
               onTabChange: (index) {

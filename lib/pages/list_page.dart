@@ -22,9 +22,10 @@ class _ListPageState extends State<ListPage> {
     return buildPage(theme, Provider.of<List<Item>>(context), []);
   }
 
-  List<PostCard> getListEntries(List<Item> objects) {
+  List<PostCard> getListEntries(List<Item> items) {
     List<PostCard> cards = [];
-    for (Item e in objects) {
+    items.sort((a, b) => b.timeCreated.compareTo(a.timeCreated));
+    for (Item e in items) {
       cards.add(PostCard(item: e));
     }
     return cards;
