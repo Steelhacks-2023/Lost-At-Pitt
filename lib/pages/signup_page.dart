@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:lost_found_steelhacks/authentication/auth.dart';
-import 'package:lost_found_steelhacks/authentication/loading_animation.dart';
+import 'package:lost_found_steelhacks/services/auth_service.dart';
+import 'package:lost_found_steelhacks/widgets/loading_animation.dart';
 import 'package:lost_found_steelhacks/themes/app_theme.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -147,10 +147,9 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Widget _buildSignUpBtn(
-      AppTheme theme, bool loading, AuthService authService) {
+  Widget _buildSignUpBtn(AppTheme theme, bool loading) {
     return loading
-        ? const Loading()
+        ? const LoadingAnimation()
         : Container(
             padding: EdgeInsets.symmetric(vertical: 25.0),
             child: Container(
@@ -162,10 +161,10 @@ class _SignUpPageState extends State<SignUpPage> {
                       loading = true;
                     });
 
-                    dynamic result =
-                        await authService.registerWithEmailAndPassword(
+                    bool success =
+                        await AuthService.registerWithEmailAndPassword(
                             firstName, lastName, _email, _password);
-                    if (result == null) {
+                    if (success) {
                       setState(() {
                         _error =
                             'Failed to register with your email and password. Please try again.';
@@ -184,7 +183,7 @@ class _SignUpPageState extends State<SignUpPage> {
           );
   }
 
-  Widget _buildSocialBtnRow(AppTheme theme, AuthService authService) {
+  Widget _buildSocialBtnRow(AppTheme theme) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15.0),
       child: Row(
@@ -192,7 +191,7 @@ class _SignUpPageState extends State<SignUpPage> {
         children: <Widget>[
           IconButton(
               onPressed: () async {
-                Future result = authService.signInWithGoogle();
+                Future result = AuthService.signInWithGoogle();
                 result.then((value) {
                   if (value == null) {
                     setState(() {
@@ -275,8 +274,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         _buildEmailTF(theme),
                         _buildSpacing(),
                         _buildPasswordTF(theme),
-                        _buildSignUpBtn(theme, loading, authService),
-                        _buildSocialBtnRow(theme, authService),
+                        _buildSignUpBtn(theme, loading),
+                        _buildSocialBtnRow(theme),
                         _buildSignInBtn(theme),
                       ],
                     ),

@@ -1,29 +1,36 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class MyUser {
+class AppUser {
+  static final AppUser defaultUser = AppUser(uid: "");
+
   final String uid;
   final String? email;
   final String? firstName;
   final String? lastName;
   final GeoPoint? location;
 
-  MyUser({required this.uid, this.email, this.firstName, this.lastName, this.location});
+  AppUser(
+      {required this.uid,
+      this.email,
+      this.firstName,
+      this.lastName,
+      this.location});
 
-factory MyUser.fromFirestore(
-    QueryDocumentSnapshot snapshot,
+  factory AppUser.fromFirestore(
+    DocumentSnapshot snapshot,
     SnapshotOptions? options,
   ) {
     Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
 
     try {
-      return MyUser(
+      return AppUser(
           uid: data['uid'],
           email: data['email'],
           firstName: data['firstName'],
           lastName: data['lastName'],
           location: data['location']);
     } catch (e) {
-      return MyUser(
+      return AppUser(
           uid: 'UserID',
           email: 'someone@example.com',
           firstName: "First",
@@ -41,6 +48,4 @@ factory MyUser.fromFirestore(
       "location": location,
     };
   }
-
 }
-
