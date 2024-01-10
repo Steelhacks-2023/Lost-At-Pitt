@@ -19,7 +19,7 @@ class ProfilePage extends StatefulWidget {
 class ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    AppUser user = Provider.of<AppUser>(context);
+    AppUser user = context.watch<AppUser>();
     return Center(
         child: Column(children: [
       Text("Signed in: ${user.firstName}"),
