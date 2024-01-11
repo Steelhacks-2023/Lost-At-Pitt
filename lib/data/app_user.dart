@@ -16,6 +16,8 @@ class AppUser {
       this.lastName,
       this.location});
 
+  String displayName() => "$firstName $lastName";
+
   factory AppUser.fromFirestore(
     DocumentSnapshot snapshot,
     SnapshotOptions? options,
