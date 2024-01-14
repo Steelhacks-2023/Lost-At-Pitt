@@ -38,6 +38,7 @@ class _SignUpPageState extends State<SignUpPage> {
           decoration: theme.textFieldDecoration,
           height: 60.0,
           child: TextFormField(
+            onChanged: (value) => firstName = value,
             controller: _firstNameController,
             validator: (val) => val == null || val.isEmpty
                 ? 'First name cannot be empty.'
@@ -69,7 +70,7 @@ class _SignUpPageState extends State<SignUpPage> {
           decoration: theme.textFieldDecoration,
           height: 60.0,
           child: TextFormField(
-            onChanged: (value) => firstName = value,
+            onChanged: (value) => lastName = value,
             controller: _lastNameController,
             validator: (val) => val == null || val.isEmpty
                 ? 'Last name cannot be empty.'
