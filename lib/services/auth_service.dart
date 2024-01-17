@@ -42,7 +42,7 @@ class AuthService extends ChangeNotifier {
   }
 
   //sign in with email and password
-  static Future<void> signInWithEmailAndPassword(
+  static Future signInWithEmailAndPassword(
       String email, String password) async {
     UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email, password: password);
@@ -52,10 +52,12 @@ class AuthService extends ChangeNotifier {
       'email': result.user!.email,
       'location': const GeoPoint(40.4440279, -79.9700647)
     }, SetOptions(merge: true));
+
+    return userFromFirebaseUser(result.user!.uid);
   }
 
   //sign in with google
-  static Future<void> signInWithGoogle() async {
+  static Future signInWithGoogle() async {
     UserCredential result;
     try {
       if (kIsWeb) {

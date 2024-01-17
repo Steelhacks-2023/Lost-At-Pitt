@@ -30,12 +30,7 @@ class AppUser {
           lastName: data['lastName'],
           location: data['location']);
     } catch (e) {
-      return AppUser(
-          uid: 'UserID',
-          email: 'someone@example.com',
-          firstName: "First",
-          lastName: "Last",
-          location: GeoPoint(0, 0));
+      return defaultUser;
     }
   }
 
