@@ -64,6 +64,7 @@ class _MapPageState extends State<MapPage> {
 
   // Builds the map Scaffold
   Widget buildMap(BuildContext context, List<Item> foundItems) {
+    markers = {};
     getMarkersFromItems(foundItems);
     return GoogleMap(
         onMapCreated: _onMapCreated,
