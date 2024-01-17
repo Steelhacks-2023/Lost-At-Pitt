@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:lost_found_steelhacks/authentication/auth.dart';
-import 'package:lost_found_steelhacks/authentication/user.dart';
-import 'package:lost_found_steelhacks/authentication/wrapper.dart';
+import 'package:lost_found_steelhacks/services/auth_service.dart';
+import 'package:lost_found_steelhacks/data/app_user.dart';
+import 'package:lost_found_steelhacks/routing/wrapper.dart';
 import 'package:lost_found_steelhacks/services/firestore_service.dart';
 import 'package:lost_found_steelhacks/data/item.dart';
 import 'package:lost_found_steelhacks/themes/app_theme.dart';
@@ -60,14 +60,14 @@ class _MyAppState extends State<MyApp> {
     FlutterNativeSplash.remove();
     return MultiProvider(
         providers: [
-          StreamProvider<MyUser?>.value(value: AuthService().user, initialData: null),
+          StreamProvider<AppUser?>.value(
+              value: AuthService.appUserStream,
+              initialData: AppUser.defaultUser,
+              catchError: (context, error) => null),
           StreamProvider<List<Item>>.value(
-            value: FirestoreService().getFoundItems(),
-            initialData: [],
-            catchError: (context, error) {
-              return [];
-            },
-          ),
+              value: FirestoreService.getFoundItemsStream(),
+              initialData: const [],
+              catchError: (context, error) => []),
         ],
         child: MaterialApp(
             title: 'Lost@Pitt | For Students By Students',

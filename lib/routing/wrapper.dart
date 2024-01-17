@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lost_found_steelhacks/authentication/user.dart';
+import 'package:lost_found_steelhacks/data/app_user.dart';
 import 'package:lost_found_steelhacks/pages/authenticate_page.dart';
 import 'package:lost_found_steelhacks/pages/home_page.dart';
-import 'package:lost_found_steelhacks/pages/login_page.dart';
+import 'package:lost_found_steelhacks/widgets/loading_animation.dart';
 import 'package:provider/provider.dart';
 
 class Wrapper extends StatelessWidget {
@@ -10,12 +10,13 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<MyUser?>(context);
-
-    if (user == null) {
-      return AuthenticatePage();
+    final user = Provider.of<AppUser?>(context);
+    if (user == AppUser.defaultUser) {
+      return const LoadingAnimation();
+    } else if (user == null) {
+      return const AuthenticatePage();
     } else {
-      return HomePage();
+      return const HomePage();
     }
   }
 }

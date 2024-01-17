@@ -1,7 +1,9 @@
 // ignore_for_file: slash_for_doc_comments
 
 import 'package:flutter/material.dart';
-import 'package:lost_found_steelhacks/authentication/auth.dart';
+import 'package:lost_found_steelhacks/data/app_user.dart';
+import 'package:lost_found_steelhacks/services/auth_service.dart';
+import 'package:provider/provider.dart';
 
 /**
  * UI to display the user's profile. 
@@ -15,17 +17,14 @@ class ProfilePage extends StatefulWidget {
 }
 
 class ProfilePageState extends State<ProfilePage> {
-  final authService = AuthService();
-  
   @override
   Widget build(BuildContext context) {
+    AppUser user = context.watch<AppUser>();
     return Center(
         child: Column(children: [
-      Text("Signed in: ${authService.isSignedIn().toString()}"),
+      Text("Signed in: ${user.firstName}"),
       OutlinedButton(
-          onPressed: () async {
-            await authService.signOut();
-          },
+          onPressed: () async => await AuthService.signOut(),
           child: const Icon(Icons.logout))
     ]));
   }

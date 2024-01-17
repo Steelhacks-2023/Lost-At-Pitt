@@ -1,67 +1,63 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:lost_found_steelhacks/authentication/user.dart';
+import 'package:lost_found_steelhacks/data/app_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:lost_found_steelhacks/services/firestore_service.dart';
 
 class AuthService extends ChangeNotifier {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
+  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // create user obj based on FirebaseUser
-  MyUser? _userFromFirebaseUser(User? user) {
-    return user != null ? MyUser(uid: user.uid) : null;
-  }
+  static Future<AppUser?> userFromFirebaseUser(String? uid) async =>
+      FirestoreService.getAppUser(uid);
 
-  bool isSignedIn() {
-    return _auth.currentUser != null;
-  }
+  static bool isSignedIn() => _auth.currentUser != null;
 
   //auth change user stream
-  Stream<MyUser?> get user {
-    return _auth.authStateChanges().map(_userFromFirebaseUser);
-  }
+  static Stream<AppUser?> get appUserStream => _auth
+      .authStateChanges()
+      .asyncMap((user) => userFromFirebaseUser(user?.uid));
 
   // register with Email and Password
-  Future registerWithEmailAndPassword(String _firstName, String _lastName,
-      String _email, String _password) async {
+  static Future<bool> registerWithEmailAndPassword(
+      String firstName, String lastName, String email, String password) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
-          email: _email, password: _password);
-      User? user = result.user;
+          email: email, password: password);
 
       //create entry if firestore of user info
       _firestore.collection('users').doc(result.user!.uid).set({
         'uid': result.user!.uid,
         'email': result.user!.email,
-        'firstName': _firstName,
-        'lastName': _lastName,
-        'location': GeoPoint(40.4440279, -79.9700647)
+        'firstName': firstName,
+        'lastName': lastName,
+        'location': const GeoPoint(40.4440279, -79.9700647)
       });
-
-      return _userFromFirebaseUser(user);
+      return true;
     } catch (e) {
       print(e.toString());
-      return null;
+      return false;
     }
   }
 
   //sign in with email and password
-  Future signInWithEmailAndPassword(String _email, String _password) async {
+  static Future signInWithEmailAndPassword(
+      String email, String password) async {
     UserCredential result = await _auth.signInWithEmailAndPassword(
-        email: _email, password: _password);
+        email: email, password: password);
 
     _firestore.collection('users').doc(result.user!.uid).set({
       'uid': result.user!.uid,
       'email': result.user!.email,
-      'location': GeoPoint(40.4440279, -79.9700647)
+      'location': const GeoPoint(40.4440279, -79.9700647)
     }, SetOptions(merge: true));
 
-    return _userFromFirebaseUser(result.user);
+    return userFromFirebaseUser(result.user!.uid);
   }
 
   //sign in with google
-  Future signInWithGoogle() async {
+  static Future signInWithGoogle() async {
     UserCredential result;
     try {
       if (kIsWeb) {
@@ -101,24 +97,19 @@ class AuthService extends ChangeNotifier {
         'email': result.user!.email,
         'firstName': firstName ?? '',
         'lastName': lastName ?? '',
-        'location': GeoPoint(40.4440279, -79.9700647)
+        'location': const GeoPoint(40.4440279, -79.9700647)
       }, SetOptions(merge: true));
-      return _userFromFirebaseUser(user);
-    } on FirebaseAuthException catch (e) {
-      return null;
-    }
-  }
-
-  //sign out logic
-  Future<void> signOut() async {
-    try {
-      await _auth.signOut();
     } catch (e) {
       print(e.toString());
     }
   }
 
-  Future<MyUser?> currentUser() async {
-    return _userFromFirebaseUser(_auth.currentUser);
+  //sign out logic
+  static Future<void> signOut() async {
+    try {
+      await _auth.signOut();
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

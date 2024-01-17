@@ -4,8 +4,8 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_fast_forms/flutter_fast_forms.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:lost_found_steelhacks/authentication/loading_animation.dart';
-import 'package:lost_found_steelhacks/authentication/user.dart';
+import 'package:lost_found_steelhacks/widgets/loading_animation.dart';
+import 'package:lost_found_steelhacks/data/app_user.dart';
 import 'package:lost_found_steelhacks/data/item.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -80,7 +80,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
   Future<void> addFound() {
     Item item = Item(
         id: "",
-        userId: context.read<MyUser?>()!.uid,
+        userId: context.read<AppUser?>()!.uid,
         timeCreated: Timestamp.now(),
         description: description,
         itemName: itemName,
@@ -89,7 +89,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
         picture: imageName);
 
     // Calling the collection to add a new user
-    return FirestoreService().addItemToFirestore(item, false);
+    return FirestoreService.addItemToFirestore(item, false);
   }
 
   void submitItem() async {
@@ -220,7 +220,7 @@ class _SubmissionPageState extends State<SubmissionPage> {
         : const SizedBox(height: 1);
 
     Widget buildSubmitButton() => loading
-        ? const Loading()
+        ? const LoadingAnimation()
         : TextButton.icon(
             label: Text("Submit", style: theme.darkSubtitleStyle),
             icon: Icon(Icons.add_box_rounded, color: theme.dark),

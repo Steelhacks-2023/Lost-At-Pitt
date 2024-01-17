@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lost_found_steelhacks/themes/app_theme.dart';
 
-class Loading extends StatelessWidget {
-  const Loading({super.key});
+class LoadingAnimation extends StatelessWidget {
+  const LoadingAnimation({super.key});
 
   @override
   Widget build(BuildContext context) {

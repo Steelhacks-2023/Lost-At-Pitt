@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:lost_found_steelhacks/authentication/auth.dart';
-import 'package:lost_found_steelhacks/authentication/loading_animation.dart';
-import 'package:lost_found_steelhacks/authentication/user.dart';
+import 'package:lost_found_steelhacks/services/auth_service.dart';
+import 'package:lost_found_steelhacks/widgets/loading_animation.dart';
+import 'package:lost_found_steelhacks/data/app_user.dart';
 import 'package:lost_found_steelhacks/themes/app_theme.dart';
 
 class LoginPage extends StatefulWidget {
@@ -108,9 +108,9 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildLoginBtn(AppTheme theme, bool loading, AuthService authService) {
+  Widget _buildLoginBtn(AppTheme theme, bool loading) {
     return loading
-        ? const Loading()
+        ? const LoadingAnimation()
         : Container(
             padding: const EdgeInsets.symmetric(vertical: 25.0),
             child: Container(
@@ -120,10 +120,10 @@ class _LoginPageState extends State<LoginPage> {
                   if (_formKey.currentState!.validate()) {
                     setState(() => loading = true);
                     try {
-                      MyUser? result = await authService
-                          .signInWithEmailAndPassword(_email, _password);
+                      await AuthService.signInWithEmailAndPassword(
+                          _email, _password);
 
-                      if (result == null) {
+                      if (!AuthService.isSignedIn()) {
                         throw FirebaseAuthException(code: "Sign in failed");
                       }
 
@@ -131,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                         loading = false;
                       });
                       //no need to route page as provider handles it
-                    } on FirebaseAuthException catch (e) {
+                    } on FirebaseAuthException {
                       setState(() {
                         _error =
                             'The email or password is incorrect. Please try again.';
@@ -146,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
           );
   }
 
-  Widget _buildSocialBtnRow(AppTheme theme, AuthService authService) {
+  Widget _buildSocialBtnRow(AppTheme theme) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15.0),
       child: Row(
@@ -154,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
         children: <Widget>[
           IconButton(
               onPressed: () async {
-                Future result = authService.signInWithGoogle();
+                Future result = AuthService.signInWithGoogle();
                 result.then((value) {
                   if (value == null) {
                     setState(() {
@@ -200,7 +200,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final AuthService authService = AuthService();
     final AppTheme theme = Theme.of(context).extension<AppTheme>()!;
     //const Widget spacing = SizedBox(height: 30);
 
@@ -234,8 +233,8 @@ class _LoginPageState extends State<LoginPage> {
                           _buildPasswordTF(theme),
                           _buildForgotPasswordBtn(theme),
                           _buildErrorMsg(theme),
-                          _buildLoginBtn(theme, loading, authService),
-                          _buildSocialBtnRow(theme, authService),
+                          _buildLoginBtn(theme, loading),
+                          _buildSocialBtnRow(theme),
                           _buildSignupBtn(theme),
                         ],
                       ),
